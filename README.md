@@ -10,3 +10,8 @@ Abra o `index.html` em qualquer navegador (celular ou PC). Não precisa instalar
 ## Conteúdo
 Versão piloto: Parte I (Prefácio e Capítulos 1–4) e Semana 1 (Dias 1–7 + revisão).
 Para editar o conteúdo, altere o objeto `BOOK` dentro do `index.html`.
+
+## Jogar agora
+👉 https://mourafelipe.github.io/blurty/
+
+<img src="qrcode.png" width="260" alt="QR code do Blurty">
