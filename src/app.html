@@ -28,13 +28,22 @@
   .msvg .whole{transform-origin:60px 110px}
   .mood-idle .whole,.mood-welcome .whole,.mood-encourage .whole{animation:bob 3s ease-in-out infinite}
   .mood-happy .whole{animation:hop .55s ease 2}
-  .mood-oops .whole{animation:wobble .7s ease 1}
+  .mood-sad .whole,.mood-oops .whole{animation:wobble .7s ease 1}
+  .mood-thinking .whole{animation:tilt 3.2s ease-in-out infinite}
+  .mood-surprised .whole{animation:pop .45s ease 1}
+  .floaty.mood-idle .whole,.floaty.mood-welcome .whole{animation:float 3.4s ease-in-out infinite}
+  .orb{animation:twinkle 2.2s ease-in-out infinite}
+  .dots circle{animation:twinkle 1.4s ease-in-out infinite}
+  .dots circle:nth-child(2){animation-delay:.2s}.dots circle:nth-child(3){animation-delay:.4s}
   .mood-excited .whole{animation:jump .5s ease 3}
   .mood-celebrate .whole{animation:party 1s ease 2}
   .mood-idle .eye,.mood-welcome .eye,.mood-encourage .eye{animation:blink 4.5s infinite;transform-box:fill-box;transform-origin:center}
   .arm-wave{animation:wave .9s ease-in-out infinite}
   .spark{animation:twinkle 1s ease-in-out infinite}
   @keyframes bob{50%{transform:translateY(-4px)}}
+  @keyframes float{50%{transform:translateY(-8px)}}
+  @keyframes tilt{50%{transform:rotate(-4deg)}}
+  @keyframes pop{40%{transform:scale(1.12)}}
   @keyframes hop{40%{transform:translateY(-14px) scale(1.03,.97)}}
   @keyframes wobble{20%{transform:rotate(-8deg)}40%{transform:rotate(6deg)}60%{transform:rotate(-4deg)}80%{transform:rotate(2deg)}}
   @keyframes jump{50%{transform:translateY(-18px)}}
@@ -176,6 +185,8 @@
   .dl.me .b{background:var(--soft);border-color:transparent;border-radius:16px 16px 4px 16px}
   .dl .b .spk{width:28px;height:28px;font-size:13px}
   .q{padding:4px 18px 200px}
+  .qhead{display:flex;justify-content:space-between;align-items:flex-end;gap:8px}
+  .qm{flex:none;width:54px;height:54px;margin:-8px 0 -6px}
   .q .type{font-weight:900;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
   .sit{background:var(--tint);border-radius:12px;padding:9px 12px;font-size:15px;margin:10px 0 12px;display:flex;gap:8px;font-weight:700}
   .q h3{font-size:24px;line-height:1.2;margin:6px 0 14px}
@@ -249,6 +260,8 @@
 
 <script>
 /*MASCOTS*/
+
+/*MASCOT_ART*/
 
 /*BLOCK1*/
 
@@ -519,8 +532,8 @@ function learnCard(){
 function nextQ(){
   if (!L.queue.length) return L.mode==="review"?finishReview():finishPhase();
   const q=L.cur=L.queue.shift();
-  app.innerHTML = `<div class="screen">${topBar()}<div class="q">
-      <div class="type">${L.mode==="review"?"Revisão · ":""}${esc(q.kind||{choice:"Escolha",build:"Monte a frase",match:"Associe"}[q.type])}</div>
+  app.innerHTML = `<div class="screen">${topBar()}<div class="q"><div class="qhead">
+      <div class="type">${L.mode==="review"?"Revisão · ":""}${esc(q.kind||{choice:"Escolha",build:"Monte a frase",match:"Associe"}[q.type])}</div><div class="qm">${mascotSVG(M(),"thinking")}</div></div>
       ${q.situation?`<div class="sit"><span>📍</span><span>${esc(q.situation)}</span></div>`:""}
       ${q.dialog?dialogHTML(q.dialog):""}
       <h3>${esc(q.prompt)}</h3><div id="body"></div></div>
@@ -572,14 +585,14 @@ function result(ok, correctText){
     let gain=10;
     if (L.mode==="review"){ gain=8; S.stats.cleared++; L.cleared++; }
     delete S.review[q.qid];
-    L.xp+=gain; foot.className="foot ok"; sfx.ok();
-    const l=mascotLine(M(),"happy");
-    fb.innerHTML=`${mbox("happy")}<div><span class="h">${esc(l[0])} +${gain} XP</span><span class="pt">${esc(l[1])}</span><p>${q.explain}</p></div>`;
+    L.xp+=gain; L.row=(L.row||0)+1; foot.className="foot ok"; sfx.ok();
+    const wow=L.row===3, l=mascotLine(M(),"happy");
+    fb.innerHTML=`${mbox(wow?"surprised":"happy")}<div><span class="h">${wow?"3 in a row! ":""}${esc(l[0])} +${gain} XP</span><span class="pt">${esc(l[1])}</span><p>${q.explain}</p></div>`;
   } else {
-    L.mistakes++; S.review[q.qid]={n:((S.review[q.qid]||{}).n||0)+1, d:dayStr()};
+    L.mistakes++; L.row=0; S.review[q.qid]={n:((S.review[q.qid]||{}).n||0)+1, d:dayStr()};
     foot.className="foot no"; sfx.no();
-    const l=mascotLine(M(),"oops");
-    fb.innerHTML=`${mbox("oops")}<div><span class="h">${esc(l[0])}</span><span class="pt">${esc(l[1])}</span>${correctText?`<p>Resposta certa: <b>${esc(correctText)}</b></p>`:""}<p>${q.explain}</p><p style="font-size:13px;color:var(--muted)">Ela entra na sua Revisão.</p></div>`;
+    const l=mascotLine(M(),"sad");
+    fb.innerHTML=`${mbox("sad")}<div><span class="h">${esc(l[0])}</span><span class="pt">${esc(l[1])}</span>${correctText?`<p>Resposta certa: <b>${esc(correctText)}</b></p>`:""}<p>${q.explain}</p><p style="font-size:13px;color:var(--muted)">Ela entra na sua Revisão.</p></div>`;
   }
   persist();
   document.querySelector(".bar i").style.width=(L.n/L.total*100)+"%";
