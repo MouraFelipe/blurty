@@ -3,124 +3,245 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Blurty — o jogo dos 90 Desafios</title>
+<meta name="theme-color" content="#F7F5F0">
+<title>Blurty — aprenda inglês conversando</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Literata:ital,wght@0,400;0,600;1,400&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#FBF6EC; --paper2:#F3EBDA; --ink:#2B2A28; --muted:#7A7267;
-    --line:#E3D8C3; --green:#3A8F5C; --green-l:#DDF0E3; --red:#C8553D; --red-l:#F8E1DA;
-    --gold:#E0A526; --blue:#2F6F9F; --blue-l:#DCEAF5;
+    --bg:#F7F5F0; --card:#FFFFFF; --ink:#26241F; --muted:#6F6A62; --line:#E7E2D8; --line2:#D9D3C7; --tint:#EFECE6;
+    --ok:#2E7A4E; --ok-l:#E4F2E9; --no:#B0473A; --no-l:#F7E4E0;
+    --accent:#4A4740; --accent-d:#2E2C27; --soft:#EEEBE5; --mbody:#BDB7AC;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;height:100%}
-  body{background:#EADFC9;color:var(--ink);font-family:Nunito,system-ui,sans-serif;display:flex;justify-content:center}
-  #app{width:100%;max-width:560px;min-height:100vh;background:var(--paper);display:flex;flex-direction:column;position:relative;
-       box-shadow:0 0 0 1px var(--line),0 10px 40px rgba(60,40,10,.12)}
-  button{font-family:inherit;cursor:pointer;border:none}
-  .screen{flex:1;display:flex;flex-direction:column;animation:turn .35s ease}
-  @keyframes turn{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+  html,body{margin:0}
+  body{background:#ECE8E0;color:var(--ink);font-family:Nunito,system-ui,sans-serif;display:flex;justify-content:center;min-height:100vh}
+  #app{width:100%;max-width:560px;min-height:100vh;background:var(--bg);position:relative;box-shadow:0 0 0 1px var(--line)}
+  button{font-family:inherit;cursor:pointer;border:none;color:inherit;background:none}
+  h1,h2,h3,.logo,.disp{font-family:"Baloo 2",Nunito,sans-serif}
+  .screen{animation:in .28s ease;padding-bottom:110px}
+  @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-  /* ---------- capa / sumário ---------- */
-  .cover{padding:32px 24px 20px;text-align:center;border-bottom:2px dashed var(--line)}
-  .cover small{letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-size:12px}
-  .cover h1{font-family:Fraunces,serif;font-size:44px;line-height:1.1;margin:10px 0 6px}
-  .cover p{margin:0;color:var(--muted);font-family:Literata,serif;font-style:italic}
-  .stats{display:flex;justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap}
-  .pill{background:#fff;border:2px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:800;font-size:14px}
-  .toc{padding:18px 18px 30px;display:flex;flex-direction:column;gap:12px}
-  .toc h2{font-family:Fraunces,serif;font-size:18px;margin:6px 6px 2px;color:var(--muted)}
-  .chap{display:flex;align-items:center;gap:14px;text-align:left;background:#fff;border:2px solid var(--line);
-        border-bottom-width:5px;border-radius:16px;padding:14px 16px;transition:transform .1s}
-  .chap:active{transform:translateY(2px);border-bottom-width:3px}
-  .chap .num{width:46px;height:46px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:22px;background:var(--paper2)}
-  .chap .t{flex:1}
-  .chap .t b{display:block;font-size:16px}
-  .chap .t span{font-size:13px;color:var(--muted)}
-  .chap .stars{font-size:15px;letter-spacing:1px;color:var(--gold);white-space:nowrap}
-  .chap.locked{opacity:.5;cursor:not-allowed}
-  .chap.locked .num{filter:grayscale(1)}
+  /* ----- mascote ----- */
+  .msvg{width:100%;height:100%;overflow:visible}
+  .msvg .whole{transform-origin:60px 110px}
+  .mood-idle .whole,.mood-welcome .whole,.mood-encourage .whole{animation:bob 3s ease-in-out infinite}
+  .mood-happy .whole{animation:hop .55s ease 2}
+  .mood-oops .whole{animation:wobble .7s ease 1}
+  .mood-excited .whole{animation:jump .5s ease 3}
+  .mood-celebrate .whole{animation:party 1s ease 2}
+  .mood-idle .eye,.mood-welcome .eye,.mood-encourage .eye{animation:blink 4.5s infinite;transform-box:fill-box;transform-origin:center}
+  .arm-wave{animation:wave .9s ease-in-out infinite}
+  .spark{animation:twinkle 1s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(-4px)}}
+  @keyframes hop{40%{transform:translateY(-14px) scale(1.03,.97)}}
+  @keyframes wobble{20%{transform:rotate(-8deg)}40%{transform:rotate(6deg)}60%{transform:rotate(-4deg)}80%{transform:rotate(2deg)}}
+  @keyframes jump{50%{transform:translateY(-18px)}}
+  @keyframes party{30%{transform:translateY(-16px) rotate(-8deg)}60%{transform:translateY(-16px) rotate(8deg)}}
+  @keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+  @keyframes wave{50%{transform:rotate(-22deg)}}
+  @keyframes twinkle{50%{opacity:.3}}
+  @media (prefers-reduced-motion:reduce){.msvg *{animation:none!important}}
+  .mbox{flex:none}
+  .bubble{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:10px 14px;position:relative;font-weight:800;line-height:1.3}
+  .bubble small{display:block;font-weight:700;color:var(--muted);font-size:13px;margin-top:2px}
+  .bubble.left::before{content:"";position:absolute;left:-9px;top:22px;width:14px;height:14px;background:var(--card);border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:rotate(45deg)}
 
-  /* ---------- topo da lição ---------- */
-  .top{display:flex;align-items:center;gap:12px;padding:14px 16px;position:sticky;top:0;background:var(--paper);z-index:5}
-  .x{background:none;font-size:24px;color:var(--muted);padding:4px 8px}
-  .bar{flex:1;height:14px;background:var(--paper2);border-radius:99px;overflow:hidden}
-  .bar i{display:block;height:100%;width:0;background:var(--green);border-radius:99px;transition:width .4s ease}
-  .combo{font-weight:800;color:var(--gold);min-width:44px;text-align:right;font-size:15px}
+  /* ----- topo ----- */
+  .appbar{display:flex;align-items:center;gap:8px;padding:12px 16px;position:sticky;top:0;background:var(--bg);z-index:6;border-bottom:2px solid var(--line)}
+  .logo{font-weight:800;font-size:28px;flex:1;line-height:1}
+  .logo span{color:var(--accent)}
+  .chip{background:var(--card);border:2px solid var(--line);border-radius:999px;padding:4px 10px;font-weight:900;font-size:14px;white-space:nowrap}
 
-  /* ---------- página de leitura ---------- */
-  .page{padding:6px 24px 120px;font-family:Literata,serif;font-size:18px;line-height:1.65}
-  .page .kicker{font-family:Nunito;font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
-  .page h2{font-family:Fraunces,serif;font-size:28px;line-height:1.15;margin:6px 0 16px}
-  .page p{margin:0 0 14px}
-  .ex{background:#fff;border-left:4px solid var(--blue);border-radius:4px 12px 12px 4px;padding:12px 14px;margin:0 0 14px;display:flex;gap:10px;align-items:flex-start}
-  .ex .en{font-weight:600}
-  .ex .pt{display:block;font-size:15px;color:var(--muted);font-style:italic}
-  .tip{background:var(--gold);background:#FCEFCF;border:2px dashed var(--gold);border-radius:12px;padding:12px 14px;margin:0 0 14px;font-size:16px}
-  .gl{border-bottom:2px dotted var(--blue);cursor:pointer;position:relative}
-  .gl.open::after{content:attr(data-t);position:absolute;left:50%;bottom:130%;transform:translateX(-50%);background:var(--ink);color:#fff;
-       font-family:Nunito;font-size:13px;font-weight:700;white-space:nowrap;padding:5px 10px;border-radius:8px;z-index:3}
-  .hint{font-family:Nunito;font-size:13px;color:var(--muted);margin-top:4px}
-  .spk{flex:none;background:var(--blue-l);color:var(--blue);width:34px;height:34px;border-radius:50%;font-size:16px}
+  /* ----- início ----- */
+  .hello{display:flex;align-items:center;gap:12px;margin:16px 16px 4px}
+  .hello .mbox{width:92px;height:92px;cursor:pointer}
+  .next{margin:14px 16px 0;background:var(--accent);color:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 5px 0 var(--accent-d);width:calc(100% - 32px);text-align:left}
+  .next:active{transform:translateY(3px);box-shadow:0 2px 0 var(--accent-d)}
+  .next .ic{font-size:30px;width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.18);display:grid;place-items:center;flex:none}
+  .next small{display:block;font-weight:900;font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+  .next b{font-size:19px;font-family:"Baloo 2";line-height:1.1}
+  .next .g{font-size:14px;opacity:.92;display:block;margin-top:2px}
+  .revbtn{margin:12px 16px 0;display:flex;gap:12px;align-items:center;width:calc(100% - 32px);text-align:left;background:var(--card);border:2px solid var(--line);border-bottom-width:4px;border-radius:16px;padding:12px 14px}
+  .revbtn .n{width:40px;height:40px;border-radius:12px;background:var(--soft);display:grid;place-items:center;font-size:20px}
+  .revbtn b{display:block}.revbtn span{font-size:13px;color:var(--muted)}
 
-  /* ---------- pergunta ---------- */
-  .q{padding:8px 22px 150px}
-  .q .type{font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-  .q h3{font-family:Fraunces,serif;font-size:24px;line-height:1.25;margin:6px 0 18px}
-  .q .sent{font-family:Literata,serif;font-size:19px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:18px;display:flex;gap:10px;align-items:center}
+  /* ----- mapa ----- */
+  .block{margin:24px 16px 8px}
+  .bhead{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:14px 16px}
+  .lvl{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border-radius:99px;background:var(--soft);color:var(--accent)}
+  .bhead h2{font-size:24px;margin:6px 0 0;line-height:1.1}
+  .bhead p{margin:2px 0 0;color:var(--muted);font-size:14px}
+  .pbar{height:12px;background:var(--tint);border-radius:99px;overflow:hidden;margin-top:12px}
+  .pbar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .5s}
+  .pcount{font-size:13px;font-weight:800;color:var(--muted);margin-top:6px}
+  .path{display:flex;flex-direction:column;align-items:center;gap:16px;padding:28px 0 6px}
+  .node{display:flex;flex-direction:column;align-items:center;gap:4px;position:relative}
+  .node .c{width:72px;height:68px;border-radius:50%;display:grid;place-items:center;font-size:28px;background:var(--accent);box-shadow:0 6px 0 var(--accent-d);transition:transform .1s}
+  .node:active .c{transform:translateY(3px)}
+  .node.done .c{background:var(--card);border:3px solid var(--accent);box-shadow:0 6px 0 var(--line2);color:var(--accent);font-weight:900}
+  .node.locked .c{background:var(--tint);box-shadow:0 6px 0 var(--line2);font-size:22px}
+  .node.locked{cursor:not-allowed}
+  .node .lb{font-weight:800;font-size:14px;text-align:center;max-width:180px;line-height:1.15}
+  .node .lb small{display:block;font-weight:700;color:var(--muted);font-size:12px}
+  .node .st{font-size:13px;color:var(--accent);letter-spacing:1px;height:15px}
+  .node .go{position:absolute;top:-28px;background:var(--card);border:2px solid var(--line);border-radius:10px;padding:2px 10px;font-weight:900;font-size:12px;color:var(--accent);letter-spacing:.08em;animation:bob 1.4s ease-in-out infinite}
+  .node.cur .c{outline:4px solid var(--soft);outline-offset:4px}
+  .soon{margin:12px 16px;display:flex;gap:14px;align-items:center;background:transparent;border:2px dashed var(--line2);border-radius:16px;padding:12px 14px;color:var(--muted)}
+  .soon .e{font-size:24px;filter:grayscale(1);opacity:.6}
+  .soon b{display:block;color:var(--ink);opacity:.7}
+  .soon span{font-size:13px}
+
+  /* ----- barra inferior ----- */
+  .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:560px;display:flex;background:var(--bg);border-top:2px solid var(--line);z-index:9;padding:6px 6px 10px}
+  .nav button{flex:1;padding:7px 0;border-radius:12px;font-weight:900;font-size:12px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:1px}
+  .nav button .i{font-size:21px;filter:grayscale(1);opacity:.55}
+  .nav button .mi{width:26px;height:26px}
+  .nav button.on{color:var(--accent);background:var(--soft)}
+  .nav button.on .i{filter:none;opacity:1}
+
+  /* ----- telas de painel ----- */
+  .pad{padding:16px}
+  .h1{font-size:28px;margin:4px 4px 12px;line-height:1.1}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .card{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px}
+  .card b{display:block;font-size:24px;font-family:"Baloo 2";line-height:1.1}
+  .card span{font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+  .big{grid-column:1/-1;display:flex;align-items:center;gap:16px}
+  .ring{width:84px;height:84px;flex:none;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:20px}
+  .ring i{width:66px;height:66px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-style:normal}
+  .chart{display:flex;align-items:flex-end;gap:8px;height:110px}
+  .chart div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+  .chart i{width:100%;background:var(--accent);border-radius:6px 6px 2px 2px;min-height:3px;opacity:.9}
+  .chart small{font-size:11px;color:var(--muted);font-weight:800}
+  .chart em{font-size:10px;font-style:normal;font-weight:900;color:var(--accent)}
+  .list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+  .row{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14px}
+  .row .grow{flex:1}.row small{color:var(--muted);display:block}
+  .tag{font-weight:900;font-size:12px;padding:3px 8px;border-radius:99px;background:var(--soft);color:var(--accent);white-space:nowrap}
+  .stitle{font-weight:900;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:22px 4px 4px}
+  .empty{color:var(--muted);font-size:14px;padding:8px 4px;margin:0}
+  .ach{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .ach div{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px;text-align:center}
+  .ach div.on{border-color:var(--accent);background:var(--soft)}
+  .ach div.off{opacity:.5;filter:grayscale(1)}
+  .ach .e{font-size:32px}.ach b{display:block;font-size:14px;margin-top:4px}.ach span{font-size:12px;color:var(--muted)}
+
+  /* ----- escolha de mascote ----- */
+  .pick{padding:18px 16px 140px}
+  .pick h1{font-size:30px;margin:0;line-height:1.1;text-align:center}
+  .pick .sub{text-align:center;color:var(--muted);margin:4px 0 14px}
+  .preview{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid var(--line);border-radius:20px;padding:12px;min-height:128px}
+  .preview .mbox{width:104px;height:104px}
+  .preview .who{font-family:"Baloo 2";font-size:24px;font-weight:800;line-height:1}
+  .preview .per{font-size:14px;color:var(--muted);margin:2px 0 8px}
+  .mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+  .mcard{background:var(--card);border:2px solid var(--line);border-bottom-width:4px;border-radius:18px;padding:10px 6px 8px;text-align:center;transition:transform .1s}
+  .mcard:active{transform:translateY(2px)}
+  .mcard .mbox{width:76px;height:76px;margin:0 auto}
+  .mcard b{display:block;font-family:"Baloo 2";font-size:18px;line-height:1.1}
+  .mcard span{font-size:12px;color:var(--muted);font-weight:700}
+  .mcard .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:middle}
+  .mcard.sel{border-color:var(--accent);background:var(--soft)}
+  @media (max-width:380px){.mgrid{grid-template-columns:repeat(2,1fr)}}
+
+  /* ----- lição ----- */
+  .top{display:flex;align-items:center;gap:12px;padding:12px 16px;position:sticky;top:0;background:var(--bg);z-index:5}
+  .x{font-size:24px;color:var(--muted);padding:4px 8px}
+  .bar{flex:1;height:14px;background:var(--tint);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .4s ease}
+  .qcount{font-weight:900;color:var(--muted);font-size:14px;min-width:34px;text-align:right}
+  .page{padding:4px 20px 150px;font-size:17px;line-height:1.55}
+  .kicker{font-weight:900;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  .page h2{font-size:30px;line-height:1.05;margin:4px 0 2px}
+  .page .ptitle{color:var(--muted);font-size:15px;margin:0 0 12px}
+  .goal{display:flex;gap:10px;align-items:flex-start;background:var(--soft);border-radius:14px;padding:10px 12px;margin:0 0 16px;font-weight:800;font-size:15px}
+  .goal small{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:900}
+  .ex{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:9px 12px;margin:0 0 8px;display:flex;gap:10px;align-items:center}
+  .ex .en{font-weight:800}
+  .ex .pt{display:block;font-size:14px;color:var(--muted);line-height:1.35}
+  .tip{background:var(--card);border:2px dashed var(--line2);border-radius:14px;padding:11px 13px;margin:14px 0;font-size:15px}
+  .hint{font-size:13px;color:var(--muted);margin-top:8px}
+  .spk{flex:none;background:var(--soft);color:var(--accent);width:34px;height:34px;border-radius:50%;font-size:15px}
+  .say{display:flex;gap:10px;align-items:center;margin:0 0 16px}
+  .say .mbox{width:70px;height:70px}
+  .say .bubble{flex:1;font-weight:700}
+  .dlg{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
+  .dl{display:flex;gap:8px;align-items:flex-end}
+  .dl.me{flex-direction:row-reverse}
+  .av{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;font-size:14px;background:#8A847A}
+  .dl.me .av{background:var(--accent)}
+  .dl .b{max-width:80%;background:var(--card);border:2px solid var(--line);border-radius:16px 16px 16px 4px;padding:7px 10px;font-size:16px;font-weight:700;display:flex;gap:8px;align-items:center}
+  .dl.me .b{background:var(--soft);border-color:transparent;border-radius:16px 16px 4px 16px}
+  .dl .b .spk{width:28px;height:28px;font-size:13px}
+  .q{padding:4px 18px 200px}
+  .q .type{font-weight:900;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  .sit{background:var(--tint);border-radius:12px;padding:9px 12px;font-size:15px;margin:10px 0 12px;display:flex;gap:8px;font-weight:700}
+  .q h3{font-size:24px;line-height:1.2;margin:6px 0 14px}
+  .q .sent{font-size:19px;font-weight:800;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:11px 13px;margin-bottom:14px;display:flex;gap:10px;align-items:center}
   .opts{display:flex;flex-direction:column;gap:10px}
-  .opt{background:#fff;border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;padding:14px 16px;text-align:left;font-size:17px;font-weight:700;color:var(--ink);transition:transform .08s}
+  .opt{background:var(--card);border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;padding:13px 15px;text-align:left;font-size:17px;font-weight:800;transition:transform .08s}
   .opt:active{transform:translateY(2px)}
-  .opt.sel{border-color:var(--blue);background:var(--blue-l)}
-  .opt.good{border-color:var(--green);background:var(--green-l)}
-  .opt.bad{border-color:var(--red);background:var(--red-l)}
+  .opt.sel{border-color:var(--accent);background:var(--soft)}
+  .opt.good{border-color:var(--ok);background:var(--ok-l)}
+  .opt.bad{border-color:var(--no);background:var(--no-l)}
   .opt:disabled{cursor:default}
-  /* montar frase */
-  .slot{min-height:64px;border-bottom:2px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;padding:8px 0 12px;margin-bottom:22px;align-content:flex-start}
+  .slot{min-height:60px;border-bottom:2px solid var(--line2);display:flex;flex-wrap:wrap;gap:8px;padding:6px 0 12px;margin-bottom:20px;align-content:flex-start}
   .bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-  .w{background:#fff;border:2px solid var(--line);border-bottom-width:4px;border-radius:12px;padding:9px 13px;font-size:17px;font-weight:700;color:var(--ink)}
+  .w{background:var(--card);border:2px solid var(--line);border-bottom-width:4px;border-radius:12px;padding:8px 13px;font-size:17px;font-weight:800}
   .w.used{visibility:hidden}
-  /* pares */
   .pairs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .pairs .opt{text-align:center;font-size:16px;padding:14px 8px}
-  .pairs .opt.done{opacity:.35;border-color:var(--green);background:var(--green-l)}
+  .pairs .opt{text-align:center;font-size:15px;padding:13px 6px}
+  .pairs .opt.done{opacity:.4;border-color:var(--ok);background:var(--ok-l)}
   .shake{animation:shake .35s}
   @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-
-  /* ---------- rodapé ---------- */
-  .foot{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:560px;padding:16px 18px 20px;background:var(--paper);border-top:2px solid var(--line);z-index:10}
-  .foot.ok{background:var(--green-l);border-color:var(--green)}
-  .foot.no{background:var(--red-l);border-color:var(--red)}
-  .fb{margin-bottom:12px;display:none}
-  .foot.ok .fb,.foot.no .fb{display:block;animation:turn .25s}
-  .fb b{font-size:19px}
-  .foot.ok .fb b{color:var(--green)} .foot.no .fb b{color:var(--red)}
-  .fb p{margin:4px 0 0;font-size:15px}
-  .btn{width:100%;padding:15px;border-radius:14px;font-size:17px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;
-       background:var(--green);box-shadow:0 4px 0 #2B6C45}
-  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 #2B6C45}
-  .btn:disabled{background:#CFC6B5;box-shadow:0 4px 0 #B3A993;cursor:default}
-  .foot.no .btn{background:var(--red);box-shadow:0 4px 0 #9A3F2C}
-  .btn.blue{background:var(--blue);box-shadow:0 4px 0 #1F5075}
-
-  /* ---------- fim ---------- */
-  .end{padding:40px 24px 140px;text-align:center}
-  .end .big{font-size:64px;line-height:1}
-  .end h2{font-family:Fraunces,serif;font-size:30px;margin:14px 0 4px}
-  .end .st{font-size:42px;color:var(--gold);letter-spacing:6px;margin:14px 0}
-  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
-  .card{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 6px}
-  .card b{display:block;font-size:22px}
-  .card span{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase}
-  .mission{margin-top:26px;text-align:left;background:#fff;border:2px solid var(--line);border-left:5px solid var(--gold);border-radius:14px;padding:14px 16px}
-  .mission .kicker{font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#A87A12}
-  .mission p{font-family:Literata,serif;font-size:16px;margin:8px 0 12px}
-  .mbtn{width:100%;padding:11px;border-radius:12px;background:var(--paper2);font-weight:800;font-size:15px;color:var(--ink)}
-  .mbtn.on{background:var(--green-l);color:var(--green)}
-  .endnote{margin-top:20px;font-family:Literata,serif;font-style:italic;color:var(--muted)}
-  .confetti{position:fixed;top:-12px;width:10px;height:14px;z-index:50;pointer-events:none;animation:fall linear forwards}
+  .foot{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:560px;padding:12px 16px 16px;background:var(--bg);border-top:2px solid var(--line);z-index:10}
+  .foot.ok{background:var(--ok-l);border-color:var(--ok)}
+  .foot.no{background:var(--no-l);border-color:var(--no)}
+  .fb{display:none;gap:10px;align-items:flex-start;margin-bottom:12px}
+  .foot.ok .fb,.foot.no .fb{display:flex;animation:in .25s}
+  .fb .mbox{width:64px;height:64px;margin-top:-4px}
+  .fb .h{font-family:"Baloo 2";font-size:19px;line-height:1.15;display:block}
+  .foot.ok .fb .h{color:var(--ok)} .foot.no .fb .h{color:var(--no)}
+  .fb .pt{font-size:13px;color:var(--muted);display:block}
+  .fb p{margin:6px 0 0;font-size:15px;line-height:1.4}
+  .btn{width:100%;padding:14px;border-radius:14px;font-size:17px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--accent);box-shadow:0 4px 0 var(--accent-d)}
+  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--accent-d)}
+  .btn:disabled{background:#CFC9BE;box-shadow:0 4px 0 #B5AEA2;cursor:default}
+  .foot.ok .btn{background:var(--ok);box-shadow:0 4px 0 #1F5536}
+  .foot.no .btn{background:var(--no);box-shadow:0 4px 0 #7F3127}
+  .btn.ghost{background:var(--card);color:var(--ink);box-shadow:0 4px 0 var(--line2);border:2px solid var(--line)}
+  /* incentivo e conclusão */
+  .pep{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 22px 140px}
+  .pep .mbox{width:170px;height:170px}
+  .pep .bubble{font-size:20px;max-width:380px;margin-top:10px}
+  .pep .bubble::before{content:"";position:absolute;left:50%;top:-9px;width:14px;height:14px;background:var(--card);border-left:2px solid var(--line);border-top:2px solid var(--line);transform:translateX(-50%) rotate(45deg)}
+  .pep .meta{margin-top:14px;color:var(--muted);font-weight:800;font-size:14px}
+  .end{padding:22px 20px 190px;text-align:center}
+  .end .mbox{width:150px;height:150px;margin:0 auto}
+  .end h2{font-size:32px;margin:4px 0 0;line-height:1.05}
+  .end .sub{color:var(--muted);font-weight:700}
+  .end .bubble{display:inline-block;margin-top:10px}
+  .end .st{font-size:34px;color:var(--accent);letter-spacing:6px;margin:8px 0 6px}
+  .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .cards3 .card{padding:10px 4px}.cards3 b{font-size:21px}
+  .done-goal{margin-top:12px;background:var(--soft);border-radius:14px;padding:10px 12px;text-align:left;font-weight:800;font-size:15px}
+  .done-goal small{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:900}
+  .xpl{text-align:left;margin-top:12px}
+  .xpl div{display:flex;justify-content:space-between;font-size:14px;padding:5px 2px;border-bottom:1px dashed var(--line2);font-weight:700}
+  .xpl div b{color:var(--accent)}
+  .bprog{margin-top:14px;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:13px}
+  .bprog .t{font-weight:900;font-size:14px}
+  .bprog .steps{display:flex;gap:6px;margin-top:10px}
+  .bprog .steps i{flex:1;height:10px;border-radius:99px;background:var(--tint)}
+  .bprog .steps i.on{background:var(--accent)}
+  .bprog .n{font-size:13px;color:var(--muted);margin-top:8px}
+  .newach{margin-top:12px;background:var(--card);border:2px solid var(--accent);border-radius:14px;padding:11px;text-align:left;font-size:14px}
+  .newach b{display:block;font-size:15px}
+  .confetti{position:fixed;top:-12px;width:9px;height:13px;z-index:50;pointer-events:none;animation:fall linear forwards;border-radius:2px}
   @keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+  .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-weight:800;z-index:60;animation:in .3s;max-width:90vw;text-align:center}
 </style>
 </head>
 <body>
@@ -128,634 +249,731 @@
 
 <script>
 /* =========================================================
-   CONTEÚDO DO LIVRO
-   Para trocar pelo seu livro, basta editar este objeto.
-   Blocos da leitura:  {p:"texto"} | {ex:"English", pt:"tradução"} | {tip:"dica"}
-   [[palavra|tradução]] vira palavra tocável com tradução.
-   Tipos de pergunta: choice | build | match
+   MASCOTES — configuração central
+   Para adicionar um mascote: inclua um item em MASCOTS (paleta + mensagens)
+   e, se for uma espécie nova, um desenho em SPECIES.
+   Futuro: skins (troca de paleta) e acessórios (camadas em ACCESSORIES).
    ========================================================= */
-const BOOK = {
-  title: "Blurty",
-  subtitle: "Não pensa, só solta! · o jogo do livro Inglês para Brasileiros – 90 Desafios",
-  endNote: "Fim da versão piloto. As Semanas 2 a 13 seguem no livro completo.",
-  chapters: [
-    /* ===================== PARTE I ===================== */
-    {
-      id: "pref", part: "Parte I — O Manifesto", label: "Prefácio", emoji: "🧱",
-      title: "A parede de vidro", sub: "Por que você entende, mas trava",
-      reading: [
-        {p: "Você entende inglês: lê um artigo sem dicionário e acompanha séries com legenda em inglês. Mas, quando alguém fala com você, a mente esvazia. Você monta a frase em português, traduz, confere a gramática… e a conversa já mudou de assunto."},
-        {p: "O intermediário vive atrás de uma <b>parede de vidro</b>. Ela não é feita de vocabulário nem de gramática. É feita de três coisas:"},
-        {tip: "1️⃣ <b>Falta de produção</b>: anos ouvindo e lendo, quase nenhuma hora falando.<br>2️⃣ <b>Tradução mental</b>: lenta demais para uma conversa real.<br>3️⃣ <b>Medo de errar</b>: você percebe os próprios erros e prefere o silêncio."},
-        {p: "O paradoxo: quanto mais você sabe, mais trava. O iniciante fala errado e segue em frente; o intermediário fica calado. Essa fase tem nome: <b>o platô do intermediário</b>."},
-        {p: "O que destrava a fala é <b>falar</b>: 90 desafios, cerca de 15 minutos por dia, em voz alta, com correção da IA. São cerca de <b>22 horas de prática ativa</b>."}
-      ],
-      questions: [
-        {type:"choice", prompt:"Segundo o livro, a parede de vidro é feita de…", options:["Falta de vocabulário","Gramática fraca","Falta de produção, tradução mental e medo de errar"], answer:2,
-         explain:"Você já sabe palavras e gramática suficientes. O que falta é usar."},
-        {type:"choice", prompt:"Quem trava mais, segundo o paradoxo do livro?", options:["O iniciante","O intermediário"], answer:1,
-         explain:"Quanto mais você sabe, mais percebe os erros, e mais trava."},
-        {type:"choice", prompt:"O que destrava a fala?", options:["Mais uma lista de vocabulário","Mais um curso de gramática","Falar todos os dias, em voz alta, com feedback","Mais séries com legenda"], answer:2,
-         explain:"Estudar mais do mesmo jeito não muda o platô. Falar muda."},
-        {type:"choice", prompt:"Quanto tempo de prática ativa os 90 desafios somam?", options:["Cerca de 5 horas","Cerca de 22 horas","Cerca de 90 horas"], answer:1,
-         explain:"90 dias × 15 minutos ≈ 22 horas."},
-        {type:"match", prompt:"Ligue cada camada ao que ela significa", pairs:[["Falta de produção","quase nunca falar"],["Tradução mental","pensar em português"],["Medo de errar","preferir o silêncio"]],
-         explain:"As três camadas da parede de vidro."},
-        {type:"choice", prompt:"Ao fim dos 90 dias, o livro promete que você vai…", options:["Perder o sotaque","Entender todos os filmes sem legenda","Falar de 3 a 5 minutos sobre temas conhecidos sem travar"], answer:2,
-         explain:"Sem promessa milagrosa: fala destravada para quem cumprir os desafios."}
-      ]
-    },
-    {
-      id: "cap1", part: "Parte I — O Manifesto", label: "Capítulo 1", emoji: "🎯",
-      title: "A Promessa Desafiadora", sub: "Fluência antes de perfeição",
-      reading: [
-        {p: "Você não tem um problema de inglês. Você tem um problema de <b>exposição</b>: quase nenhuma hora falando frases suas."},
-        {p: "Falar é uma <b>habilidade motora</b>. A boca precisa de repetição, como as mãos de quem aprende um instrumento. Ninguém aprende violão só assistindo aos outros tocarem."},
-        {tip: "🏆 <b>Regra de ouro (Dias 1–30): não pare.</b> Errou o tempo verbal? Continue. Esqueceu a palavra? Contorne.<br>Primeiro você <b>fala</b>; <b>depois</b> a IA mostra os erros."},
-        {p: "<b>Os dias críticos:</b> 1–7 estranhamento · 8–15 o teste de verdade (muita gente desiste aqui) · 16–30 primeiro destravamento · 31–60 sustentação · 61–90 domínio."},
-        {p: "O compromisso: <b>15 minutos por dia, 90 dias seguidos, nenhum dia zerado.</b>"}
-      ],
-      questions: [
-        {type:"choice", prompt:"Falar inglês é, segundo o livro, uma habilidade…", options:["teórica","motora","de memorização"], answer:1,
-         explain:"Como tocar um instrumento: precisa de repetição."},
-        {type:"choice", prompt:"Você errou um tempo verbal no meio da fala. Nos primeiros 30 dias, você deve…", options:["Parar e recomeçar a frase","Continuar falando","Pesquisar a regra na hora"], answer:1,
-         explain:"Regra de ouro: fluência antes de perfeição."},
-        {type:"choice", prompt:"Em qual fase muita gente abandona qualquer método?", options:["Dias 1–7","Dias 8–15","Dias 61–90"], answer:1,
-         explain:"A novidade acaba e a evolução parece invisível. Releia este capítulo nesses dias."},
-        {type:"build", prompt:"Monte a regra de ouro", words:["fluência","antes","de","perfeição","depois","gramática"],
-         answer:"fluência antes de perfeição", explain:"Primeiro falar, depois corrigir."},
-        {type:"match", prompt:"Ligue cada fase ao que acontece nela", pairs:[["Dias 1–7","estranhamento"],["Dias 16–30","primeiro destravamento"],["Dias 31–60","sustentação"],["Dias 61–90","domínio"]],
-         explain:"O começo é fácil, o meio é neblina, o topo é de quem não para."},
-        {type:"choice", prompt:"Em quais dias você grava sua fala para comparar a evolução?", options:["1, 30, 60 e 90","Todo domingo","Só no Dia 90"], answer:0,
-         explain:"Progresso registrado: a comparação não mente."}
-      ]
-    },
-    {
-      id: "cap2", part: "Parte I — O Manifesto", label: "Capítulo 2", emoji: "📖",
-      title: "Como Usar Este Livro", sub: "A regra do nunca zero",
-      reading: [
-        {p: "Um desafio por dia, todos os dias, na ordem."},
-        {tip: "🚫 <b>Regra do nunca zero:</b> pode fazer malfeito, em 5 minutos, cansado, às 23h, em voz baixa. Só não pode zerar o dia."},
-        {p: "<b>Perdeu um dia?</b> Regra das 24 horas: faça o desafio perdido junto com o do dia seguinte. Nunca dois dias seguidos sem treino."},
-        {p: "Cada dia tem: desafio, tempo, instrução exata, frases-modelo, <b>IA valida</b>, por que funciona, critério de sucesso, modo difícil e diário."},
-        {p: "Equipamento: celular com gravador, uma IA com texto e voz, fones e um caderno. Só isso."},
-        {p: "Fora dos 15 minutos: celular em inglês, podcasts no trajeto, séries com legenda <b>em inglês</b> e pensar em inglês no banho ou na caminhada."}
-      ],
-      questions: [
-        {type:"choice", prompt:"Qual destas atitudes quebra a regra do nunca zero?", options:["Fazer o desafio em 5 minutos","Fazer cansado, às 23h","Pular o dia"], answer:2,
-         explain:"Malfeito vale. Zerado, não."},
-        {type:"choice", prompt:"Você perdeu o desafio de ontem. O que fazer?", options:["Recomeçar do Dia 1","Fazer o de ontem junto com o de hoje","Pular e seguir"], answer:1,
-         explain:"Regra das 24 horas."},
-        {type:"choice", prompt:"O que vale mais, segundo o livro?", options:["3 horas no fim de semana","15 minutos todos os dias"], answer:1,
-         explain:"Constância vence intensidade."},
-        {type:"choice", prompt:"Séries devem ser vistas com legenda em…", options:["português","inglês"], answer:1,
-         explain:"Legenda em inglês, nunca em português."},
-        {type:"choice", prompt:"O mesmo erro aparece 5 dias seguidos no diário. E agora?", options:["Ignore, é normal","Ele vira prioridade"], answer:1,
-         explain:"O diário serve para revelar padrões."},
-        {type:"match", prompt:"Ligue cada bloco do dia à sua função", pairs:[["Frases-modelo","blocos prontos"],["IA valida","prompt de correção"],["Critério de sucesso","cumpriu ou falhou"],["Modo difícil","versão mais pesada"]],
-         explain:"Todos os 90 desafios seguem esse formato."}
-      ]
-    },
-    {
-      id: "cap3", part: "Parte I — O Manifesto", label: "Capítulo 3", emoji: "🤖",
-      title: "IA Como Treinador Pessoal", sub: "Sua arma secreta",
-      reading: [
-        {p: "A IA é o treinador disponível às 23h, que não cansa e não julga: um <b>espelho com opinião</b>."},
-        {tip: "<b>Regra 1:</b> a IA corrige, você produz. Nunca peça para ela escrever o que você vai falar.<br><b>Regra 2:</b> exija feedback honesto. “Great job!” não ajuda ninguém.<br><b>Regra 3:</b> transforme correção em repetição."},
-        {p: "Depois de cada correção: leia a versão corrigida em voz alta <b>3 vezes</b>, feche o texto e diga tudo de novo, e anote os 3 erros principais."},
-        {ex: "Be direct. Only praise what is genuinely good.", pt: "Seja direto. Só elogie o que for realmente bom."},
-        {ex: "Is my original sentence actually wrong, or just less common?", pt: "Minha frase original está errada ou só é menos comum?"},
-        {p: "Cuidado: a IA também erra. Na dúvida, confira em um dicionário confiável (Cambridge, Oxford, Longman)."}
-      ],
-      questions: [
-        {type:"choice", prompt:"Qual é a ordem certa?", options:["A IA escreve, você lê em voz alta","Você fala primeiro, depois a IA corrige"], answer:1,
-         explain:"Se a IA pensa por você, você só copia."},
-        {type:"choice", prompt:"Por que o prompt pede para a IA ser direta?", options:["Porque IAs tendem a ser gentis demais","Para economizar tempo","Porque é mais educado"], answer:0,
-         explain:"Elogio vazio não corrige nada."},
-        {type:"choice", prompt:"Depois da correção, você lê a versão corrigida em voz alta…", options:["1 vez","3 vezes","10 vezes"], answer:1,
-         explain:"Regra 3: correção vira repetição."},
-        {type:"choice", prompt:"A IA “corrigiu” algo que parecia certo. O que fazer?", options:["Aceitar sempre","Perguntar se está errado ou só é menos comum, e conferir no dicionário"], answer:1,
-         explain:"Use a IA como treinador, não como autoridade final."},
-        {type:"build", prompt:"Monte em inglês: “Explique de novo em inglês mais simples.”", words:["Explain","it","again","in","simpler","English","Portuguese","more"],
-         answer:"Explain it again in simpler English", explain:"Pedir explicação em inglês também é treino."},
-        {type:"choice", prompt:"No modo de voz, a IA deve responder com…", options:["Textos longos e detalhados","2–3 frases e sempre uma pergunta de volta"], answer:1,
-         explain:"Assim você fala mais do que ela."}
-      ]
-    },
-    {
-      id: "cap4", part: "Parte I — O Manifesto", label: "Capítulo 4", emoji: "🗣️",
-      title: "Pronúncia: os 10 pontos", sub: "O que denuncia o brasileiro",
-      reading: [
-        {p: "O objetivo não é soar americano nem britânico. É <b>ser entendido na primeira vez</b>."},
-        {tip: "<b>TH</b>: língua entre os dentes (think, this)<br><b>R</b>: a língua não encosta em nada<br><b>T/D antes de i</b>: city, não “citchy”<br><b>Vogal fantasma</b>: big, não “bigui”<br><b>S + consoante</b>: school, não “escool”"},
-        {tip: "<b>Vogais curtas × longas</b>: ship × sheep<br><b>Schwa</b>: about = ə-BOUT<br><b>L final</b>: a língua encosta (people)<br><b>-ed</b>: worked /t/ · played /d/ · wanted /ɪd/<br><b>Acento</b>: CA-na-da"},
-        {ex: "I think these three things are worth it.", pt: "Eu acho que essas três coisas valem a pena."},
-        {ex: "She asked me if I wanted to stay, so I stayed.", pt: "Ela me perguntou se eu queria ficar, então eu fiquei."},
-        {p: "<b>Teste do ditado:</b> dite a frase com o teclado do celular em inglês. Se ele escrever certo, você foi entendido."}
-      ],
-      questions: [
-        {type:"choice", prompt:"Como soa o -ed de “worked”?", sentence:"worked", options:["/t/: uórkt","/d/: uórkd","/ɪd/: uórquêd"], answer:0,
-         explain:"Depois de som surdo (k) → /t/."},
-        {type:"choice", prompt:"Em qual destes verbos o -ed vira uma sílaba extra?", options:["played","asked","wanted"], answer:2,
-         explain:"Só depois de T ou D: wanted, needed, decided."},
-        {type:"choice", prompt:"O que é o erro da “vogal fantasma”?", options:["Trocar TH por F","Acrescentar “i” no final: “bigui”","Falar “escool”"], answer:1,
-         explain:"Termine a palavra na consoante."},
-        {type:"choice", prompt:"Onde fica a sílaba forte de “Canada”?", sentence:"Canada", options:["CA-na-da","ca-NA-da","ca-na-DÁ"], answer:0,
-         explain:"Aprenda o acento junto com a palavra."},
-        {type:"match", prompt:"Ligue cada palavra ao cuidado que ela pede", pairs:[["think","língua entre os dentes"],["school","sem “e” no começo"],["city","sem “tch”"],["people","L com a língua encostada"]],
-         explain:"Quatro dos 10 pontos do capítulo."},
-        {type:"choice", prompt:"Qual é o objetivo da pronúncia, segundo o livro?", options:["Soar como nativo","Ser entendido na primeira vez","Ter sotaque britânico"], answer:1,
-         explain:"Sotaque não é problema. Ser mal entendido é."}
-      ]
-    },
+const MASCOTS = {
+  dino: {
+    name: "Dino", species: "dino", speciesPt: "Dinossauro", colorPt: "Verde",
+    personality: "Corajoso e cheio de energia. Comemora tudo com um rugido.",
+    pal: {body:"#7CC28E", belly:"#E2F2E6", dark:"#4E9A64", accent:"#2A7346", accentD:"#1F5A36", soft:"#E8F3EB"},
+    msgs: {
+      welcome:  [["Roar! Ready for today's English?","Roar! Pronto para o inglês de hoje?"],["Hey, partner! Let's do this!","E aí, parceiro! Bora nessa!"],["Big steps today. Let's go!","Passos grandes hoje. Vamos!"]],
+      happy:    [["Roar! That's right!","Roar! Isso mesmo!"],["Stomp! Nailed it!","Pisou firme! Acertou!"],["Dino-mite answer!","Resposta dino-mite!"]],
+      oops:     [["Oops! Even dinos trip sometimes.","Opa! Até dinossauro tropeça às vezes."],["No worries. We'll get it next time!","Tranquilo. Na próxima a gente acerta!"],["Rawr... almost! Read the tip.","Rawr... quase! Lê a dica."]],
+      excited:  [["Roar! Another English challenge completed!","Roar! Mais um desafio de inglês concluído!"],["Phase done! You're unstoppable!","Fase vencida! Ninguém te para!"],["That was a big step!","Esse foi um passo grande!"]],
+      celebrate:[["ROOOAR! A whole block done!","ROOOAR! Um bloco inteiro concluído!"],["Legend! Time to celebrate!","Lenda! Hora de comemorar!"]],
+      encourage:[["Five more done! Keep stomping!","Mais cinco feitos! Segue firme!"],["You're stronger in English every day.","Você fica mais forte no inglês a cada dia."],["Keep going. I'm right behind you!","Continua. Tô logo atrás de você!"]]
+    }
+  },
+  lumi: {
+    name: "Lumi", species: "llama", speciesPt: "Lhama", colorPt: "Lilás",
+    personality: "Calma e gentil. Te ajuda a aprender sem pressa.",
+    pal: {body:"#C4ADE3", belly:"#F3ECFB", dark:"#9B7DC6", accent:"#76539F", accentD:"#533A73", soft:"#EFE9F6"},
+    msgs: {
+      welcome:  [["Hello, friend. Let's learn calmly today.","Olá, amigo. Vamos aprender com calma hoje."],["Nice to see you again.","Que bom te ver de novo."],["One small step at a time.","Um passinho de cada vez."]],
+      happy:    [["Lovely. That's correct.","Que lindo. Está certo."],["Smooth and natural.","Suave e natural."],["See? You know this.","Viu? Você sabe isso."]],
+      oops:     [["It's okay. Take a breath and read the tip.","Tudo bem. Respira e lê a dica."],["Mistakes help us learn.","Os erros ajudam a gente a aprender."],["Gently now. You'll see it again.","Com calma. Você vai ver de novo."]],
+      excited:  [["Phase complete. I'm proud of you.","Fase concluída. Tenho orgulho de você."],["Beautiful work today.","Lindo trabalho hoje."],["Calm and steady wins.","Com calma e constância se vence."]],
+      celebrate:[["A whole block! What a journey.","Um bloco inteiro! Que jornada."],["You did it. Enjoy this moment.","Você conseguiu. Aproveite o momento."]],
+      encourage:[["Five exercises done. You're doing great.","Cinco exercícios feitos. Você está indo muito bem."],["Slow is fine. Keep going.","Devagar está ótimo. Continue."],["Every answer brings you closer.","Cada resposta te deixa mais perto."]]
+    }
+  },
+  foxy: {
+    name: "Foxy", species: "fox", speciesPt: "Raposa", colorPt: "Laranja",
+    personality: "Esperta e bem-humorada. Adora uma pegadinha.",
+    pal: {body:"#F0A05A", belly:"#FFF4E8", dark:"#D07A35", accent:"#AE520E", accentD:"#7E3B0A", soft:"#FAEDE1"},
+    msgs: {
+      welcome:  [["Hey there, smart one. Ready?","E aí, espertinho. Pronto?"],["Let's outsmart some English today.","Vamos dar um drible no inglês hoje."],["I've got a good feeling about today.","Tô com um bom pressentimento sobre hoje."]],
+      happy:    [["Clever! That's it.","Esperto! É isso."],["Sharp answer!","Resposta afiada!"],["You saw right through it.","Você matou a charada."]],
+      oops:     [["Tricky one, huh? Now you know the trick.","Essa era pegadinha, né? Agora você sabe o truque."],["Even foxes miss sometimes.","Até raposa erra às vezes."],["Smart people learn from slips.","Gente esperta aprende com os deslizes."]],
+      excited:  [["Phase done. Too easy for you!","Fase concluída. Fácil demais pra você!"],["Nicely played!","Bem jogado!"],["Another one in the bag.","Mais uma no papo."]],
+      celebrate:[["A full block? Now that's clever.","Um bloco inteiro? Isso que é esperteza."],["Brilliant! Take a bow.","Brilhante! Pode agradecer à plateia."]],
+      encourage:[["You're getting smarter. Keep going!","Você está ficando mais esperto. Continue!"],["Five down. Your brain is warming up.","Cinco feitos. Seu cérebro está esquentando."],["Stay sharp. The next one is yours.","Fica ligado. A próxima é sua."]]
+    }
+  },
+  miko: {
+    name: "Miko", species: "meerkat", speciesPt: "Suricato", colorPt: "Azul",
+    personality: "Curioso e atento. Repara em cada detalhe.",
+    pal: {body:"#8DB8E3", belly:"#E8F1FB", dark:"#5E8FC0", accent:"#2C6699", accentD:"#1D486E", soft:"#E6EEF7"},
+    msgs: {
+      welcome:  [["Ooh, you're here! What will we learn today?","Ooh, você chegou! O que vamos aprender hoje?"],["I'm on the lookout. Let's learn!","Tô de vigia. Vamos aprender!"],["Curious minds learn faster!","Mentes curiosas aprendem mais rápido!"]],
+      happy:    [["Ooh, good eye!","Ooh, bom olho!"],["I noticed that. Perfect!","Eu reparei. Perfeito!"],["Yes! You spotted it!","Isso! Você percebeu!"]],
+      oops:     [["Hmm, interesting! Look at the tip.","Hmm, interessante! Olha a dica."],["Now we know something new!","Agora a gente sabe algo novo!"],["Let's look closer next time.","Vamos olhar com mais atenção na próxima."]],
+      excited:  [["Phase complete! What's next?","Fase concluída! Qual a próxima?"],["Wow, you learned a lot!","Uau, você aprendeu muito!"],["I'm taking notes on your progress!","Tô anotando seu progresso!"]],
+      celebrate:[["A whole block! Everyone, look!","Um bloco inteiro! Gente, olha isso!"],["Amazing! I can't stop jumping!","Incrível! Não consigo parar de pular!"]],
+      encourage:[["Five done! You're paying great attention.","Cinco feitos! Você está prestando muita atenção."],["Curiosity is your superpower.","A curiosidade é o seu superpoder."],["Keep exploring. You're doing well!","Continue explorando. Você está indo bem!"]]
+    }
+  },
+  bloop: {
+    name: "Bloop", species: "frog", speciesPt: "Sapo", colorPt: "Turquesa",
+    personality: "Saltitante e bobo. Transforma tudo em festa.",
+    pal: {body:"#6CCFC4", belly:"#E3F6F3", dark:"#3FA79C", accent:"#18736F", accentD:"#10504D", soft:"#E2F2F0"},
+    msgs: {
+      welcome:  [["Boing! Hi hi! Let's hop in!","Boing! Oi oi! Bora pular nessa!"],["Ribbit! English time!","Ribbit! Hora do inglês!"],["Hop, hop! Ready?","Pula, pula! Pronto?"]],
+      happy:    [["Boing! That was a great answer!","Boing! Que resposta ótima!"],["Ribbit! Correct!","Ribbit! Certo!"],["Big hop forward!","Um pulão pra frente!"]],
+      oops:     [["Splash! Missed the lily pad.","Tchibum! Errei a folha."],["Oops! Let's hop again later.","Opa! Depois a gente pula de novo."],["Ribbit... almost!","Ribbit... quase!"]],
+      excited:  [["Phase done! Boing boing!","Fase concluída! Boing boing!"],["You hopped all the way!","Você pulou até o fim!"],["Ribbit-tastic!","Ribbit-ástico!"]],
+      celebrate:[["BOING! A whole block! Pond party!","BOING! Um bloco inteiro! Festa na lagoa!"],["Highest jump ever!","O pulo mais alto da história!"]],
+      encourage:[["Five hops done! Keep bouncing!","Cinco pulos feitos! Continua pulando!"],["You're getting so good at this!","Você está ficando muito bom nisso!"],["Hop by hop, you'll get there.","Pulo a pulo, você chega lá."]]
+    }
+  },
+  roki: {
+    name: "Roki", species: "raccoon", speciesPt: "Guaxinim", colorPt: "Coral",
+    personality: "Brincalhão e travesso. Ri dos erros junto com você.",
+    pal: {body:"#EF8E80", belly:"#FDEDEA", dark:"#C9665A", accent:"#B4473A", accentD:"#823227", soft:"#F8E8E4"},
+    msgs: {
+      welcome:  [["Psst! Ready for some English fun?","Psiu! Pronto pra se divertir com inglês?"],["Hey you! I saved you a seat.","Ei você! Guardei um lugar pra você."],["Let's sneak some English into your day.","Vamos colocar um pouco de inglês no seu dia."]],
+      happy:    [["Ha! You got it!","Rá! Acertou!"],["Sneaky good answer!","Resposta boa demais!"],["Not bad at all!","Nada mal!"]],
+      oops:     [["Haha! Even mistakes make you smarter!","Haha! Até os erros te deixam mais esperto!"],["Oops! I won't tell anyone.","Opa! Não conto pra ninguém."],["That one tricked us both!","Essa enganou nós dois!"]],
+      excited:  [["Phase complete! Look at you go!","Fase concluída! Olha você mandando bem!"],["Treasure found: new English!","Tesouro encontrado: inglês novo!"],["Too good! Next one?","Bom demais! Próxima?"]],
+      celebrate:[["A whole block! Let's party!","Um bloco inteiro! Bora comemorar!"],["Best heist ever: a full block!","Melhor golpe da história: um bloco inteiro!"]],
+      encourage:[["Five down! You're on a roll.","Cinco feitos! Você está embalado."],["Keep going. I've got snacks.","Continua. Eu tenho lanchinhos."],["You're better at this than you think.","Você é melhor nisso do que pensa."]]
+    }
+  }
+};
 
-    /* ===================== SEMANA 1 ===================== */
+/* ----------- desenho (SVG) — partes comuns + traços por espécie ----------- */
+const EYES = {default:[[47,64],[73,64]], frog:[[43,40],[77,40]]};
+const SPECIES = {
+  dino: {back: p=>`
+      <path d="M92 92 Q116 96 112 74 Q104 86 90 82Z" fill="${p.body}"/>
+      <path d="M40 40 L46 22 L54 36 Z M54 34 L62 16 L70 34 Z M68 36 L76 22 L82 40 Z" fill="${p.dark}"/>`},
+  llama: {back: p=>`
+      <ellipse cx="42" cy="26" rx="7" ry="18" fill="${p.body}" transform="rotate(-12 42 26)"/>
+      <ellipse cx="78" cy="26" rx="7" ry="18" fill="${p.body}" transform="rotate(12 78 26)"/>
+      <ellipse cx="42" cy="28" rx="3" ry="11" fill="${p.dark}" opacity=".5" transform="rotate(-12 42 28)"/>
+      <ellipse cx="78" cy="28" rx="3" ry="11" fill="${p.dark}" opacity=".5" transform="rotate(12 78 28)"/>`,
+    front: p=>`<circle cx="50" cy="40" r="9" fill="${p.belly}"/><circle cx="60" cy="35" r="10" fill="${p.belly}"/><circle cx="70" cy="40" r="9" fill="${p.belly}"/>`},
+  fox: {back: p=>`
+      <path d="M30 56 L38 16 L60 42 Z" fill="${p.body}"/><path d="M90 56 L82 16 L60 42 Z" fill="${p.body}"/>
+      <path d="M36 48 L40 26 L52 42 Z" fill="${p.belly}"/><path d="M84 48 L80 26 L68 42 Z" fill="${p.belly}"/>`,
+    front: p=>`<path d="M30 70 Q60 102 90 70 Q78 92 60 92 Q42 92 30 70Z" fill="${p.belly}"/>`},
+  meerkat: {back: p=>`<circle cx="24" cy="62" r="8" fill="${p.dark}"/><circle cx="96" cy="62" r="8" fill="${p.dark}"/>`,
+    front: p=>`<ellipse cx="47" cy="64" rx="11" ry="12" fill="${p.dark}" opacity=".55"/><ellipse cx="73" cy="64" rx="11" ry="12" fill="${p.dark}" opacity=".55"/>`},
+  frog: {back: p=>`<circle cx="43" cy="42" r="15" fill="${p.body}"/><circle cx="77" cy="42" r="15" fill="${p.body}"/>`},
+  raccoon: {back: p=>`
+      <path d="M90 96 Q120 92 114 66 Q108 78 92 84Z" fill="${p.body}"/>
+      <path d="M106 72 l7 4 M100 82 l8 3" stroke="${p.dark}" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="36" cy="40" r="12" fill="${p.body}"/><circle cx="84" cy="40" r="12" fill="${p.body}"/>
+      <circle cx="36" cy="40" r="6" fill="${p.dark}"/><circle cx="84" cy="40" r="6" fill="${p.dark}"/>`,
+    front: p=>`<path d="M28 62 Q32 52 47 54 Q60 58 73 54 Q88 52 92 62 Q88 74 73 72 Q60 68 47 72 Q32 74 28 62Z" fill="${p.dark}" opacity=".75"/>`}
+};
+/* acessórios: camadas opcionais, prontos para itens cosméticos no futuro */
+const ACCESSORIES = {
+  partyHat: ()=>`<g class="acc"><path d="M60 4 L48 34 L72 34 Z" fill="#26241F"/><path d="M52 24 L68 24 M50 30 L70 30" stroke="#fff" stroke-width="2" opacity=".6"/><circle cx="60" cy="4" r="4" fill="#fff" stroke="#26241F" stroke-width="2"/></g>`
+};
+
+function eyesSVG(mood, pos){
+  const ink = "#26241F";
+  return pos.map(([x,y],i)=>{
+    const wink = mood==="encourage" && i===1;
+    if (mood==="happy" || mood==="celebrate" || wink)
+      return `<path d="M${x-6} ${y+2} Q${x} ${y-6} ${x+6} ${y+2}" stroke="${ink}" stroke-width="3.2" fill="none" stroke-linecap="round"/>`;
+    if (mood==="oops")
+      return i===0 ? `<path d="M${x-5} ${y-4} L${x+4} ${y} L${x-5} ${y+4}" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
+                   : `<path d="M${x+5} ${y-4} L${x-4} ${y} L${x+5} ${y+4}" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    const r = mood==="excited" ? 8.5 : 7;
+    return `<g class="eye"><circle cx="${x}" cy="${y}" r="${r}" fill="#fff"/><circle cx="${x+1}" cy="${y+1}" r="${r*.55}" fill="${ink}"/><circle cx="${x+2.5}" cy="${y-1.5}" r="1.6" fill="#fff"/></g>`;
+  }).join("");
+}
+function mouthSVG(mood, sp){
+  const ink="#26241F", y = sp==="frog" ? 72 : 80, w = sp==="frog" ? 16 : 9;
+  if (mood==="happy" || mood==="celebrate" || mood==="excited")
+    return `<path d="M${60-w-2} ${y-2} Q60 ${y+16} ${60+w+2} ${y-2} Z" fill="${ink}"/><path d="M${60-6} ${y+6} Q60 ${y+2} ${60+6} ${y+6} Q60 ${y+11} ${60-6} ${y+6}Z" fill="#E46F6F"/>`;
+  if (mood==="oops")
+    return `<path d="M${60-w} ${y+3} q4 -5 ${w/2} 0 t${w/2} 0 t${w/2} 0 t${w/2} 0" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+  return `<path d="M${60-w} ${y} Q60 ${y+8} ${60+w} ${y}" stroke="${ink}" stroke-width="3.2" fill="none" stroke-linecap="round"/>`;
+}
+/* mood: idle | happy | oops | excited | celebrate | welcome | encourage */
+function mascotSVG(id, mood="idle", opts={}){
+  const m = MASCOTS[id], p = m.pal, sp = SPECIES[m.species];
+  const eyes = EYES[m.species==="frog"?"frog":"default"];
+  const wave = mood==="welcome" || mood==="encourage";
+  const acc = (opts.accessories||[]).concat(mood==="celebrate"?["partyHat"]:[]).map(a=>ACCESSORIES[a]?ACCESSORIES[a](p):"").join("");
+  const sparkle = (mood==="excited"||mood==="celebrate") ? `<g class="spark" fill="${p.accent}"><path d="M14 30 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3z"/><path d="M104 18 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2z"/><circle cx="108" cy="50" r="3"/></g>` : "";
+  const drop = mood==="oops" ? `<path d="M92 44 q5 8 0 12 q-5 -4 0 -12z" fill="#9CC3E6"/>` : "";
+  return `<svg class="msvg mood-${mood}" viewBox="0 0 120 120" role="img" aria-label="${m.name}">
+    <g class="whole">
+      ${sparkle}
+      ${sp.back ? sp.back(p) : ""}
+      <ellipse cx="44" cy="108" rx="11" ry="6" fill="${p.dark}"/><ellipse cx="76" cy="108" rx="11" ry="6" fill="${p.dark}"/>
+      <ellipse class="arm-l" cx="25" cy="84" rx="8" ry="12" fill="${p.body}" transform="rotate(20 25 84)"/>
+      <g class="${wave?"arm-wave":""}" style="transform-origin:92px 80px"><ellipse cx="96" cy="${wave?70:84}" rx="8" ry="12" fill="${p.body}" transform="rotate(${wave?-35:-20} 96 ${wave?70:84})"/></g>
+      <ellipse cx="60" cy="72" rx="38" ry="37" fill="${p.body}"/>
+      <ellipse cx="60" cy="90" rx="22" ry="16" fill="${p.belly}"/>
+      ${sp.front ? sp.front(p) : ""}
+      <g class="eyes">${eyesSVG(mood, eyes)}</g>
+      ${(mood==="happy"||mood==="excited"||mood==="celebrate"||mood==="welcome") ? `<circle cx="${eyes[0][0]-8}" cy="${eyes[0][1]+13}" r="5" fill="#F29A9A" opacity=".45"/><circle cx="${eyes[1][0]+8}" cy="${eyes[1][1]+13}" r="5" fill="#F29A9A" opacity=".45"/>` : ""}
+      ${mouthSVG(mood, m.species)}
+      ${drop}${acc}
+    </g></svg>`;
+}
+
+/* mensagens sem repetir em sequência */
+const _bags = {};
+function mascotLine(id, mood){
+  const key = id+":"+mood, list = MASCOTS[id].msgs[mood] || MASCOTS[id].msgs.encourage;
+  if (!_bags[key] || !_bags[key].length){ _bags[key] = list.map((_,i)=>i).sort(()=>Math.random()-.5); }
+  return list[_bags[key].pop()];
+}
+
+/* aplica o tema do mascote nas variáveis de cor do app */
+function applyTheme(id){
+  const p = MASCOTS[id] ? MASCOTS[id].pal : {accent:"#4A4740", accentD:"#2E2C27", soft:"#EEEBE5", body:"#BDB7AC"};
+  const r = document.documentElement.style;
+  r.setProperty("--accent", p.accent); r.setProperty("--accent-d", p.accentD);
+  r.setProperty("--soft", p.soft); r.setProperty("--mbody", p.body);
+  const meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.content = "#F7F5F0";
+}
+
+
+/* =========================================================
+   BLOCO 1 — FIRST CONVERSATIONS (Iniciante)
+   Cada fase: cartão "Aprenda" (reading) + 3 desafios.
+   Blocos da leitura: {say:[personagem, en], pt} | {ex, pt} | {tip} | {p} | {dialog:[[quem, en], ...]}
+   Campos da pergunta: kind (rótulo), situation, dialog, sentence, prompt, explain (aceita HTML)
+   ========================================================= */
+const BLOCK1 = {
+  id: "b1", title: "First Conversations", pt: "Primeiras conversas", level: "Iniciante", emoji: "👋",
+  goal: "Cumprimentar, se apresentar e manter uma conversa curta com alguém que você acabou de conhecer.",
+  phases: [
     {
-      id: "d1", part: "Semana 1 — Quebrar o Silêncio", label: "Dia 1", emoji: "🎙️",
-      title: "A Gravação Zero", sub: "Registrar como você fala hoje",
-      mission: "Fale sobre você por 2 minutos, sem parar e sem português. Grave e salve como “Gravação Zero”.",
+      id: "b1p1", title: "Greetings", pt: "Cumprimentos", emoji: "👋",
+      goal: "Cumprimentar alguém e responder a “How are you?”",
       reading: [
-        {p: "<b>Desafio do dia (15 min):</b> fale sobre você por 2 minutos sem parar, sem roteiro e sem português. Grave."},
-        {p: "Responda nesta ordem:"},
-        {ex: "Who are you? What do you do? What do you like doing?", pt: "Quem é você? O que você faz? Do que você gosta?"},
-        {p: "Travou? Use as frases de ganhar tempo:"},
-        {ex: "Let me think…", pt: "Deixa eu pensar…"},
-        {ex: "How can I put it…", pt: "Como posso dizer…"},
-        {ex: "What I mean is…", pt: "O que eu quero dizer é…"},
-        {tip: "⚠️ <b>Falhou se</b> parou a gravação para recomeçar “do jeito certo”. Recomeçar é proibido: é exatamente o hábito que trava você."}
+        {say: ["@", "Hi! Let's start with the first thing everyone says: hello!"], pt: "Oi! Vamos começar pela primeira coisa que todo mundo diz: olá!"},
+        {ex: "Hi!", pt: "Oi! (o mais comum no dia a dia)"},
+        {ex: "Good morning!", pt: "Bom dia!"},
+        {ex: "How are you?", pt: "Como você está?"},
+        {ex: "I'm good, thanks. And you?", pt: "Estou bem, obrigado(a). E você?"},
+        {ex: "See you later!", pt: "Até mais!"},
+        {tip: "💡 <b>Good night</b> é só para se despedir ou ir dormir. Para cumprimentar à noite, use <b>Good evening</b> ou simplesmente <b>Hi</b>."}
       ],
       questions: [
-        {type:"choice", prompt:"Você travou no meio da gravação. O que dizer?", options:["Pera aí…","Let me think…","Sorry, I stop."], answer:1,
-         explain:"Frase de ganhar tempo, e a gravação continua."},
-        {type:"match", prompt:"Ligue as frases de ganhar tempo", pairs:[["Let me think…","Deixa eu pensar…"],["How can I put it…","Como posso dizer…"],["What I mean is…","O que eu quero dizer é…"],["Anyway, …","Enfim, …"]],
-         explain:"As frases-modelo do Dia 1."},
-        {type:"choice", prompt:"Sua gravação ficou ruim. O que fazer?", options:["Apagar e regravar","Guardar como Gravação Zero, mesmo odiando"], answer:1,
-         explain:"Ela é o seu “antes”."},
-        {type:"build", prompt:"Monte: “O que eu quero dizer é…”", words:["What","I","mean","is","say","want"],
-         answer:"What I mean is", explain:"What I mean is… = o que eu quero dizer é…"},
-        {type:"choice", prompt:"Por que a Gravação Zero é importante?", options:["Para mandar para um professor","É o ponto de partida para comparar nos Dias 30, 60 e 90"], answer:1,
-         explain:"Não existe evolução sem ponto de partida."},
-        {type:"choice", prompt:"Quantas vezes você lê a versão corrigida em voz alta?", options:["1","3","Nenhuma"], answer:1,
-         explain:"Passo 8 da instrução exata."}
+        {type: "choice", kind: "Tradução", prompt: "Como se diz “Bom dia!” em inglês?",
+         options: ["Good morning!", "Good night!", "Good day, morning!"], answer: 0,
+         explain: "<b>Good morning</b> é o cumprimento natural pela manhã. <b>Good night</b> é despedida."},
+        {type: "choice", kind: "Responda na conversa", situation: "Você chega na cafeteria. A Maya está no balcão.",
+         dialog: [["Maya", "Hi! How are you?"]], prompt: "Qual é uma resposta natural?",
+         options: ["I'm good, thanks. And you?", "I'm 25 years.", "Good night, Maya."], answer: 0,
+         explain: "Você responde e devolve a pergunta com <b>And you?</b>, como os nativos fazem. (Estou bem, obrigado. E você?)"},
+        {type: "choice", kind: "Encontre o erro", situation: "São 21h e você está chegando a um jantar com amigos.",
+         prompt: "Qual cumprimento NÃO combina com a situação?",
+         options: ["Hi, everyone!", "Good evening!", "Good night!"], answer: 2,
+         explain: "<b>Good night</b> é para se despedir ou ao ir dormir, não para chegar. Na chegada: <i>Hi</i> ou <i>Good evening</i>."}
       ]
     },
     {
-      id: "d2", part: "Semana 1 — Quebrar o Silêncio", label: "Dia 2", emoji: "☕",
-      title: "Narre a Sua Vida", sub: "Falar sem traduzir, em tempo real",
-      mission: "Durante uma tarefa comum, narre em voz alta, em inglês, por 5 minutos. Anote as palavras que faltaram.",
+      id: "b1p2", title: "Introducing Yourself", pt: "Apresentações", emoji: "🙋",
+      goal: "Dizer seu nome, de onde você é e sua idade",
       reading: [
-        {p: "<b>Desafio (10–15 min):</b> durante uma tarefa comum, narre em voz alta, em inglês, tudo o que está fazendo, por 5 minutos seguidos."},
-        {ex: "I'm opening the fridge. I'm taking the milk out.", pt: "Estou abrindo a geladeira. Estou tirando o leite."},
-        {ex: "I'm about to make coffee.", pt: "Estou prestes a fazer café."},
-        {ex: "I've just washed the dishes.", pt: "Acabei de lavar a louça."},
-        {ex: "Where did I put the keys?", pt: "Onde eu coloquei as chaves?"},
-        {tip: "💡 Narrar em tempo real não deixa tempo para traduzir: a ação está acontecendo agora, e a frase precisa sair agora."}
+        {say: ["@", "Now let's introduce ourselves. Look how Maya does it:"], pt: "Agora vamos nos apresentar. Veja como a Maya faz:"},
+        {dialog: [["Maya", "Hi! I'm Maya. I'm from Canada. Nice to meet you!"]]},
+        {ex: "My name is Ana.", pt: "Meu nome é Ana."},
+        {ex: "I'm Ana.", pt: "Eu sou a Ana. (mais comum na conversa)"},
+        {ex: "Nice to meet you!", pt: "Prazer em te conhecer!"},
+        {ex: "Nice to meet you too!", pt: "O prazer é meu!"},
+        {ex: "I'm from Brazil.", pt: "Eu sou do Brasil."},
+        {ex: "I'm 25 years old.", pt: "Tenho 25 anos."},
+        {tip: "💡 Idade usa o verbo <b>be</b>: <i>I'm 25</i>. Nunca <i>I have 25 years</i>."}
       ],
       questions: [
-        {type:"match", prompt:"Ligue as frases-modelo", pairs:[["I'm about to…","Estou prestes a…"],["I've just…","Acabei de…"],["I'm done with…","Terminei de…"],["Now I'm going to…","Agora eu vou…"]],
-         explain:"As frases-modelo do Dia 2."},
-        {type:"choice", prompt:"Você acabou de lavar a louça. Como narrar?", options:["I'm about to wash the dishes.","I've just washed the dishes.","I'm done to wash the dishes."], answer:1,
-         explain:"I've just… = acabei de…"},
-        {type:"build", prompt:"Monte: “Onde eu coloquei as chaves?”", words:["Where","did","I","put","the","keys?","do","my"],
-         answer:"Where did I put the keys?", explain:"Pergunta no passado → did."},
-        {type:"choice", prompt:"Você não sabe dizer “escorredor”. O que fazer?", options:["Parar a narração","Falar em português","Descrever: the thing I use to dry the dishes"], answer:2,
-         explain:"Contorne com outras palavras e continue."},
-        {type:"choice", prompt:"Por que narrar a própria vida funciona?", options:["Treina a escrita","Não deixa tempo para a tradução mental","Ensina gramática"], answer:1,
-         explain:"E mostra as palavras do SEU dia a dia que faltam."},
-        {type:"choice", prompt:"No modo difícil do Dia 2, você conta tudo de novo no…", options:["futuro","passado","presente"], answer:1,
-         explain:"First, I opened the fridge. Then I…"}
+        {type: "build", kind: "Monte a frase", situation: "Alguém acabou de se apresentar para você.",
+         prompt: "Monte em inglês: “Prazer em te conhecer!”", words: ["Nice", "to", "meet", "you!", "know", "have"],
+         answer: "Nice to meet you!",
+         explain: "<b>Nice to meet you</b> é a frase padrão ao conhecer alguém. Aqui não se usa <i>know</i>."},
+        {type: "choice", kind: "Encontre o erro", prompt: "Qual frase está ERRADA?",
+         options: ["I'm 30 years old.", "I have 30 years.", "I'm 30."], answer: 1,
+         explain: "Idade em inglês usa <b>be</b>: <i>I'm 30</i>. “I have 30 years” é tradução literal do português."},
+        {type: "choice", kind: "Responda na conversa", situation: "Primeiro dia no trabalho novo.",
+         dialog: [["Leo", "Hi, I'm Leo. Nice to meet you!"]], prompt: "Qual é a melhor resposta?",
+         options: ["Nice to meet you too! I'm Ana.", "Yes, I meet you.", "Me too name is Ana."], answer: 0,
+         explain: "<b>Nice to meet you too</b> devolve a gentileza, e você já se apresenta. (Prazer também! Sou a Ana.)"}
       ]
     },
     {
-      id: "d3", part: "Semana 1 — Quebrar o Silêncio", label: "Dia 3", emoji: "👅",
-      title: "Os Sons Que Te Denunciam", sub: "TH e vogal fantasma",
-      mission: "Treine TH e vogal fantasma até o ditado do celular escrever certo as três frases de treino. Grave a leitura final.",
+      id: "b1p3", title: "Asking Questions", pt: "Fazendo perguntas", emoji: "❓",
+      goal: "Fazer as 4 perguntas básicas para conhecer alguém",
       reading: [
-        {p: "<b>Desafio (15 min):</b> treinar os dois pontos de pronúncia da semana até o ditado do celular entender você."},
-        {tip: "<b>TH</b>: ponta da língua entre os dentes. Em <i>think</i> sem vibrar a garganta; em <i>this</i> vibrando.<br><b>Vogal fantasma</b>: termine na consoante. <i>big</i>, não “bigui”."},
-        {ex: "I think these three things are worth it.", pt: "Eu acho que essas três coisas valem a pena."},
-        {ex: "They thought about it, but they didn't say anything.", pt: "Eles pensaram nisso, mas não disseram nada."},
-        {ex: "Let me check my work and get back to you.", pt: "Deixa eu revisar meu trabalho e te dou retorno."},
-        {p: "Pares mínimos: <b>think × sink</b> · <b>three × tree</b> · <b>they × day</b>"}
+        {say: ["@", "A good conversation goes both ways. Ask questions!"], pt: "Uma boa conversa é de ida e volta. Faça perguntas!"},
+        {ex: "What's your name?", pt: "Qual é o seu nome?"},
+        {ex: "Where are you from?", pt: "De onde você é?"},
+        {ex: "What do you do?", pt: "O que você faz? (profissão)"},
+        {ex: "How old are you?", pt: "Quantos anos você tem?"},
+        {tip: "💡 <b>What do you do?</b> pergunta a profissão. Para “o que você está fazendo agora?”, use <b>What are you doing?</b>"}
       ],
       questions: [
-        {type:"choice", prompt:"Como fazer o som do TH em “think”?", sentence:"think", options:["Como “f”: fink","Língua entre os dentes, soltando o ar","Como “t”: tink"], answer:1,
-         explain:"Ponta da língua aparecendo entre os dentes."},
-        {type:"choice", prompt:"Qual palavra forma par mínimo com “three”?", sentence:"three", options:["tree","free","throw"], answer:0,
-         explain:"three × tree: só o TH muda."},
-        {type:"choice", prompt:"Qual pronúncia de “like” está correta?", sentence:"like", options:["laiki","laik","laique"], answer:1,
-         explain:"Termine na consoante, sem vogal fantasma."},
-        {type:"match", prompt:"Ligue cada palavra ao seu par mínimo", pairs:[["think","sink"],["three","tree"],["they","day"]],
-         explain:"Exagere a diferença ao ler em voz alta."},
-        {type:"choice", prompt:"Por que usar o ditado do celular?", options:["É um juiz neutro: não adivinha o que você quis dizer","Ele corrige gramática","É mais rápido"], answer:0,
-         explain:"Se ele entendeu, você está sendo claro."},
-        {type:"choice", prompt:"Falhou se…", options:["leu as frases em silêncio, “na cabeça”","precisou de várias tentativas"], answer:0,
-         explain:"Pronúncia só se treina com a boca."}
+        {type: "match", kind: "Associe", prompt: "Ligue cada pergunta à resposta certa",
+         pairs: [["What's your name?", "I'm Ana."], ["Where are you from?", "I'm from Brazil."], ["What do you do?", "I'm a nurse."], ["How old are you?", "I'm 28."]],
+         explain: "Cada pergunta pede uma informação: nome, origem, profissão e idade."},
+        {type: "choice", kind: "Complete a frase", prompt: "Complete a pergunta", sentence: "___ are you from?",
+         options: ["Where", "What", "How"], answer: 0,
+         explain: "<b>Where</b> = onde. <i>Where are you from?</i> = De onde você é?"},
+        {type: "choice", kind: "Interprete", dialog: [["Maya", "So, what do you do?"]], prompt: "O que a Maya quer saber?",
+         options: ["Qual é a sua profissão", "O que você está fazendo agora", "Do que você gosta de fazer"], answer: 0,
+         explain: "<b>What do you do?</b> é o jeito comum de perguntar a profissão. Resposta: <i>I'm a teacher</i>, <i>I work in sales</i>…"}
       ]
     },
     {
-      id: "d4", part: "Semana 1 — Quebrar o Silêncio", label: "Dia 4", emoji: "🌗",
-      title: "Sombra", sub: "Ritmo e fala ligada de um nativo",
-      mission: "Escolha 1 minuto de áudio com transcrição e faça 5 rodadas de shadowing. Grave a quinta.",
+      id: "b1p4", title: "Everyday Expressions", pt: "Expressões do dia a dia", emoji: "🙏",
+      goal: "Agradecer, pedir licença e pedir para repetir",
       reading: [
-        {p: "<b>Desafio (15 min):</b> escolha um áudio de 1 minuto com um falante nativo e fale junto com ele, ao mesmo tempo, até acompanhar o ritmo sem ler."},
-        {tip: "<b>Rodada 1:</b> ouvir lendo a transcrição<br><b>Rodadas 2–4:</b> falar junto, olhando cada vez menos o texto<br><b>Rodada 5:</b> sem texto, gravando"},
-        {p: "Onde encontrar: podcasts com transcrição, vídeos com legenda feita pelo autor, cenas curtas de séries que você já viu."},
-        {ex: "I want to go. → I wanna go.", pt: "“want to” vira “wanna” na fala rápida"},
-        {ex: "Did you see it? → Didja see it?", pt: "“did you” vira “didja”"},
-        {p: "O intermediário trava também por não conhecer a <b>música da língua</b>: o ritmo, as palavras que se juntam, as sílabas que quase somem."}
+        {say: ["@", "These little phrases make you sound polite and natural."], pt: "Essas frases curtinhas fazem você soar educado e natural."},
+        {ex: "Thanks!", pt: "Obrigado(a)!"},
+        {ex: "You're welcome.", pt: "De nada."},
+        {ex: "Excuse me.", pt: "Com licença. (antes de pedir passagem ou chamar alguém)"},
+        {ex: "Sorry!", pt: "Desculpa! (depois de um esbarrão ou erro)"},
+        {ex: "Could you repeat that, please?", pt: "Pode repetir, por favor?"},
+        {ex: "No problem.", pt: "Sem problema."}
       ],
       questions: [
-        {type:"choice", prompt:"Quantas rodadas tem o shadowing do Dia 4?", options:["2","5","10"], answer:1,
-         explain:"As duas últimas, sem transcrição."},
-        {type:"choice", prompt:"Falhou se…", options:["pausou o áudio a cada frase","errou algumas palavras"], answer:0,
-         explain:"Pausar transforma shadowing em leitura."},
-        {type:"match", prompt:"Ligue a forma escrita à fala rápida", pairs:[["want to","wanna"],["did you","didja"],["going to","gonna"]],
-         explain:"Padrões de fala ligada."},
-        {type:"choice", prompt:"Qual áudio é melhor para começar?", options:["Stand-up rápido","Entrevistas e podcasts para estudantes","Notícias sem legenda"], answer:1,
-         explain:"Comece mais lento e aumente a velocidade ao longo das semanas."},
-        {type:"choice", prompt:"O que o shadowing treina?", options:["Vocabulário","A música da língua: ritmo e fala ligada","Escrita"], answer:1,
-         explain:"É o mais perto que você chega de copiar um nativo."},
-        {type:"choice", prompt:"Legendas automáticas…", options:["são sempre perfeitas","costumam errar; prefira as feitas pelo autor"], answer:1,
-         explain:"Dica da seção “Onde encontrar áudios”."}
+        {type: "choice", kind: "Situação", situation: "Você precisa passar por alguém em um corredor estreito.",
+         prompt: "O que você diz?", options: ["Excuse me.", "Sorry me.", "Thanks you."], answer: 0,
+         explain: "<b>Excuse me</b> pede licença <i>antes</i>. <b>Sorry</b> é para depois de esbarrar. “Sorry me” e “Thanks you” não existem."},
+        {type: "choice", kind: "Responda na conversa", dialog: [["Você", "Thank you so much!"]],
+         prompt: "O que a Maya responde, naturalmente?", options: ["You're welcome!", "Thank you too!", "Yes, please."], answer: 0,
+         explain: "<b>You're welcome</b> = de nada. Também se ouve muito <i>No problem</i>."},
+        {type: "build", kind: "Monte a frase", situation: "Você não entendeu o que a pessoa falou.",
+         prompt: "Monte: “Pode repetir, por favor?”", words: ["Could", "you", "repeat", "that,", "please?", "me", "do"],
+         answer: "Could you repeat that, please?",
+         explain: "Pedir para repetir é normal, até entre nativos! Também vale: <i>Sorry, could you say that again?</i>"}
       ]
     },
     {
-      id: "d5", part: "Semana 1 — Quebrar o Silêncio", label: "Dia 5", emoji: "🔄",
-      title: "Sem a Palavra Certa", sub: "Contornar o que você não sabe",
-      mission: "Explique 6 palavras sem dizê-las, em inglês, até 30 segundos cada. Grave cada explicação.",
+      id: "b1p5", title: "Let's Talk!", pt: "Vamos conversar!", emoji: "💬",
+      goal: "Acompanhar uma conversa curta do começo ao fim",
       reading: [
-        {p: "<b>Desafio (15 min):</b> explique 6 palavras sem dizê-las, em inglês, em até 30 segundos cada. Sem português e sem pausa longa."},
-        {ex: "It's a kind of…", pt: "É um tipo de…"},
-        {ex: "It's something you use to…", pt: "É algo que você usa para…"},
-        {ex: "It's the place where…", pt: "É o lugar onde…"},
-        {ex: "It's the person who…", pt: "É a pessoa que…"},
-        {ex: "It's the opposite of…", pt: "É o oposto de…"},
-        {tip: "💡 O falante fluente também não sabe todas as palavras, mas contorna as que não sabe sem parar a conversa. Isso se chama <b>paráfrase</b>."}
+        {say: ["@", "Time to put it all together. Here's Ana meeting Maya at a coffee shop."], pt: "Hora de juntar tudo. Aqui a Ana conhece a Maya numa cafeteria."},
+        {dialog: [["Maya", "Hi! I'm Maya. What's your name?"], ["Você", "Hi, Maya! I'm Ana. Nice to meet you."], ["Maya", "Nice to meet you too! Where are you from?"], ["Você", "I'm from Brazil. And you?"], ["Maya", "I'm from Canada. What do you do?"], ["Você", "I'm a student."], ["Maya", "Cool! See you later!"]]},
+        {tip: "💡 Repare: depois de responder, a Ana devolve a pergunta com <b>And you?</b> É assim que a conversa continua."}
       ],
       questions: [
-        {type:"choice", prompt:"Como explicar “dentist” sem dizer a palavra?", options:["It's the person who takes care of your teeth.","It's the place where teeth.","It's dentista."], answer:0,
-         explain:"Pessoa → It's the person who…"},
-        {type:"choice", prompt:"Como explicar “scissors”?", options:["It's the person who cuts.","It's something you use to cut paper.","It's the opposite of paper."], answer:1,
-         explain:"Objeto → It's something you use to…"},
-        {type:"choice", prompt:"Como explicar “library”?", options:["It's the place where you borrow books.","It's something you use to read.","It's a kind of person."], answer:0,
-         explain:"Lugar → It's the place where…"},
-        {type:"match", prompt:"Ligue as estruturas de paráfrase", pairs:[["It's a kind of…","É um tipo de…"],["It's the place where…","É o lugar onde…"],["It looks like…","Parece…"],["It's the opposite of…","É o oposto de…"]],
-         explain:"O, para que serve, onde, com o que se parece."},
-        {type:"build", prompt:"Monte: “É algo que você usa para cozinhar.”", words:["It's","something","you","use","to","cook","where","who"],
-         answer:"It's something you use to cook", explain:"Estrutura para objetos."},
-        {type:"choice", prompt:"Falhou se…", options:["pulou as palavras “difíceis demais”","usou uma estrutura só"], answer:0,
-         explain:"As difíceis são o desafio."}
-      ]
-    },
-    {
-      id: "d6", part: "Semana 1 — Quebrar o Silêncio", label: "Dia 6", emoji: "💬",
-      title: "Opinião em 60 Segundos", sub: "Organizar uma ideia sob pressão",
-      mission: "Dê sua opinião sobre 3 temas, 60 segundos cada, com a estrutura PREP. Grave as três.",
-      reading: [
-        {p: "<b>Desafio (15 min):</b> dê sua opinião sobre três temas, 60 segundos cada, usando a estrutura <b>PREP</b>. Grave as três."},
-        {tip: "<b>P</b>oint: I believe that…<br><b>R</b>eason: The main reason is that…<br><b>E</b>xample: For example, …<br><b>P</b>oint: That's why I think…"},
-        {ex: "In my opinion, working from home is better.", pt: "Na minha opinião, trabalhar de casa é melhor."},
-        {ex: "On the other hand, …", pt: "Por outro lado, …"},
-        {p: "Dar opinião é uma das fronteiras entre o B1 e o B2. Com a PREP, você nunca começa uma resposta sem saber como vai terminá-la."}
-      ],
-      questions: [
-        {type:"choice", prompt:"O que significa o primeiro P da PREP?", options:["Problem","Point: a sua opinião","Pause"], answer:1,
-         explain:"Point → Reason → Example → Point."},
-        {type:"build", prompt:"Coloque a PREP na ordem", words:["Point","Reason","Example","Point"],
-         answer:"Point Reason Example Point", explain:"Opinião, motivo, exemplo, opinião de novo."},
-        {type:"choice", prompt:"Qual frase abre a parte Reason?", options:["That's why I think…","The main reason is that…","For example, …"], answer:1,
-         explain:"Reason = o porquê."},
-        {type:"match", prompt:"Ligue as frases de opinião", pairs:[["In my opinion, …","Na minha opinião…"],["The main reason is that…","O principal motivo é que…"],["On the other hand, …","Por outro lado…"],["That's why I think…","É por isso que eu acho…"]],
-         explain:"As frases-modelo do Dia 6."},
-        {type:"choice", prompt:"Quanto tempo para pensar antes de falar?", options:["30 segundos, só palavras-chave","5 minutos escrevendo o texto"], answer:0,
-         explain:"Nada de frases escritas."},
-        {type:"choice", prompt:"Falhou se…", options:["escreveu o texto antes e leu","usou poucas expressões"], answer:0,
-         explain:"O treino é organizar o pensamento falando."}
-      ]
-    },
-    {
-      id: "d7", part: "Semana 1 — Quebrar o Silêncio", label: "Dia 7", emoji: "🤝",
-      title: "A Primeira Conversa", sub: "Conversa real, sem roteiro",
-      mission: "Converse com a IA por voz durante 10 minutos, sem português. Peça o feedback e grave 1 minuto de resumo da semana.",
-      reading: [
-        {p: "<b>Desafio (15 min):</b> converse com a IA, por voz, durante 10 minutos, sem pausa e sem português. Cenário: o intervalo de um evento profissional."},
-        {ex: "That's a good question. Let me think…", pt: "Boa pergunta. Deixa eu pensar…"},
-        {ex: "Sorry, could you say that again?", pt: "Desculpe, pode repetir?"},
-        {ex: "Really? Tell me more about that.", pt: "Sério? Me conta mais."},
-        {ex: "So, what brings you here?", pt: "E o que te traz aqui?"},
-        {tip: "💡 Conversa é ida e volta: faça pelo menos <b>3 perguntas</b>. Aos 10 minutos, diga <b>feedback</b>."}
-      ],
-      questions: [
-        {type:"choice", prompt:"Você não entendeu o que a pessoa disse. Você diz:", options:["What?","Sorry, could you say that again?","Repeat."], answer:1,
-         explain:"Educado e natural."},
-        {type:"choice", prompt:"Você quer devolver a pergunta. Você diz:", options:["What about you?","And you what?","You too?"], answer:0,
-         explain:"What about you? = E você?"},
-        {type:"match", prompt:"Ligue as frases de conversa", pairs:[["What about you?","E você?"],["Tell me more about that.","Me conta mais."],["What brings you here?","O que te traz aqui?"],["Could you say that again?","Pode repetir?"]],
-         explain:"As frases-modelo do Dia 7."},
-        {type:"build", prompt:"Monte: “E o que te traz aqui?”", words:["So,","what","brings","you","here?","takes","there"],
-         answer:"So, what brings you here?", explain:"Ótima pergunta para abrir conversa em eventos."},
-        {type:"choice", prompt:"Quantas perguntas você deve fazer, no mínimo?", options:["Nenhuma","3","10"], answer:1,
-         explain:"Critério de sucesso do Dia 7."},
-        {type:"choice", prompt:"Falhou se…", options:["encerrou antes dos 10 minutos porque “ficou estranho”","errou alguns tempos verbais"], answer:0,
-         explain:"Estranho é o normal do Dia 7."}
-      ]
-    },
-    {
-      id: "chk1", part: "Semana 1 — Quebrar o Silêncio", label: "Checkpoint", emoji: "🏁",
-      title: "Revisão da Semana 1", sub: "7 de 90: o primeiro marco",
-      mission: "Ouça a Gravação Zero e o resumo do Dia 7, junte os erros da semana e diga as 10 frases da IA em voz alta, duas vezes.",
-      reading: [
-        {p: "Você completou 7 dias. Antes de começar a Semana 2, faça esta revisão em 10 minutos."},
-        {tip: "1️⃣ Ouça a Gravação Zero e o resumo do Dia 7, uma depois da outra.<br>2️⃣ Junte os erros da semana e peça à IA para agrupá-los.<br>3️⃣ Responda com honestidade: dias cumpridos, desafio mais difícil, erro que mais se repetiu."},
-        {p: "Zerou algum dia? <b>Não recomece do Dia 1.</b> Faça hoje o desafio que faltou e siga em frente."},
-        {p: "A Semana 2, <i>Pensar em Inglês</i>, ataca a tradução mental de frente."}
-      ],
-      questions: [
-        {type:"choice", prompt:"Ao comparar as gravações, o que procurar?", options:["Uma transformação total","Detalhes: menos pausas, menos “éééé”, frases mais completas"], answer:1,
-         explain:"Não espere milagre: procure detalhes."},
-        {type:"choice", prompt:"Você zerou o Dia 4. O que fazer?", options:["Recomeçar do Dia 1","Fazer hoje o desafio que faltou e seguir"], answer:1,
-         explain:"O livro continua, e você também."},
-        {type:"match", prompt:"Ligue cada dia ao que ele treina", pairs:[["Dia 1","Gravação Zero"],["Dia 3","TH e vogal fantasma"],["Dia 5","paráfrase"],["Dia 6","PREP"]],
-         explain:"Revisão da semana."},
-        {type:"choice", prompt:"Revisão: como soa “worked”?", sentence:"worked", options:["uórkt","uórquêd"], answer:0,
-         explain:"-ed depois de som surdo → /t/."},
-        {type:"choice", prompt:"Revisão: qual é a regra de ouro dos 30 primeiros dias?", options:["Perfeição antes de fluência","Fluência antes de perfeição"], answer:1,
-         explain:"Não pare. Fale primeiro, corrija depois."},
-        {type:"choice", prompt:"Revisão: faltou a palavra no meio da conversa. Você diz:", options:["It's something you use to…","I don't know English."], answer:0,
-         explain:"Paráfrase: contorne e siga."}
+        {type: "choice", kind: "Interprete o diálogo", dialog: [["Maya", "I'm from Canada. What do you do?"]],
+         prompt: "O que a Maya disse?",
+         options: ["Que é do Canadá e perguntou a sua profissão", "Que mora no Brasil e perguntou a sua idade", "Que é estudante e perguntou o seu nome"], answer: 0,
+         explain: "<i>I'm from Canada</i> = sou do Canadá. <i>What do you do?</i> = o que você faz (profissão)."},
+        {type: "build", kind: "Construa a resposta", dialog: [["Maya", "What do you do?"]],
+         prompt: "Responda: “Eu sou estudante.”", words: ["I'm", "a", "student.", "an", "am", "do"],
+         answer: "I'm a student.",
+         explain: "Profissão usa <b>a/an</b>: I'm <b>a</b> student, I'm <b>an</b> engineer."},
+        {type: "choice", kind: "Continue a conversa", dialog: [["Maya", "It was nice talking to you!"]],
+         prompt: "Como você encerra a conversa?", options: ["You too! See you later!", "Good morning!", "I'm from Brazil."], answer: 0,
+         explain: "<b>You too!</b> devolve a gentileza e <b>See you later!</b> encerra. (Igualmente! Até mais!)"}
       ]
     }
   ]
 };
 
-/* ================== progresso salvo ================== */
-const KEY = "livro-90desafios-v1";
-let save = {stars:{}, missions:{}, xp:0, streak:0, last:null};
-try { const s = JSON.parse(localStorage.getItem(KEY)); if (s) save = Object.assign(save, s); } catch(e){}
-save.missions = save.missions || {};
-function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(save)); }catch(e){} }
-function today(){ return new Date().toISOString().slice(0,10); }
-function bumpStreak(){
-  const t = today(); if (save.last === t) return;
-  const y = new Date(Date.now()-864e5).toISOString().slice(0,10);
-  save.streak = (save.last === y) ? save.streak + 1 : 1; save.last = t;
-}
+const UPCOMING = [
+  {title: "Daily Life", pt: "Rotina, trabalho, estudos e hobbies", level: "Básico", emoji: "☀️"},
+  {title: "Out and About", pt: "Restaurantes, lojas e pedir informação", level: "Básico", emoji: "🛍️"},
+  {title: "Travel Talk", pt: "Aeroporto, hotel e imprevistos", level: "Intermediário", emoji: "✈️"},
+  {title: "Real Opinions", pt: "Opinar, concordar e argumentar", level: "Avançado", emoji: "🗣️"}
+];
+
+
+/* ================== estrutura do curso ================== */
+const MAIN = [BLOCK1];                        // novos blocos entram aqui, em ordem de dificuldade
+const PEP_EVERY = 5;                          // mascote incentiva a cada 5 exercícios
+const PHASES = {};
+MAIN.forEach(b=>b.phases.forEach((p,i)=>PHASES[p.id]={p, b, i}));
+const QUESTIONS = {};
+Object.values(PHASES).forEach(({p})=>p.questions.forEach((q,k)=>QUESTIONS[p.id+":"+k]={...q, qid:p.id+":"+k, from:p}));
+const MAIN_PHASES = MAIN.flatMap(b=>b.phases);
+
+/* ================== progresso salvo (neste aparelho) ================== */
+const KEY = "blurty-v2";
+const fresh = ()=>({profile:{mascot:null, skin:null, accessories:[]}, phases:{}, xp:0, streak:0, best:0, last:null,
+                     days:{}, history:[], review:{}, achieved:{}, stats:{answered:0, correct:0, cleared:0}});
+let S = fresh(), storageOK = true;
+try{ const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(fresh(), JSON.parse(raw)); }catch(e){ storageOK = false; }
+S.stats = Object.assign({answered:0, correct:0, cleared:0}, S.stats);
+S.profile = Object.assign({mascot:null, skin:null, accessories:[]}, S.profile);
+if (S.profile.mascot && !MASCOTS[S.profile.mascot]) S.profile.mascot = null;
+function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ storageOK = false; } }
+
+const dayStr = (d=new Date())=>{ const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4); return z.toISOString().slice(0,10); };
+function streakNow(){ if(!S.last) return 0; const y=dayStr(new Date(Date.now()-864e5)); return (S.last===dayStr()||S.last===y)?S.streak:0; }
+function touchDay(){ const t=dayStr(); if(S.last===t) return false; const y=dayStr(new Date(Date.now()-864e5));
+  S.streak=(S.last===y)?S.streak+1:1; S.last=t; S.best=Math.max(S.best||0,S.streak); return true; }
 
 /* ================== utilidades ================== */
 const app = document.getElementById("app");
-const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const gloss = s => s.replace(/\[\[([^|\]]+)\|([^\]]+)\]\]/g, (_,w,t)=>`<span class="gl" data-t="${esc(t)}">${w}</span>`);
-const shuffle = a => { a = a.slice(); for (let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];} return a; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];} return a; };
 const norm = s => s.toLowerCase().replace(/[.,!?]/g,"").replace(/\s+/g," ").trim();
+const done = id => !!(S.phases[id] && S.phases[id].stars);
+const starsTxt = n => "★".repeat(n)+"☆".repeat(3-n);
+const M = ()=>S.profile.mascot;
+const mbox = (mood, id=M(), extra="") => `<div class="mbox" ${extra}>${mascotSVG(id, mood, {accessories:S.profile.accessories})}</div>`;
 
 let actx;
-function tone(freqs){ try{
-  actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+function tone(freqs){ try{ actx=actx||new (window.AudioContext||window.webkitAudioContext)();
   freqs.forEach((f,i)=>{ const o=actx.createOscillator(), g=actx.createGain(); o.type="sine"; o.frequency.value=f;
-    const t=actx.currentTime+i*.09; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.18,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+.22);
-    o.connect(g).connect(actx.destination); o.start(t); o.stop(t+.25); });
-}catch(e){} }
-const sfx = {ok:()=>tone([660,880]), no:()=>tone([300,220]), tap:()=>tone([520]), win:()=>tone([523,659,784,1046])};
+    const t=actx.currentTime+i*.09; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.14,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+.22);
+    o.connect(g).connect(actx.destination); o.start(t); o.stop(t+.25); }); }catch(e){} }
+const sfx = {ok:()=>tone([660,880]), no:()=>tone([330,262]), tap:()=>tone([520]), win:()=>tone([523,659,784,1046])};
+function speak(text){ try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang="en-US"; u.rate=.9; speechSynthesis.speak(u); }catch(e){} }
+document.addEventListener("click", e=>{ const s=e.target.closest("[data-say]"); if(s){ e.stopPropagation(); speak(s.dataset.say); } });
+function confetti(n=60){
+  const cs = getComputedStyle(document.documentElement);
+  const colors=[cs.getPropertyValue("--accent").trim(), cs.getPropertyValue("--mbody").trim(), "#D9D3C7", "#26241F"];
+  for(let i=0;i<n;i++){ const d=document.createElement("div"); d.className="confetti"; d.style.left=Math.random()*100+"vw"; d.style.background=colors[i%colors.length];
+    d.style.animationDuration=(1.6+Math.random()*1.6)+"s"; d.style.animationDelay=(Math.random()*.4)+"s"; document.body.appendChild(d); setTimeout(()=>d.remove(),3800); }
+}
+function toast(msg){ const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2600); }
+const dialogHTML = lines => `<div class="dlg">${lines.map(([who,t])=>`<div class="dl ${who==="Você"?"me":""}"><div class="av">${esc(who[0])}</div><div class="b"><button class="spk" data-say="${esc(t)}" aria-label="Ouvir">🔊</button><span>${esc(t)}</span></div></div>`).join("")}</div>`;
 
-function speak(text){ try{
-  speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang="en-US"; u.rate=.9; speechSynthesis.speak(u);
-}catch(e){} }
+/* ================== progresso / desbloqueio ================== */
+function unlocked(id){ const idx=MAIN_PHASES.findIndex(p=>p.id===id); return idx===0 || done(MAIN_PHASES[idx-1].id); }
+function nextActivity(){
+  const p = MAIN_PHASES.find(p=>!done(p.id));
+  if (p) return {type:"phase", p};
+  if (Object.keys(S.review).length) return {type:"review"};
+  return {type:"all"};
+}
+const overallPct = ()=>Math.round(MAIN_PHASES.filter(p=>done(p.id)).length/MAIN_PHASES.length*100);
+const accuracy = ()=>S.stats.answered?Math.round(S.stats.correct/S.stats.answered*100):0;
 
-document.addEventListener("click", e=>{
-  const g = e.target.closest(".gl");
-  document.querySelectorAll(".gl.open").forEach(x=>{ if(x!==g) x.classList.remove("open"); });
-  if (g){ g.classList.toggle("open"); }
-  const s = e.target.closest("[data-say]"); if (s) speak(s.dataset.say);
-});
+const ACH = [
+  {id:"first",  e:"🌱", t:"Primeiro passo",     d:"Conclua sua primeira fase",    ok:()=>Object.keys(S.phases).length>=1},
+  {id:"perfect",e:"🎯", t:"Sem erros",           d:"Conclua uma fase sem errar",   ok:()=>Object.values(S.phases).some(x=>x.stars===3)},
+  {id:"b1",     e:"👋", t:"First Conversations", d:"Conclua o Bloco 1",           ok:()=>BLOCK1.phases.every(p=>done(p.id))},
+  {id:"ten",    e:"✍️", t:"10 exercícios",       d:"Responda 10 exercícios",       ok:()=>S.stats.answered>=10},
+  {id:"st3",    e:"🔥", t:"3 dias seguidos",     d:"Estude 3 dias em sequência",   ok:()=>(S.best||0)>=3},
+  {id:"st7",    e:"🏅", t:"Uma semana",          d:"Estude 7 dias em sequência",   ok:()=>(S.best||0)>=7},
+  {id:"rev5",   e:"🔁", t:"Revisor",             d:"Acerte 5 itens na revisão",    ok:()=>S.stats.cleared>=5},
+  {id:"xp300",  e:"⚡", t:"300 XP",              d:"Alcance 300 XP",               ok:()=>S.xp>=300}
+];
+function checkAch(){ const out=[]; ACH.forEach(a=>{ if(!S.achieved[a.id]&&a.ok()){ S.achieved[a.id]=dayStr(); out.push(a);} }); return out; }
 
-function confetti(){
-  const colors=["#3A8F5C","#E0A526","#2F6F9F","#C8553D","#9B6BC4"];
-  for(let i=0;i<70;i++){ const d=document.createElement("div"); d.className="confetti";
-    d.style.left=Math.random()*100+"vw"; d.style.background=colors[i%colors.length];
-    d.style.animationDuration=(1.6+Math.random()*1.6)+"s"; d.style.animationDelay=(Math.random()*.4)+"s";
-    document.body.appendChild(d); setTimeout(()=>d.remove(),3800); }
+/* ================== escolha de mascote ================== */
+function pickScreen(mode){ // mode: "first" | "change"
+  let sel = mode==="change" ? M() : null;
+  const ids = Object.keys(MASCOTS);
+  function draw(){
+    applyTheme(sel);
+    const m = sel && MASCOTS[sel];
+    const line = sel ? mascotLine(sel,"welcome") : null;
+    app.innerHTML = `<div class="screen pick">
+      <h1>${mode==="first"?"Escolha seu companheiro":"Trocar mascote"}</h1>
+      <p class="sub">${mode==="first"?"Ele vai te acompanhar em toda a jornada. Dá para trocar depois no Perfil.":"Seu XP, fases, conquistas e sequência continuam iguais."}</p>
+      <div class="preview">${sel ? `${mbox("welcome", sel)}<div><div class="who">${m.name}</div><div class="per">${m.speciesPt} · ${m.colorPt}<br>${esc(m.personality)}</div>
+          <div class="bubble" style="font-size:15px">“${esc(line[0])}”<small>${esc(line[1])}</small></div></div>`
+        : `<div style="flex:1;text-align:center;color:var(--muted);font-weight:800">Toque em um mascote para conhecer 👇</div>`}</div>
+      <div class="mgrid">${ids.map(id=>{ const x=MASCOTS[id]; return `<button class="mcard ${sel===id?"sel":""}" data-m="${id}" aria-pressed="${sel===id}">
+          ${mbox(sel===id?"happy":"idle", id)}<b>${x.name}</b><span><i class="dot" style="background:${x.pal.accent}"></i>${x.speciesPt}</span></button>`;}).join("")}</div>
+      <div class="foot">
+        <button class="btn" id="ok" ${sel?"":"disabled"}>${sel?`Escolher ${MASCOTS[sel].name}`:"Escolha um mascote"}</button>
+        ${mode==="change"?`<button class="btn ghost" id="cancel" style="margin-top:10px">Cancelar</button>`:""}
+      </div></div>`;
+    app.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{ sel=b.dataset.m; sfx.tap(); draw(); });
+    document.getElementById("ok").onclick = ()=>{
+      if(!sel) return;
+      const changed = S.profile.mascot!==sel;
+      S.profile.mascot = sel; persist(); applyTheme(sel); sfx.win();
+      if (changed) confetti(40);
+      tab = mode==="first" ? "map" : "me"; greet = true; render(); window.scrollTo(0,0);
+    };
+    const c = document.getElementById("cancel"); if (c) c.onclick = ()=>{ applyTheme(M()); tab="me"; render(); };
+  }
+  draw();
 }
 
-/* ================== tela: sumário ================== */
-function home(){
-  const stars = BOOK.chapters.reduce((n,c)=>n+(save.stars[c.id]||0),0);
-  app.innerHTML = `
-  <div class="screen">
-    <div class="cover">
-      <small>Inglês sem travar</small>
-      <h1>${BOOK.title}</h1>
-      <p>${BOOK.subtitle}</p>
-      <div class="stats">
-        <span class="pill">🔥 ${save.streak} dia${save.streak===1?"":"s"}</span>
-        <span class="pill">⚡ ${save.xp} XP</span>
-        <span class="pill">⭐ ${stars}/${BOOK.chapters.length*3}</span>
-      </div>
+/* ================== telas principais ================== */
+let tab = "map", greet = true;
+function appbar(){
+  return `<div class="appbar"><div class="logo">Blurty<span>.</span></div>
+    <span class="chip" title="Dias seguidos">🔥 ${streakNow()}</span><span class="chip" title="XP">⚡ ${S.xp}</span><span class="chip" title="Progresso geral">${overallPct()}%</span></div>`;
+}
+function nav(){
+  const b=(id,i,l)=>`<button class="${tab===id?"on":""}" data-tab="${id}">${i}${l}</button>`;
+  return `<div class="nav">${b("map",'<span class="i">🗺️</span>',"Aprender")}${b("prog",'<span class="i">📈</span>',"Progresso")}${b("ach",'<span class="i">🏆</span>',"Conquistas")}${b("me",`<span class="mi">${mascotSVG(M(),"idle")}</span>`,"Perfil")}</div>`;
+}
+function bindNav(){ app.querySelectorAll("[data-tab]").forEach(x=>x.onclick=()=>{ tab=x.dataset.tab; sfx.tap(); render(); window.scrollTo(0,0); }); }
+function render(){
+  if (!M()) return pickScreen("first");
+  applyTheme(M());
+  ({map:mapScreen, prog:progScreen, ach:achScreen, me:meScreen})[tab]();
+}
+
+function mapScreen(){
+  const nx = nextActivity();
+  const mood = greet ? "welcome" : "encourage";
+  const line = mascotLine(M(), mood); greet = false;
+  let next = "";
+  if (nx.type==="phase"){ const {b,i}=PHASES[nx.p.id];
+    next = `<button class="next" id="next"><span class="ic">${nx.p.emoji}</span><span><small>Próxima · ${esc(b.title)} · fase ${i+1}</small><b>${esc(nx.p.title)}</b><span class="g">🎯 ${esc(nx.p.goal)}</span></span></button>`;
+  } else if (nx.type==="review"){
+    next = `<button class="next" id="next"><span class="ic">🔁</span><span><small>Próxima atividade</small><b>Revisão</b><span class="g">Reforce ${Object.keys(S.review).length} item(ns) que você errou</span></span></button>`;
+  }
+  const rc = Object.keys(S.review).length;
+  const blocks = MAIN.map((b,bi)=>{
+    const n=b.phases.filter(p=>done(p.id)).length, offs=[0,56,76,36,-30];
+    return `<div class="block"><div class="bhead"><span class="lvl">Bloco ${bi+1} · ${b.level}</span><h2>${b.emoji} ${esc(b.title)}</h2><p>${esc(b.goal)}</p>
+        <div class="pbar"><i style="width:${n/b.phases.length*100}%"></i></div><div class="pcount">${n} de ${b.phases.length} fases${n===b.phases.length?" · bloco completo 🎉":""}</div></div>
+      <div class="path">${b.phases.map((p,i)=>{ const ul=unlocked(p.id), d=done(p.id), cur=nx.type==="phase"&&nx.p.id===p.id;
+        return `<button class="node ${d?"done":""} ${ul?"":"locked"} ${cur?"cur":""}" data-ph="${p.id}" style="transform:translateX(${offs[i%offs.length]}px)">
+          ${cur?`<span class="go">START</span>`:""}<span class="c">${ul?(d?"✓":p.emoji):"🔒"}</span><span class="st">${d?starsTxt(S.phases[p.id].stars):""}</span>
+          <span class="lb">${esc(p.title)}<small>Fase ${i+1} · ${esc(p.pt)}</small></span></button>`;}).join("")}</div></div>`;
+  }).join("");
+  const soon = UPCOMING.map((u,i)=>`<div class="soon"><span class="e">${u.emoji}</span><div><b>Bloco ${MAIN.length+i+1} · ${esc(u.title)}</b><span>${u.level} · ${esc(u.pt)} · em breve</span></div></div>`).join("");
+  app.innerHTML = `<div class="screen">${appbar()}
+    <div class="hello">${mbox(mood, M(), 'id="mtap" title="Toque em mim"')}<div class="bubble left">${esc(line[0])}<small>${esc(line[1])}</small></div></div>
+    ${next}
+    ${rc && nx.type!=="review" ? `<button class="revbtn" id="rev"><span class="n">🔁</span><div><b>Revisão</b><span>${rc} item(ns) para reforçar · +8 XP cada</span></div></button>`:""}
+    ${blocks}${soon}
+    ${storageOK?"":`<p class="empty" style="margin:16px">⚠️ Este navegador não está salvando o progresso (modo anônimo?).</p>`}
+  </div>${nav()}`;
+  bindNav();
+  const nb=document.getElementById("next"); if(nb) nb.onclick=()=>{ sfx.tap(); nx.type==="review"?startReview():startPhase(nx.p.id); };
+  const rb=document.getElementById("rev"); if(rb) rb.onclick=()=>{ sfx.tap(); startReview(); };
+  document.getElementById("mtap").onclick=()=>{ const l=mascotLine(M(),"happy"); const h=document.querySelector(".hello");
+    h.innerHTML=`${mbox("happy",M(),'id="mtap"')}<div class="bubble left">${esc(l[0])}<small>${esc(l[1])}</small></div>`; sfx.ok();
+    setTimeout(()=>{ const t=document.getElementById("mtap"); if(t) t.onclick=()=>mapScreen(); },50); };
+  app.querySelectorAll("[data-ph]").forEach(b=>b.onclick=()=>{ const id=b.dataset.ph;
+    if(!unlocked(id)){ b.classList.add("shake"); sfx.no(); setTimeout(()=>b.classList.remove("shake"),400); toast("Conclua a fase anterior para desbloquear"); return; }
+    sfx.tap(); startPhase(id); });
+}
+
+function progScreen(){
+  const dp=MAIN_PHASES.filter(p=>done(p.id)).length, db=MAIN.filter(b=>b.phases.every(p=>done(p.id))).length, pct=overallPct();
+  const last7=[...Array(7)].map((_,i)=>{ const d=new Date(Date.now()-(6-i)*864e5); return {k:dayStr(d), l:["D","S","T","Q","Q","S","S"][d.getDay()]}; });
+  const mx=Math.max(10,...last7.map(d=>S.days[d.k]||0));
+  const rev=Object.entries(S.review).sort((a,b)=>b[1].n-a[1].n);
+  const rows=MAIN_PHASES.filter(p=>S.phases[p.id]).map(p=>{ const r=S.phases[p.id];
+    return `<div class="row"><span>${p.emoji}</span><div class="grow"><b>${esc(p.title)}</b><small>${starsTxt(r.stars)} · jogada ${r.plays}x</small></div><span class="tag">${r.best}%</span></div>`;}).join("");
+  app.innerHTML = `<div class="screen">${appbar()}<div class="pad"><h1 class="h1">Seu progresso</h1>
+    <div class="grid">
+      <div class="card big"><div class="ring" style="background:conic-gradient(var(--accent) ${pct*3.6}deg, var(--tint) 0)"><i>${pct}%</i></div>
+        <div><b style="font-size:20px">Progresso geral</b><span style="text-transform:none;letter-spacing:0;font-size:14px;font-weight:700">${dp} de ${MAIN_PHASES.length} fases · ${db} de ${MAIN.length} bloco(s) concluído(s)</span></div></div>
+      <div class="card"><b>⚡ ${S.xp}</b><span>XP total</span></div>
+      <div class="card"><b>🔥 ${streakNow()}</b><span>Dias seguidos · recorde ${S.best||0}</span></div>
+      <div class="card"><b>🎯 ${accuracy()}%</b><span>Taxa de acertos</span></div>
+      <div class="card"><b>✍️ ${S.stats.answered}</b><span>Exercícios feitos</span></div>
     </div>
-    <div class="toc">
-      ${BOOK.chapters.map((c,i)=>{
-        const unlocked = i===0 || (save.stars[BOOK.chapters[i-1].id]||0)>0;
-        const s = save.stars[c.id]||0;
-        const head = (i===0 || BOOK.chapters[i-1].part!==c.part) ? `<h2>${c.part}</h2>` : "";
-        return head + `<button class="chap ${unlocked?"":"locked"}" data-i="${i}" ${unlocked?"":"aria-disabled='true'"}>
-          <div class="num">${unlocked?c.emoji:"🔒"}</div>
-          <div class="t"><b>${c.label} · ${c.title}</b><span>${c.sub}${c.mission&&save.missions[c.id]?" · ✅ missão feita":""}</span></div>
-          <div class="stars">${s?"★".repeat(s)+"☆".repeat(3-s):""}</div>
-        </button>`;}).join("")}
+    <div class="stitle">XP nos últimos 7 dias</div>
+    <div class="card"><div class="chart">${last7.map(d=>{ const v=S.days[d.k]||0; return `<div>${v?`<em>${v}</em>`:""}<i style="height:${v/mx*80}%"></i><small>${d.l}</small></div>`;}).join("")}</div></div>
+    <div class="stitle">Precisa de revisão</div>
+    ${rev.length?`<div class="list">${rev.slice(0,6).map(([id,r])=>{ const q=QUESTIONS[id]; return q?`<div class="row"><span>🔁</span><div class="grow">${esc(q.prompt)}<small>${esc(q.from.title)} · errou ${r.n}x</small></div></div>`:""; }).join("")}</div>
+      <button class="btn" id="revgo" style="margin-top:12px">Revisar agora</button>`
+      :`<p class="empty">Nada pendente. Quando você errar uma pergunta, ela aparece aqui.</p>`}
+    <div class="stitle">Desempenho por fase</div>${rows?`<div class="list">${rows}</div>`:`<p class="empty">Conclua uma fase para ver seu desempenho.</p>`}
+    <div class="stitle">Histórico</div>
+    ${S.history.length?`<div class="list">${S.history.slice(-8).reverse().map(h=>`<div class="row"><div class="grow"><b>${esc(h.t)}</b><small>${h.d.split("-").reverse().join("/")} · ${h.c}/${h.n} certas</small></div><span class="tag">+${h.xp} XP</span></div>`).join("")}</div>`:`<p class="empty">Aparece aqui depois da primeira fase.</p>`}
+  </div></div>${nav()}`;
+  bindNav(); const r=document.getElementById("revgo"); if(r) r.onclick=()=>startReview();
+}
+
+function achScreen(){
+  const n=ACH.filter(a=>S.achieved[a.id]).length;
+  app.innerHTML = `<div class="screen">${appbar()}<div class="pad"><h1 class="h1">Conquistas <span style="font-size:18px;color:var(--muted)">${n}/${ACH.length}</span></h1>
+    <div class="ach">${ACH.map(a=>`<div class="${S.achieved[a.id]?"on":"off"}"><div class="e">${a.e}</div><b>${esc(a.t)}</b><span>${esc(a.d)}${S.achieved[a.id]?`<br>✔ ${S.achieved[a.id].split("-").reverse().join("/")}`:""}</span></div>`).join("")}</div>
+    <div class="stitle">Como ganhar XP</div>
+    <div class="list">
+      <div class="row"><div class="grow">Resposta certa</div><span class="tag">+10</span></div>
+      <div class="row"><div class="grow">Concluir uma fase pela primeira vez</div><span class="tag">+20</span></div>
+      <div class="row"><div class="grow">Fase sem erros</div><span class="tag">+10</span></div>
+      <div class="row"><div class="grow">Primeira sessão do dia (sequência)</div><span class="tag">+5 por dia, até +35</span></div>
+      <div class="row"><div class="grow">Acertar um item da revisão</div><span class="tag">+8</span></div>
+      <div class="row"><div class="grow">Concluir um bloco</div><span class="tag">+100</span></div>
+    </div><p class="empty">Não existe bônus por velocidade: o que conta é entender.</p></div></div>${nav()}`;
+  bindNav();
+}
+
+function meScreen(){
+  const m=MASCOTS[M()], line=mascotLine(M(),"encourage");
+  app.innerHTML = `<div class="screen">${appbar()}<div class="pad"><h1 class="h1">Perfil</h1>
+    <div class="card" style="text-align:center;padding:18px">
+      <div style="width:150px;height:150px;margin:0 auto">${mascotSVG(M(),"welcome",{accessories:S.profile.accessories})}</div>
+      <div class="disp" style="font-size:30px;font-weight:800;line-height:1">${m.name}</div>
+      <div style="color:var(--muted);font-weight:800">${m.speciesPt} · ${m.colorPt}</div>
+      <p style="margin:8px 0 12px">${esc(m.personality)}</p>
+      <div class="bubble" style="display:inline-block">“${esc(line[0])}”<small>${esc(line[1])}</small></div>
+      <button class="btn" id="chg" style="margin-top:16px">Trocar mascote</button>
     </div>
-  </div>`;
-  app.querySelectorAll(".chap").forEach(b=>b.onclick=()=>{
-    if (b.classList.contains("locked")){ b.classList.add("shake"); sfx.no(); setTimeout(()=>b.classList.remove("shake"),400); return; }
-    sfx.tap(); startChapter(+b.dataset.i);
-  });
+    <div class="stitle">Seus números</div>
+    <div class="grid"><div class="card"><b>⚡ ${S.xp}</b><span>XP</span></div><div class="card"><b>🏆 ${ACH.filter(a=>S.achieved[a.id]).length}</b><span>Conquistas</span></div></div>
+    <p class="empty" style="margin-top:14px">Trocar de mascote muda só o personagem e as cores. XP, fases, conquistas, histórico e sequência continuam.</p>
+    <p class="empty">Seu progresso fica salvo neste aparelho e neste navegador.</p>
+  </div></div>${nav()}`;
+  bindNav(); document.getElementById("chg").onclick=()=>{ sfx.tap(); pickScreen("change"); };
 }
 
-/* ================== lição ================== */
-let L; // estado da lição
-function startChapter(i){
-  const ch = BOOK.chapters[i];
-  L = {i, ch, queue: ch.questions.map((q,k)=>({...q,k})), total: ch.questions.length, done:0, mistakes:0, combo:0, best:0, xp:0, seenWrong:new Set()};
-  reading();
+/* ================== sessão ================== */
+let L;
+function startPhase(id){ const {p,b}=PHASES[id];
+  L={mode:"phase", p, b, queue:p.questions.map((q,k)=>QUESTIONS[p.id+":"+k]), total:p.questions.length, n:0, mistakes:0, ok:0, xp:0}; learnCard(); }
+function startReview(){
+  const ids=shuffle(Object.keys(S.review).filter(id=>QUESTIONS[id])).slice(0,5);
+  if(!ids.length){ toast("Nada para revisar agora 🎉"); return; }
+  L={mode:"review", queue:ids.map(id=>QUESTIONS[id]), total:ids.length, n:0, mistakes:0, ok:0, xp:0, cleared:0}; nextQ();
 }
+function topBar(){ return `<div class="top"><button class="x" id="quit" aria-label="Sair">✕</button><div class="bar"><i style="width:${L.n/L.total*100}%"></i></div><div class="qcount">${Math.min(L.n+1,L.total)}/${L.total}</div></div>`; }
+function quit(){ tab="map"; render(); window.scrollTo(0,0); }
 
-function topBar(pct){
-  return `<div class="top"><button class="x" id="quit" aria-label="Sair">✕</button>
-    <div class="bar"><i style="width:${pct}%"></i></div>
-    <div class="combo">${L.combo>=2?"🔥"+L.combo:""}</div></div>`;
+function readingHTML(blocks){
+  return blocks.map(x=>{
+    if (x.say){ const who=x.say[0]==="@"?M():null;
+      return `<div class="say">${who?mbox("welcome",who):`<div class="av">${esc(x.say[0][0])}</div>`}<div class="bubble left">${esc(x.say[1])} <button class="spk" data-say="${esc(x.say[1])}" aria-label="Ouvir" style="width:26px;height:26px;font-size:12px;vertical-align:middle">🔊</button>${x.pt?`<small>${esc(x.pt)}</small>`:""}</div></div>`; }
+    if (x.dialog) return dialogHTML(x.dialog);
+    if (x.p)   return `<p>${x.p}</p>`;
+    if (x.tip) return `<div class="tip">${x.tip}</div>`;
+    if (x.ex)  return `<div class="ex"><button class="spk" data-say="${esc(x.ex)}" aria-label="Ouvir">🔊</button><div><span class="en">${esc(x.ex)}</span>${x.pt?`<span class="pt">${esc(x.pt)}</span>`:""}</div></div>`;
+    return "";
+  }).join("");
 }
-
-function reading(){
-  const ch = L.ch;
-  app.innerHTML = `<div class="screen">${topBar(0)}
-    <div class="page">
-      <div class="kicker">${ch.label}</div>
-      <h2>${ch.title}</h2>
-      ${ch.reading.map(b=>{
-        if (b.p)   return `<p>${gloss(b.p)}</p>`;
-        if (b.tip) return `<div class="tip">${gloss(b.tip)}</div>`;
-        if (b.ex)  return `<div class="ex"><button class="spk" data-say="${esc(b.ex)}" aria-label="Ouvir">🔊</button>
-                     <div><span class="en">${esc(b.ex)}</span>${b.pt?`<span class="pt">${esc(b.pt)}</span>`:""}</div></div>`;
-      }).join("")}
-      <div class="hint">Toque nas palavras sublinhadas para ver a tradução · 🔊 para ouvir</div>
-    </div>
-    <div class="foot"><button class="btn blue" id="go">Começar desafios</button></div>
-  </div>`;
-  document.getElementById("quit").onclick = home;
-  document.getElementById("go").onclick = ()=>{ sfx.tap(); nextQ(); };
+function learnCard(){
+  const {p,b}=L, i=PHASES[p.id].i;
+  app.innerHTML = `<div class="screen">${topBar()}<div class="page">
+      <div class="kicker">${esc(b.title)} · Fase ${i+1} de ${b.phases.length}</div>
+      <h2>${p.emoji} ${esc(p.title)}</h2><div class="ptitle">${esc(p.pt)}</div>
+      <div class="goal"><span>🎯</span><span><small>Objetivo desta fase</small>${esc(p.goal)}</span></div>
+      ${readingHTML(p.reading)}<div class="hint">🔊 toque para ouvir a pronúncia</div></div>
+    <div class="foot"><button class="btn" id="go">Praticar · ${p.questions.length} exercícios</button></div></div>`;
+  document.getElementById("quit").onclick=quit;
+  document.getElementById("go").onclick=()=>{ sfx.tap(); nextQ(); };
   window.scrollTo(0,0);
 }
 
 function nextQ(){
-  if (!L.queue.length) return finish();
-  L.cur = L.queue.shift();
-  const q = L.cur, pct = L.done/L.total*100;
-  const labels = {choice:"Escolha a resposta", build:"Monte a frase", match:"Ligue os pares"};
-  app.innerHTML = `<div class="screen">${topBar(pct)}
-    <div class="q">
-      <div class="type">${L.seenWrong.has(q.k)?"🔁 Revisão · ":""}${labels[q.type]}</div>
-      <h3>${esc(q.prompt)}</h3>
-      <div id="body"></div>
-    </div>
-    <div class="foot" id="foot">
-      <div class="fb" id="fb"></div>
-      <button class="btn" id="check" disabled>Verificar</button>
-    </div>
-  </div>`;
-  document.getElementById("quit").onclick = home;
+  if (!L.queue.length) return L.mode==="review"?finishReview():finishPhase();
+  const q=L.cur=L.queue.shift();
+  app.innerHTML = `<div class="screen">${topBar()}<div class="q">
+      <div class="type">${L.mode==="review"?"Revisão · ":""}${esc(q.kind||{choice:"Escolha",build:"Monte a frase",match:"Associe"}[q.type])}</div>
+      ${q.situation?`<div class="sit"><span>📍</span><span>${esc(q.situation)}</span></div>`:""}
+      ${q.dialog?dialogHTML(q.dialog):""}
+      <h3>${esc(q.prompt)}</h3><div id="body"></div></div>
+    <div class="foot" id="foot"><div class="fb" id="fb"></div><button class="btn" id="check" disabled>Verificar</button></div></div>`;
+  document.getElementById("quit").onclick=quit;
   ({choice:qChoice, build:qBuild, match:qMatch})[q.type](q);
   window.scrollTo(0,0);
 }
-
-/* --- múltipla escolha --- */
 function qChoice(q){
-  const body = document.getElementById("body"), btn = document.getElementById("check");
-  body.innerHTML = (q.sentence?`<div class="sent"><button class="spk" data-say="${esc(q.sentence.replace("___","blank"))}">🔊</button><span>${esc(q.sentence)}</span></div>`:"")
-    + `<div class="opts">${q.options.map((o,i)=>`<button class="opt" data-i="${i}">${esc(o)}</button>`).join("")}</div>`;
-  let sel = null;
-  body.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
-    body.querySelectorAll(".opt").forEach(x=>x.classList.remove("sel"));
-    b.classList.add("sel"); sel = +b.dataset.i; btn.disabled=false; sfx.tap();
-  });
-  btn.onclick = ()=>{
-    const ok = sel===q.answer, opts = body.querySelectorAll(".opt");
-    opts.forEach(x=>x.disabled=true);
-    opts[q.answer].classList.add("good"); if(!ok) opts[sel].classList.add("bad");
-    result(ok, q.options[q.answer]);
-  };
+  const body=document.getElementById("body"), btn=document.getElementById("check");
+  body.innerHTML=(q.sentence?`<div class="sent"><button class="spk" data-say="${esc(q.sentence.replace("___","…"))}">🔊</button><span>${esc(q.sentence)}</span></div>`:"")
+    +`<div class="opts">${shuffle(q.options.map((o,i)=>i)).map(i=>`<button class="opt" data-i="${i}">${esc(q.options[i])}</button>`).join("")}</div>`;
+  let sel=null; const opts=[...body.querySelectorAll(".opt")];
+  opts.forEach(b=>b.onclick=()=>{ opts.forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); sel=+b.dataset.i; btn.disabled=false; sfx.tap(); });
+  btn.onclick=()=>{ const ok=sel===q.answer; opts.forEach(x=>{ x.disabled=true; if(+x.dataset.i===q.answer) x.classList.add("good"); if(!ok&&+x.dataset.i===sel) x.classList.add("bad"); }); result(ok,q.options[q.answer]); };
 }
-
-/* --- montar frase --- */
 function qBuild(q){
-  const body = document.getElementById("body"), btn = document.getElementById("check");
-  const words = shuffle(q.words);
-  body.innerHTML = `<div class="slot" id="slot"></div><div class="bank" id="bank">${words.map((w,i)=>`<button class="w" data-i="${i}">${esc(w)}</button>`).join("")}</div>`;
-  const slot = body.querySelector("#slot"), picked = [];
-  body.querySelectorAll("#bank .w").forEach(b=>b.onclick=()=>{
-    if (b.classList.contains("used")) return;
-    b.classList.add("used"); sfx.tap();
-    const c = document.createElement("button"); c.className="w"; c.textContent=b.textContent; slot.appendChild(c);
-    picked.push({chip:c, src:b});
-    c.onclick = ()=>{ if(btn.dataset.locked) return; c.remove(); b.classList.remove("used"); picked.splice(picked.findIndex(p=>p.chip===c),1); btn.disabled=!picked.length; };
-    btn.disabled=false;
-  });
-  btn.onclick = ()=>{
-    btn.dataset.locked=1;
-    const ok = norm(picked.map(p=>p.src.textContent).join(" "))===norm(q.answer);
-    result(ok, q.answer, true);
-  };
+  const body=document.getElementById("body"), btn=document.getElementById("check");
+  body.innerHTML=`<div class="slot" id="slot"></div><div class="bank">${shuffle(q.words).map(w=>`<button class="w">${esc(w)}</button>`).join("")}</div>`;
+  const slot=body.querySelector("#slot"), picked=[];
+  body.querySelectorAll(".bank .w").forEach(b=>b.onclick=()=>{
+    if(b.classList.contains("used")||btn.dataset.locked) return; b.classList.add("used"); sfx.tap();
+    const c=document.createElement("button"); c.className="w"; c.textContent=b.textContent; slot.appendChild(c); picked.push({c,b});
+    c.onclick=()=>{ if(btn.dataset.locked) return; c.remove(); b.classList.remove("used"); picked.splice(picked.findIndex(p=>p.c===c),1); btn.disabled=!picked.length; };
+    btn.disabled=false; });
+  btn.onclick=()=>{ btn.dataset.locked=1; result(norm(picked.map(p=>p.b.textContent).join(" "))===norm(q.answer), q.answer); };
 }
-
-/* --- ligar pares --- */
 function qMatch(q){
-  const body = document.getElementById("body"), btn = document.getElementById("check");
-  const left = shuffle(q.pairs.map((p,i)=>({t:p[0],i}))), right = shuffle(q.pairs.map((p,i)=>({t:p[1],i})));
-  body.innerHTML = `<div class="pairs">${left.map((l,r)=>`
-      <button class="opt" data-side="L" data-i="${l.i}">${esc(l.t)}</button>
-      <button class="opt" data-side="R" data-i="${right[r].i}">${esc(right[r].t)}</button>`).join("")}</div>`;
-  btn.style.display="none";
-  let pick = null, matched = 0, errs = 0;
+  const body=document.getElementById("body"), btn=document.getElementById("check");
+  const left=shuffle(q.pairs.map((p,i)=>({t:p[0],i}))), right=shuffle(q.pairs.map((p,i)=>({t:p[1],i})));
+  body.innerHTML=`<div class="pairs">${left.map((l,r)=>`<button class="opt" data-side="L" data-i="${l.i}">${esc(l.t)}</button><button class="opt" data-side="R" data-i="${right[r].i}">${esc(right[r].t)}</button>`).join("")}</div>`;
+  btn.style.display="none"; let pick=null, matched=0, errs=0;
   body.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
-    if (b.classList.contains("done")) return;
-    if (b.dataset.side==="L") speak(b.textContent);
-    if (!pick || pick.dataset.side===b.dataset.side){
-      if (pick) pick.classList.remove("sel");
-      pick = b; b.classList.add("sel"); sfx.tap(); return;
-    }
-    if (pick.dataset.i===b.dataset.i){
-      [pick,b].forEach(x=>{x.classList.remove("sel"); x.classList.add("done"); x.disabled=true;});
-      sfx.ok(); matched++;
-      if (matched===q.pairs.length){ btn.style.display=""; result(errs===0, null); }
-    } else {
-      errs++; sfx.no(); const a=pick;
-      [a,b].forEach(x=>{x.classList.remove("sel"); x.classList.add("bad","shake");});
-      setTimeout(()=>[a,b].forEach(x=>x.classList.remove("bad","shake")),450);
-    }
-    pick = null;
-  });
+    if(b.classList.contains("done")) return;
+    if(b.dataset.side==="L") speak(b.textContent);
+    if(!pick||pick.dataset.side===b.dataset.side){ if(pick) pick.classList.remove("sel"); pick=b; b.classList.add("sel"); sfx.tap(); return; }
+    if(pick.dataset.i===b.dataset.i){ [pick,b].forEach(x=>{x.classList.remove("sel"); x.classList.add("done"); x.disabled=true;}); sfx.ok(); matched++;
+      if(matched===q.pairs.length){ btn.style.display=""; result(errs===0,null); } }
+    else { errs++; sfx.no(); const a=pick; [a,b].forEach(x=>{x.classList.remove("sel"); x.classList.add("bad","shake");}); setTimeout(()=>[a,b].forEach(x=>x.classList.remove("bad","shake")),450); }
+    pick=null; });
 }
 
-/* --- resultado de cada pergunta --- */
-const PRAISE = ["Mandou bem!","Isso aí!","Perfeito!","Excelente!","Arrasou!"];
-function result(ok, correctText, showAnswer){
-  const foot = document.getElementById("foot"), fb = document.getElementById("fb"), btn = document.getElementById("check");
-  const q = L.cur;
+/* cada exercício é respondido uma vez; erro vai para a Revisão (sem repetir na hora) */
+function result(ok, correctText){
+  const foot=document.getElementById("foot"), fb=document.getElementById("fb"), btn=document.getElementById("check"), q=L.cur;
+  L.n++; S.stats.answered++;
   if (ok){
-    L.done++; L.combo++; L.best=Math.max(L.best,L.combo);
-    const gain = (L.seenWrong.has(q.k)?5:10) + (L.combo>=3?5:0); L.xp += gain;
-    foot.className="foot ok"; sfx.ok();
-    fb.innerHTML = `<b>✓ ${PRAISE[Math.random()*PRAISE.length|0]} <span style="font-size:14px">+${gain} XP</span></b><p>${esc(q.explain)}</p>`;
+    S.stats.correct++; L.ok++;
+    let gain=10;
+    if (L.mode==="review"){ gain=8; S.stats.cleared++; L.cleared++; }
+    delete S.review[q.qid];
+    L.xp+=gain; foot.className="foot ok"; sfx.ok();
+    const l=mascotLine(M(),"happy");
+    fb.innerHTML=`${mbox("happy")}<div><span class="h">${esc(l[0])} +${gain} XP</span><span class="pt">${esc(l[1])}</span><p>${q.explain}</p></div>`;
   } else {
-    L.mistakes++; L.combo=0; L.seenWrong.add(q.k); L.queue.push(q);
+    L.mistakes++; S.review[q.qid]={n:((S.review[q.qid]||{}).n||0)+1, d:dayStr()};
     foot.className="foot no"; sfx.no();
-    fb.innerHTML = `<b>✗ Quase!</b>${showAnswer||correctText?`<p>Resposta: <b style="font-size:15px">${esc(correctText)}</b></p>`:""}<p>${esc(q.explain)} Ela volta no final.</p>`;
+    const l=mascotLine(M(),"oops");
+    fb.innerHTML=`${mbox("oops")}<div><span class="h">${esc(l[0])}</span><span class="pt">${esc(l[1])}</span>${correctText?`<p>Resposta certa: <b>${esc(correctText)}</b></p>`:""}<p>${q.explain}</p><p style="font-size:13px;color:var(--muted)">Ela entra na sua Revisão.</p></div>`;
   }
-  document.querySelector(".bar i").style.width = (L.done/L.total*100)+"%";
-  document.querySelector(".combo").textContent = L.combo>=2?"🔥"+L.combo:"";
+  persist();
+  document.querySelector(".bar i").style.width=(L.n/L.total*100)+"%";
+  const pep = S.stats.answered % PEP_EVERY === 0;
   btn.disabled=false; btn.textContent="Continuar";
-  btn.onclick = ()=>{ sfx.tap(); nextQ(); };
+  btn.onclick=()=>{ sfx.tap(); pep ? pepTalk() : nextQ(); };
 }
 
-/* ================== fim do capítulo ================== */
-function finish(){
-  const stars = L.mistakes===0?3:L.mistakes<=2?2:1;
-  const acc = Math.round(L.total/(L.total+L.mistakes)*100);
-  save.stars[L.ch.id] = Math.max(save.stars[L.ch.id]||0, stars);
-  save.xp += L.xp; bumpStreak(); persist();
-  const hasNext = L.i < BOOK.chapters.length-1;
-  app.innerHTML = `<div class="screen"><div class="end">
-      <div class="big">${stars===3?"🏆":stars===2?"🎉":"💪"}</div>
-      <h2>${L.ch.label} concluído!</h2>
-      <div style="color:var(--muted);font-family:Literata,serif;font-style:italic">${L.ch.title}</div>
-      <div class="st">${"★".repeat(stars)}${"☆".repeat(3-stars)}</div>
-      <div class="cards">
-        <div class="card"><b>⚡ ${L.xp}</b><span>XP</span></div>
-        <div class="card"><b>🎯 ${acc}%</b><span>Precisão</span></div>
-        <div class="card"><b>🔥 ${L.best}</b><span>Combo</span></div>
-      </div>
-      ${stars<3?`<p style="margin-top:22px;color:var(--muted)">Refaça sem erros para ganhar 3 estrelas.</p>`:""}
-      ${L.ch.mission?`<div class="mission">
-          <div class="kicker">🎯 Agora é com você · fora da tela</div>
-          <p>${L.ch.mission}</p>
-          <button class="mbtn ${save.missions[L.ch.id]?"on":""}" id="mdone">${save.missions[L.ch.id]?"✅ Missão cumprida":"Marcar missão como cumprida"}</button>
-        </div>`:""}
-      ${!hasNext&&BOOK.endNote?`<p class="endnote">📘 ${BOOK.endNote}</p>`:""}
-    </div>
-    <div class="foot">
-      ${hasNext?`<button class="btn" id="next" style="margin-bottom:10px">Próxima lição</button>`:""}
-      <button class="btn blue" id="toc">Voltar ao sumário</button>
-    </div></div>`;
-  sfx.win(); confetti();
-  const md = document.getElementById("mdone");
-  if (md) md.onclick = ()=>{
-    const on = !save.missions[L.ch.id]; save.missions[L.ch.id] = on; persist();
-    md.classList.toggle("on", on); md.textContent = on ? "✅ Missão cumprida" : "Marcar missão como cumprida";
-    if (on){ sfx.ok(); confetti(); }
-  };
-  if (hasNext) document.getElementById("next").onclick=()=>startChapter(L.i+1);
-  document.getElementById("toc").onclick=home;
+function pepTalk(){
+  const l=mascotLine(M(),"encourage");
+  app.innerHTML=`<div class="screen pep">${mbox("encourage")}
+    <div class="bubble">${esc(l[0])}<small>${esc(l[1])}</small></div>
+    <div class="meta">✍️ ${S.stats.answered} exercícios feitos · 🎯 ${accuracy()}% de acertos</div>
+    <div class="foot"><button class="btn" id="go">Continuar</button></div></div>`;
+  sfx.win(); document.getElementById("go").onclick=()=>{ sfx.tap(); nextQ(); };
 }
 
-home();
+function addXP(n){ S.xp+=n; const t=dayStr(); S.days[t]=(S.days[t]||0)+n; }
+
+function finishPhase(){
+  const {p,b}=L, first=!done(p.id);
+  const stars=L.mistakes===0?3:L.mistakes===1?2:1, acc=Math.round(L.ok/L.total*100);
+  const lines=[["Respostas certas",L.xp]];
+  if (first) lines.push(["Fase concluída",20]);
+  if (!L.mistakes) lines.push(["Sem erros",10]);
+  if (touchDay()) lines.push([`Sequência de ${S.streak} dia${S.streak>1?"s":""}`,5*Math.min(S.streak,7)]);
+  const prev=S.phases[p.id]||{stars:0,best:0,plays:0};
+  S.phases[p.id]={stars:Math.max(prev.stars,stars), best:Math.max(prev.best,acc), plays:prev.plays+1};
+  const blockNow = first && b.phases.every(x=>done(x.id));
+  if (blockNow) lines.push(["Bloco completo!",100]);
+  const total=lines.reduce((s,l)=>s+l[1],0); addXP(total);
+  S.history.push({d:dayStr(), t:p.title, c:L.ok, n:L.total, xp:total}); S.history=S.history.slice(-40);
+  const news=checkAch(); persist();
+  const nd=b.phases.filter(x=>done(x.id)).length, nx=nextActivity();
+  const mood=blockNow?"celebrate":"excited", l=mascotLine(M(),mood);
+  app.innerHTML=`<div class="screen"><div class="end">
+      ${mbox(mood)}
+      <h2>${blockNow?"Bloco completo!":"Fase concluída!"}</h2><div class="sub">${esc(p.title)} · ${esc(p.pt)}</div>
+      <div class="bubble">${esc(l[0])}<small>${esc(l[1])}</small></div>
+      <div class="st">${starsTxt(stars)}</div>
+      <div class="cards3"><div class="card"><b>⚡ ${total}</b><span>XP</span></div><div class="card"><b>🎯 ${acc}%</b><span>Acertos</span></div><div class="card"><b>🔥 ${S.streak}</b><span>Dias</span></div></div>
+      <div class="done-goal"><small>✔ Objetivo cumprido</small>${esc(p.goal)}</div>
+      <div class="xpl">${lines.map(x=>`<div><span>${esc(x[0])}</span><b>+${x[1]} XP</b></div>`).join("")}</div>
+      <div class="bprog"><div class="t">${b.emoji} ${esc(b.title)} · ${nd} de ${b.phases.length} fases</div>
+        <div class="steps">${b.phases.map(x=>`<i class="${done(x.id)?"on":""}"></i>`).join("")}</div>
+        <div class="n">${nd===b.phases.length?"Agora você consegue cumprimentar, se apresentar e manter uma conversa curta em inglês.":`Falta${b.phases.length-nd>1?"m":""} ${b.phases.length-nd} fase${b.phases.length-nd>1?"s":""} para completar o bloco.`}</div></div>
+      ${news.map(a=>`<div class="newach"><b>${a.e} Conquista: ${esc(a.t)}</b>${esc(a.d)}</div>`).join("")}
+      ${L.mistakes?`<p class="empty" style="margin-top:12px">O que você errou foi para a <b>Revisão</b>.${stars<3?" Refaça a fase sem erros para ganhar 3 estrelas.":""}</p>`:""}
+    </div><div class="foot">
+      ${nx.type!=="all"?`<button class="btn" id="nx" style="margin-bottom:10px">${nx.type==="phase"?`Próxima: ${esc(nx.p.title)}`:"Próxima: Revisão"}</button>`:""}
+      <button class="btn ghost" id="map">Ver mapa</button></div></div>`;
+  sfx.win(); confetti(blockNow?130:60);
+  const nb=document.getElementById("nx"); if(nb) nb.onclick=()=>nx.type==="review"?startReview():startPhase(nx.p.id);
+  document.getElementById("map").onclick=quit; window.scrollTo(0,0);
+}
+function finishReview(){
+  const bonus=touchDay()?5*Math.min(S.streak,7):0, total=L.xp+bonus; addXP(total);
+  S.history.push({d:dayStr(), t:"Revisão", c:L.ok, n:L.total, xp:total}); S.history=S.history.slice(-40);
+  const news=checkAch(); persist();
+  const left=Object.keys(S.review).length, l=mascotLine(M(),"excited");
+  app.innerHTML=`<div class="screen"><div class="end">${mbox("excited")}
+      <h2>Revisão feita!</h2><div class="sub">Você reforçou ${L.cleared} de ${L.total} item(ns)</div>
+      <div class="bubble">${esc(l[0])}<small>${esc(l[1])}</small></div>
+      <div class="cards3" style="margin-top:14px"><div class="card"><b>⚡ ${total}</b><span>XP</span></div><div class="card"><b>🎯 ${Math.round(L.ok/L.total*100)}%</b><span>Acertos</span></div><div class="card"><b>📌 ${left}</b><span>Restam</span></div></div>
+      ${bonus?`<div class="xpl"><div><span>Sequência de ${S.streak} dia(s)</span><b>+${bonus} XP</b></div></div>`:""}
+      ${news.map(a=>`<div class="newach"><b>${a.e} Conquista: ${esc(a.t)}</b>${esc(a.d)}</div>`).join("")}
+    </div><div class="foot"><button class="btn" id="map">Voltar ao mapa</button></div></div>`;
+  sfx.win(); confetti(); document.getElementById("map").onclick=quit;
+}
+
+render();
 </script>
 </body>
 </html>
