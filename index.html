@@ -70,6 +70,41 @@
   .logo span{color:var(--accent)}
   .logo small{display:block;font-family:Nunito,sans-serif;font-size:11px;font-weight:900;letter-spacing:.08em;color:var(--accent);margin-top:2px}
   .brand{text-align:center;margin:0 0 10px}
+  /* comemoração de sequência */
+  .streak-ov{position:fixed;inset:0;z-index:80;overflow-y:auto;background:radial-gradient(ellipse at 50% 30%,#FFE8C7 0%,var(--bg) 62%);animation:in .35s ease}
+  .streak-ov.out{opacity:0;transition:opacity .3s}
+  .streak-ov .sbox{position:relative;z-index:2;max-width:440px;margin:0 auto;padding:26px 20px 30px;text-align:center}
+  .streak-ov h2{font-size:34px;margin:2px 0 0;line-height:1.05}
+  .flame{position:relative;display:inline-block;margin:0 0 14px;animation:flicker 1.3s ease-in-out infinite;transform-origin:50% 90%}
+  .flame .f{font-size:88px;display:block;line-height:1;filter:drop-shadow(0 6px 14px rgba(255,120,30,.45))}
+  .flame .num{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);font-family:"Baloo 2";font-size:34px;color:#fff;text-shadow:0 2px 0 #B4441A,0 0 8px rgba(0,0,0,.25)}
+  .flame .num.bump{animation:numpop .5s ease}
+  @keyframes numpop{40%{transform:translate(-50%,-50%) scale(1.6)}}
+  @keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.07,1.12) rotate(2deg)}}
+  .streak-ov .act{width:150px;height:150px;margin:6px auto 0}
+  .act-stomp{animation:stomp .7s ease-in-out infinite}
+  @keyframes stomp{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-10px) rotate(-5deg)}50%{transform:translateY(0) rotate(0)}75%{transform:translateY(-10px) rotate(5deg)}}
+  .act-glow{animation:float 2s ease-in-out infinite,glow 1.6s ease-in-out infinite}
+  @keyframes glow{50%{filter:drop-shadow(0 0 18px rgba(255,214,120,.95))}}
+  .act-spin{animation:spin 2.2s ease-in-out infinite}
+  @keyframes spin{0%,45%{transform:rotate(0)}70%{transform:rotate(360deg) translateY(-8px)}100%{transform:rotate(360deg)}}
+  .act-jump{animation:jump .8s ease-in-out infinite}
+  .act-boing{animation:boing .9s ease-in-out infinite;transform-origin:50% 100%}
+  @keyframes boing{0%,100%{transform:scale(1,1)}30%{transform:scale(1.18,.82)}60%{transform:scale(.9,1.12) translateY(-16px)}}
+  .act-dance{animation:dance 1s ease-in-out infinite;transform-origin:50% 100%}
+  @keyframes dance{0%,100%{transform:rotate(-10deg) translateX(-6px)}50%{transform:rotate(10deg) translateX(6px)}}
+  .acttxt{font-size:13px;font-weight:800;color:var(--accent);margin-top:2px}
+  .streak-ov .bubble{display:inline-block;margin-top:10px}
+  .week{display:flex;justify-content:center;gap:6px;margin:14px 0 6px}
+  .week i{width:38px;height:48px;border-radius:12px;background:var(--card);border:2px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;font-style:normal;font-size:16px}
+  .week i b{font-size:11px;color:var(--muted)}
+  .week i.on{border-color:#F0A04B;background:#FFF1DF}
+  .ins{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:9px 12px;margin-top:8px;text-align:left;font-weight:700;font-size:14px}
+  .streak-ov .btn{margin-top:16px}
+  .embers{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+  .ember{position:absolute;bottom:-20px;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle,#FFD27A,#FF7A2F);opacity:0;animation:rise linear infinite}
+  .ember.big{width:auto;height:auto;background:none;font-size:20px}
+  @keyframes rise{0%{transform:translateY(0) scale(1);opacity:0}10%{opacity:.95}100%{transform:translateY(-105vh) translateX(30px) scale(.4);opacity:0}}
   .infobox{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px;text-align:left}
   .infobox h4{margin:0 0 4px;font-family:"Baloo 2";font-size:19px;line-height:1.15}
   .infobox p{margin:0;font-size:14px;color:var(--muted);line-height:1.4}
@@ -313,6 +348,7 @@ const MASCOTS = {
       celebrate:[["ROOOAR! A whole block done!","ROOOAR! Um bloco inteiro concluído!"],["Legend! Time to celebrate!","Lenda! Hora de comemorar!"]],
       surprise: [["Roar! A mystery gift! Let's win it!", "Roar! Um presente misterioso! Bora ganhar!"], ["A secret challenge? I'm ready!", "Um desafio secreto? Tô pronto!"]],
       gift:     [["ROAR! The gift is yours!", "ROAR! O presente é seu!"], ["Look at me! Do I look cool?", "Olha pra mim! Tô estiloso?"]],
+      streak:   [["ROAR! {n} days in a row! I'm stomping in your honor!", "ROAR! {n} dias seguidos! Tô pisando forte em sua homenagem!"], ["Day {n}! Even dinosaurs need a routine, and you've got one!", "Dia {n}! Até dinossauro precisa de rotina, e você já tem uma!"], ["{n} days! Your English is getting a thicker skin.", "{n} dias! Seu inglês tá ficando casca-grossa."]],
       encourage:[["Five more done! Keep stomping!","Mais cinco feitos! Segue firme!"],["You're stronger in English every day.","Você fica mais forte no inglês a cada dia."],["Keep going. I'm right behind you!","Continua. Tô logo atrás de você!"],["Don't overthink it. Blurty it out!","Não pensa demais. Solta o inglês!"]]
     }
   },
@@ -328,6 +364,7 @@ const MASCOTS = {
       celebrate:[["A whole block! What a journey.","Um bloco inteiro! Que jornada."],["You did it. Enjoy this moment.","Você conseguiu. Aproveite o momento."]],
       surprise: [["Oh, a little surprise. Shall we open it?", "Ah, uma surpresinha. Vamos abrir?"], ["Something special is waiting for you.", "Tem algo especial esperando por você."]],
       gift:     [["A gift, just for us. Thank you!", "Um presente, só pra gente. Obrigada!"], ["It suits me, doesn't it?", "Ficou bem em mim, né?"]],
+      streak:   [["{n} days of light. You came back, and that matters.", "{n} dias de luz. Você voltou, e isso importa."], ["Day {n}. Small steps, every day, shine bright.", "Dia {n}. Passos pequenos, todo dia, brilham forte."], ["{n} days in a row. I'm glowing just for you.", "{n} dias seguidos. Tô brilhando só pra você."]],
       encourage:[["Five exercises done. You're doing great.","Cinco exercícios feitos. Você está indo muito bem."],["Slow is fine. Keep going.","Devagar está ótimo. Continue."],["Every answer brings you closer.","Cada resposta te deixa mais perto."],["Don't overthink it. Blurty it out!","Não pensa demais. Solta o inglês!"]]
     }
   },
@@ -343,6 +380,7 @@ const MASCOTS = {
       celebrate:[["A full block? Now that's clever.","Um bloco inteiro? Isso que é esperteza."],["Brilliant! Take a bow.","Brilhante! Pode agradecer à plateia."]],
       surprise: [["A secret challenge… my favorite kind.", "Um desafio secreto… meu tipo favorito."], ["I smell a prize. Let's get it!", "Tô sentindo cheiro de prêmio. Bora pegar!"]],
       gift:     [["Sneaky and stylish. Just like me.", "Esperta e estilosa. Igual a mim."], ["Got it! I knew you would.", "Ganhou! Eu sabia."]],
+      streak:   [["{n} days straight? Clever move. Very clever.", "{n} dias seguidos? Jogada esperta. Muito esperta."], ["Day {n}! I'd do a trick, but you're the one doing magic.", "Dia {n}! Eu faria um truque, mas quem tá fazendo mágica é você."], ["{n} days! Nobody can catch you now.", "{n} dias! Agora ninguém te alcança."]],
       encourage:[["You're getting smarter. Keep going!","Você está ficando mais esperto. Continue!"],["Five down. Your brain is warming up.","Cinco feitos. Seu cérebro está esquentando."],["Stay sharp. The next one is yours.","Fica ligado. A próxima é sua."],["Don't overthink it. Blurty it out!","Não pensa demais. Solta o inglês!"]]
     }
   },
@@ -358,6 +396,7 @@ const MASCOTS = {
       celebrate:[["A whole block! Everyone, look!","Um bloco inteiro! Gente, olha isso!"],["Amazing! I can't stop jumping!","Incrível! Não consigo parar de pular!"]],
       surprise: [["What's inside? I need to know!", "O que tem dentro? Preciso saber!"], ["A mystery box! Let's investigate.", "Uma caixa misteriosa! Vamos investigar."]],
       gift:     [["Wow! It's perfect, down to the last detail!", "Uau! Ficou perfeito, até no último detalhe!"], ["New item spotted! Thank you!", "Item novo à vista! Obrigado!"]],
+      streak:   [["Day {n}! I wrote it down: you didn't skip a single day.", "Dia {n}! Anotei: você não pulou nenhum dia."], ["{n} days in a row. I noticed. I notice everything!", "{n} dias seguidos. Eu reparei. Eu reparo em tudo!"], ["{n} days! Your progress chart is going up, up, up!", "{n} dias! Seu gráfico de progresso só sobe!"]],
       encourage:[["Five done! You're paying great attention.","Cinco feitos! Você está prestando muita atenção."],["Curiosity is your superpower.","A curiosidade é o seu superpoder."],["Keep exploring. You're doing well!","Continue explorando. Você está indo bem!"],["Don't overthink it. Blurty it out!","Não pensa demais. Solta o inglês!"]]
     }
   },
@@ -373,6 +412,7 @@ const MASCOTS = {
       celebrate:[["BOING! A whole block! Pond party!","BOING! Um bloco inteiro! Festa na lagoa!"],["Highest jump ever!","O pulo mais alto da história!"]],
       surprise: [["A surprise! Boing boing! Open it!", "Uma surpresa! Boing boing! Abre!"], ["Gift time? Party time!", "Hora do presente? Hora da festa!"]],
       gift:     [["I look AMAZING! Boing!", "Tô INCRÍVEL! Boing!"], ["Best. Gift. Ever!", "Melhor. Presente. Do mundo!"]],
+      streak:   [["{n} DAYS! Boing boing! I can't stop jumping!", "{n} DIAS! Boing boing! Não consigo parar de pular!"], ["Day {n}! This calls for a pond party!", "Dia {n}! Isso merece uma festa na lagoa!"], ["{n} days! You're hopping higher every day!", "{n} dias! Você pula mais alto a cada dia!"]],
       encourage:[["Five hops done! Keep bouncing!","Cinco pulos feitos! Continua pulando!"],["You're getting so good at this!","Você está ficando muito bom nisso!"],["Hop by hop, you'll get there.","Pulo a pulo, você chega lá."],["Don't overthink it. Blurty it out!","Não pensa demais. Solta o inglês!"]]
     }
   },
@@ -388,6 +428,7 @@ const MASCOTS = {
       celebrate:[["A whole block! Let's party!","Um bloco inteiro! Bora comemorar!"],["Best heist ever: a full block!","Melhor golpe da história: um bloco inteiro!"]],
       surprise: [["Hehe, a secret challenge. Let's grab the loot!", "Hehe, um desafio secreto. Bora pegar o tesouro!"], ["Shh… there's a prize hidden here.", "Psiu… tem um prêmio escondido aqui."]],
       gift:     [["Loot secured! Hehe!", "Tesouro garantido! Hehe!"], ["Do I look fancy now?", "Tô chique agora?"]],
+      streak:   [["Hehe, {n} days! You stole another day from laziness!", "Hehe, {n} dias! Você roubou mais um dia da preguiça!"], ["Day {n}! I'm dancing, don't tell anyone.", "Dia {n}! Tô dançando, não conta pra ninguém."], ["{n} days in a row? That's my kind of mischief!", "{n} dias seguidos? Essa é a minha travessura favorita!"]],
       encourage:[["Five down! You're on a roll.","Cinco feitos! Você está embalado."],["Keep going. I've got snacks.","Continua. Eu tenho lanchinhos."],["You're better at this than you think.","Você é melhor nisso do que pensa."],["Don't overthink it. Blurty it out!","Não pensa demais. Solta o inglês!"]]
     }
   }
@@ -1117,7 +1158,54 @@ function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e)
 const dayStr = (d=new Date())=>{ const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4); return z.toISOString().slice(0,10); };
 function streakNow(){ if(!S.last) return 0; const y=dayStr(new Date(Date.now()-864e5)); return (S.last===dayStr()||S.last===y)?S.streak:0; }
 function touchDay(){ const t=dayStr(); if(S.last===t) return false; const y=dayStr(new Date(Date.now()-864e5));
-  S.streak=(S.last===y)?S.streak+1:1; S.last=t; S.best=Math.max(S.best||0,S.streak); return true; }
+  const before=S.best||0;
+  S.streak=(S.last===y)?S.streak+1:1; S.last=t; S.best=Math.max(before,S.streak);
+  STREAK_UP={n:S.streak, record:S.streak>1 && S.streak>before};
+  setTimeout(showStreak, 1100);              // comemora o dia novo depois da tela de fim aparecer
+  return true; }
+let STREAK_UP=null;
+
+/* ================== comemoração de +1 dia na sequência ================== */
+const ACTIONS = {   // o que cada mascote faz na comemoração
+  dino:["stomp","Dino está pisando forte em sua homenagem!"], lumi:["glow","Lumi está brilhando por você!"],
+  foxy:["spin","Foxy deu um giro de alegria!"], miko:["jump","Miko está pulando de animação!"],
+  bloop:["boing","Bloop está fazendo festa na lagoa!"], roki:["dance","Roki está dançando escondido!"]};
+function streakInsights(st){
+  const out=[], n=st.n, donePh=MAIN_PHASES.filter(p=>done(p.id));
+  const exprs=donePh.reduce((s,p)=>s+p.reading.filter(x=>x.ex).length,0), last=S.history[S.history.length-1];
+  if (st.record) out.push(`🏆 Novo recorde! Sua maior sequência agora é de ${n} dias.`);
+  if (n===1 && (S.best||0)>1) out.push(`🌱 Recomeço também conta: seu recorde é de ${S.best} dias, e você pode passar dele.`);
+  if (last) out.push(`✍️ Hoje você fez “${last.t}”, com ${last.c} de ${last.n} certas.`);
+  if (exprs) out.push(`🧠 Você já estudou ${exprs} expressões em inglês em ${donePh.length} fase${donePh.length>1?"s":""}.`);
+  const ms=[3,7,14,30,60,100,365].find(x=>x>n); if (ms) out.push(`🎯 Faltam ${ms-n} dia${ms-n>1?"s":""} para chegar a ${ms} dias seguidos.`);
+  return out.slice(0,3);
+}
+function showStreak(){
+  const st=STREAK_UP; STREAK_UP=null; if(!st || !M()) return;
+  document.querySelectorAll(".streak-ov").forEach(x=>x.remove());
+  const id=M(), act=ACTIONS[id]||["jump",""], lines=MASCOTS[id].msgs.streak||[["Day {n}!","Dia {n}!"]];
+  const pool=st.n===1?lines.filter(x=>x[0].includes("Day {n}")):lines, use=pool.length?pool:lines;
+  const l=use[Math.floor(Math.random()*use.length)].map(t=>t.replace(/\{n\}/g,st.n));
+  const week=[...Array(7)].map((_,i)=>{ const d=new Date(Date.now()-(6-i)*864e5), k=dayStr(d);
+    return `<i class="${S.days[k]?"on":""}"><b>${"DSTQQSS"[d.getDay()]}</b>${S.days[k]?"🔥":""}</i>`; }).join("");
+  const ov=document.createElement("div"); ov.className="streak-ov";
+  ov.innerHTML=`<div class="embers"></div><div class="sbox">
+      <div class="flame"><span class="f">🔥</span><b class="num">${Math.max(st.n-1,0)}</b></div>
+      <h2>${st.n===1?"Dia 1!":`${st.n} dias seguidos!`}</h2>
+      <div class="mbox act act-${act[0]}">${mascotSVG(id,"celebrate",{accessories:S.profile.accessories})}</div>
+      <div class="acttxt">${esc(act[1])}</div>
+      <div class="bubble">${esc(l[0])}<small>${esc(l[1])}</small></div>
+      <div class="week">${week}</div>
+      ${streakInsights(st).map(t=>`<div class="ins">${esc(t)}</div>`).join("")}
+      <button class="btn" id="sgo">Blurty it out! Bora continuar</button></div>`;
+  document.body.appendChild(ov);
+  const em=ov.querySelector(".embers");
+  for(let i=0;i<36;i++){ const e=document.createElement("span"); e.className="ember"+(i%6===0?" big":"");
+    if(i%6===0) e.textContent="🔥"; e.style.left=Math.random()*100+"%"; e.style.animationDuration=(2.2+Math.random()*2.4)+"s";
+    e.style.animationDelay=(Math.random()*1.6)+"s"; em.appendChild(e); }
+  setTimeout(()=>{ const nb=ov.querySelector(".num"); if(nb){ nb.textContent=st.n; nb.classList.add("bump"); } tone([523,659,784,1046,1318]); }, 700);
+  ov.querySelector("#sgo").onclick=()=>{ sfx.tap(); ov.classList.add("out"); setTimeout(()=>ov.remove(),300); };
+}
 
 /* ================== utilidades ================== */
 const app = document.getElementById("app");
