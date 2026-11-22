@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#F7F5F0">
-<title>Blurty — blurt it out!</title>
+<title>Blurty — Blurty it out!</title>
 <meta name="description" content="Aprenda inglês conversando, sem medo de errar.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
@@ -405,7 +405,7 @@ function pickScreen(mode){ // mode: "first" | "change"
     const m = sel && MASCOTS[sel];
     const line = sel ? mascotLine(sel,"welcome") : null;
     app.innerHTML = `<div class="screen pick">
-      ${mode==="first"?`<div class="brand"><b>Blurty<span>.</span></b><small>Blurt it out!</small><em>Solte o seu inglês. Errar faz parte.</em></div>`:""}
+      ${mode==="first"?`<div class="brand"><b>Blurty<span>.</span></b><small>Blurty it out!</small><em>Solte o seu inglês. Errar faz parte.</em></div>`:""}
       <h1>${mode==="first"?"Escolha seu companheiro":"Trocar mascote"}</h1>
       <p class="sub">${mode==="first"?"Ele vai te acompanhar em toda a jornada. Dá para trocar depois no Perfil.":"Seu XP, fases, conquistas e sequência continuam iguais."}</p>
       <div class="preview">${sel ? `${mbox("welcome", sel)}<div><div class="who">${m.name}</div><div class="per">${m.speciesPt} · ${m.colorPt}<br>${esc(m.personality)}</div>
@@ -433,7 +433,7 @@ function pickScreen(mode){ // mode: "first" | "change"
 /* ================== telas principais ================== */
 let tab = "map", greet = true;
 function appbar(){
-  return `<div class="appbar"><div class="logo">Blurty<span>.</span><small>blurt it out!</small></div>
+  return `<div class="appbar"><div class="logo">Blurty<span>.</span><small>Blurty it out!</small></div>
     <span class="chip" title="Dias seguidos">🔥 ${streakNow()}</span><span class="chip" title="XP">⚡ ${S.xp}</span><span class="chip" title="Progresso geral">${overallPct()}%</span></div>`;
 }
 function nav(){
@@ -583,7 +583,7 @@ function meScreen(){
     <div class="stitle">Blurty no celular</div>
     <div class="infobox" id="appbox">${appBox()}</div>
     <div class="stitle">Por que Blurty?</div>
-    <div class="infobox"><h4>Blurt it out!</h4>
+    <div class="infobox"><h4>Blurty it out!</h4>
       <p><b>To blurt</b> é soltar as palavras sem pensar demais. No Blurty você se joga, fala sem medo e erra sem medo: errar faz parte de aprender.</p></div>
     <p class="empty" style="margin-top:14px">Trocar de mascote muda só o personagem e as cores. XP, fases, conquistas, histórico e sequência continuam.</p>
     <p class="empty">Seu progresso fica salvo neste aparelho e neste navegador.</p>
