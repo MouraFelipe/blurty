@@ -4,7 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#F7F5F0">
-<title>Blurty — aprenda inglês conversando</title>
+<title>Blurty — blurt it out!</title>
+<meta name="description" content="Aprenda inglês conversando, sem medo de errar.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Blurty">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -61,6 +68,16 @@
   .appbar{display:flex;align-items:center;gap:8px;padding:12px 16px;position:sticky;top:0;background:var(--bg);z-index:6;border-bottom:2px solid var(--line)}
   .logo{font-weight:800;font-size:28px;flex:1;line-height:1}
   .logo span{color:var(--accent)}
+  .logo small{display:block;font-family:Nunito,sans-serif;font-size:11px;font-weight:900;letter-spacing:.08em;color:var(--accent);margin-top:2px}
+  .brand{text-align:center;margin:0 0 10px}
+  .infobox{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px;text-align:left}
+  .infobox h4{margin:0 0 4px;font-family:"Baloo 2";font-size:19px;line-height:1.15}
+  .infobox p{margin:0;font-size:14px;color:var(--muted);line-height:1.4}
+  .infobox p b{color:var(--ink)}
+  .infobox .btn{margin-top:10px}
+  .brand b{font-family:"Baloo 2";font-size:34px;line-height:1}.brand b span{color:var(--accent)}
+  .brand small{display:block;font-weight:900;color:var(--accent);letter-spacing:.04em}
+  .brand em{display:block;font-style:normal;color:var(--muted);font-weight:700;font-size:14px}
   .chip{background:var(--card);border:2px solid var(--line);border-radius:999px;padding:4px 10px;font-weight:900;font-size:14px;white-space:nowrap}
 
   /* ----- início ----- */
@@ -291,7 +308,7 @@ MAIN.forEach(b=>b.phases.forEach((p,i)=>PHASES[p.id]={p, b, i}));
 const QUESTIONS = {};
 Object.values(PHASES).forEach(({p})=>p.questions.forEach((q,k)=>QUESTIONS[p.id+":"+k]={...q, qid:p.id+":"+k, from:p}));
 const MAIN_PHASES = MAIN.flatMap(b=>b.phases);
-const CHAL_NEED = 3, CHAL_BONUS = 30;          // desafio surpresa: acertar 3 de 4 · bônus na 1ª vitória
+const CHAL_NEED = 3, CHAL_BONUS = 50, TRY_BONUS = 5;          // desafio surpresa: acertar 3 de 4 · bônus na 1ª vitória · tentar sempre vale XP
 const CHAL = CHALLENGES.filter(c=>PHASES[c.after]).map(c=>({...c, b:PHASES[c.after].b}));
 const CH_BY_ID = {}; CHAL.forEach(c=>{ CH_BY_ID[c.id]=c; QUESTIONS[c.id+":s"]={...c.question, qid:c.id+":s", from:{title:"Desafio surpresa"}}; });
 
@@ -383,6 +400,7 @@ function pickScreen(mode){ // mode: "first" | "change"
     const m = sel && MASCOTS[sel];
     const line = sel ? mascotLine(sel,"welcome") : null;
     app.innerHTML = `<div class="screen pick">
+      ${mode==="first"?`<div class="brand"><b>Blurty<span>.</span></b><small>Blurt it out!</small><em>Solte o seu inglês. Errar faz parte.</em></div>`:""}
       <h1>${mode==="first"?"Escolha seu companheiro":"Trocar mascote"}</h1>
       <p class="sub">${mode==="first"?"Ele vai te acompanhar em toda a jornada. Dá para trocar depois no Perfil.":"Seu XP, fases, conquistas e sequência continuam iguais."}</p>
       <div class="preview">${sel ? `${mbox("welcome", sel)}<div><div class="who">${m.name}</div><div class="per">${m.speciesPt} · ${m.colorPt}<br>${esc(m.personality)}</div>
@@ -410,7 +428,7 @@ function pickScreen(mode){ // mode: "first" | "change"
 /* ================== telas principais ================== */
 let tab = "map", greet = true;
 function appbar(){
-  return `<div class="appbar"><div class="logo">Blurty<span>.</span></div>
+  return `<div class="appbar"><div class="logo">Blurty<span>.</span><small>blurt it out!</small></div>
     <span class="chip" title="Dias seguidos">🔥 ${streakNow()}</span><span class="chip" title="XP">⚡ ${S.xp}</span><span class="chip" title="Progresso geral">${overallPct()}%</span></div>`;
 }
 function nav(){
@@ -516,10 +534,27 @@ function achScreen(){
       <div class="row"><div class="grow">Acertar um item da revisão</div><span class="tag">+8</span></div>
       <div class="row"><div class="grow">Concluir um bloco</div><span class="tag">+100</span></div>
       <div class="row"><div class="grow">Vencer um desafio surpresa (1ª vez)</div><span class="tag">+${CHAL_BONUS}</span></div>
+      <div class="row"><div class="grow">Tentar de novo uma fase ou desafio (coragem de tentar)</div><span class="tag">+${TRY_BONUS}</span></div>
     </div><p class="empty">Não existe bônus por velocidade: o que conta é entender.</p></div></div>${nav()}`;
   bindNav();
 }
 
+/* app no celular (site): instalar na tela inicial */
+const SITE_URL = "https://mourafelipe.github.io/blurty/";
+const ON_SITE = /(^|\.)github\.io$/i.test(location.hostname) || location.hostname==="localhost";
+const IS_APP = (()=>{ try{ return matchMedia("(display-mode: standalone)").matches || navigator.standalone===true; }catch(e){ return false; } })();
+const IS_IOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+let installEvt = null;
+window.addEventListener("beforeinstallprompt", e=>{ e.preventDefault(); installEvt=e; const b=document.getElementById("appbox"); if(b){ b.innerHTML=appBox(); bindApp(); } });
+if (ON_SITE && "serviceWorker" in navigator) { try{ navigator.serviceWorker.register("sw.js").catch(()=>{}); }catch(e){} }
+function appBox(){
+  if (IS_APP) return `<h4>✔ Você está usando o app</h4><p>O Blurty abre direto da tela inicial, como um app.</p>`;
+  if (!ON_SITE) return `<h4>Instale pelo site</h4><p>Abra o Blurty pelo site no celular para colocar o ícone na tela inicial.</p><a class="btn ghost" href="${SITE_URL}" target="_blank" rel="noopener">Abrir o site</a>`;
+  if (installEvt) return `<h4>Coloque o Blurty na tela inicial</h4><p>Ele abre como um app, em tela cheia.</p><button class="btn" id="install">Instalar app</button>`;
+  if (IS_IOS) return `<h4>Coloque o Blurty na tela inicial</h4><p>No Safari, toque em <b>Compartilhar</b> e depois em <b>Adicionar à Tela de Início</b>.</p>`;
+  return `<h4>Coloque o Blurty na tela inicial</h4><p>No Chrome, abra o menu <b>⋮</b> e toque em <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</p>`;
+}
+function bindApp(){ const b=document.getElementById("install"); if(b) b.onclick=async()=>{ if(!installEvt) return; installEvt.prompt(); try{ await installEvt.userChoice; }catch(e){} installEvt=null; const x=document.getElementById("appbox"); if(x){ x.innerHTML=appBox(); bindApp(); } }; }
 function meScreen(){
   const m=MASCOTS[M()], line=mascotLine(M(),"encourage");
   app.innerHTML = `<div class="screen">${appbar()}<div class="pad"><h1 class="h1">Perfil</h1>
@@ -531,16 +566,22 @@ function meScreen(){
       <div class="bubble" style="display:inline-block">“${esc(line[0])}”<small>${esc(line[1])}</small></div>
       <button class="btn" id="chg" style="margin-top:16px">Trocar mascote</button>
     </div>
-    <div class="stitle">Itens do mascote</div>
+    <div class="stitle">Personalize o seu mascote</div>
     <div class="items">${Object.entries(PRIZES).map(([id,pr])=>{ const has=S.items.includes(id), on=S.profile.accessories.includes(id);
       return has ? `<button class="item ${on?"on":""}" data-item="${id}"><span class="e">${pr.e}</span><b>${esc(pr.name)}</b><span>${on?"Usando · toque para tirar":"Toque para usar"}</span></button>`
                  : `<div class="item off"><span class="e">🎁</span><b>???</b><span>Vença um desafio surpresa no mapa</span></div>`; }).join("")}</div>
     <div class="stitle">Seus números</div>
     <div class="grid"><div class="card"><b>⚡ ${S.xp}</b><span>XP</span></div><div class="card"><b>🏆 ${ACH.filter(a=>S.achieved[a.id]).length}</b><span>Conquistas</span></div></div>
+    <div class="stitle">Blurty no celular</div>
+    <div class="infobox" id="appbox">${appBox()}</div>
+    <div class="stitle">Por que Blurty?</div>
+    <div class="infobox"><h4>Blurt it out!</h4>
+      <p><b>To blurt</b> é soltar as palavras sem pensar demais. No Blurty você se joga, fala sem medo e erra sem medo: errar faz parte de aprender.</p></div>
     <p class="empty" style="margin-top:14px">Trocar de mascote muda só o personagem e as cores. XP, fases, conquistas, histórico e sequência continuam.</p>
     <p class="empty">Seu progresso fica salvo neste aparelho e neste navegador.</p>
   </div></div>${nav()}`;
   bindNav(); document.getElementById("chg").onclick=()=>{ sfx.tap(); pickScreen("change"); };
+  bindApp();
   app.querySelectorAll("[data-item]").forEach(b=>b.onclick=()=>{ const id=b.dataset.item; S.profile.accessories.includes(id)?unequip(id):equip(id); sfx.ok(); meScreen(); });
 }
 
@@ -671,7 +712,7 @@ function result(ok, correctText){
     L.mistakes++; L.row=0; S.review[q.qid]={n:((S.review[q.qid]||{}).n||0)+1, d:dayStr()};
     foot.className="foot no"; sfx.no();
     const l=mascotLine(M(),"sad");
-    fb.innerHTML=`${mbox("sad")}<div><span class="h">${esc(l[0])}</span><span class="pt">${esc(l[1])}</span>${correctText?`<p>Resposta certa: <b>${esc(correctText)}</b></p>`:""}<p>${q.explain}</p><p style="font-size:13px;color:var(--muted)">Ela entra na sua Revisão.</p></div>`;
+    fb.innerHTML=`${mbox("encourage")}<div><span class="h">${esc(l[0])}</span><span class="pt">${esc(l[1])}</span>${correctText?`<p>Resposta certa: <b>${esc(correctText)}</b></p>`:""}<p>${q.explain}</p><p style="font-size:13px;color:var(--muted)">Errar faz parte: ela vai para a Revisão para você treinar.</p></div>`;
   }
   persist();
   document.querySelector(".bar i").style.width=(L.n/L.total*100)+"%";
@@ -731,19 +772,20 @@ function finishPhase(){
 }
 function retryPhase(){
   const {p}=L, need=Math.ceil(L.total*PASS), acc=Math.round(L.ok/L.total*100);
-  const bonus=touchDay()?5*Math.min(S.streak,7):0, total=L.xp+bonus; addXP(total);
+  const bonus=touchDay()?5*Math.min(S.streak,7):0, total=L.xp+bonus+TRY_BONUS; addXP(total);
   const prev=S.phases[p.id]||{stars:0,best:0,plays:0};
   S.phases[p.id]={stars:prev.stars, best:Math.max(prev.best,acc), plays:prev.plays+1};
   S.history.push({d:dayStr(), t:p.title, c:L.ok, n:L.total, xp:total}); S.history=S.history.slice(-40);
   checkAch(); persist();
   const l=mascotLine(M(),"oops");
   app.innerHTML=`<div class="screen"><div class="end">${mbox("encourage")}
-      <h2>Quase lá!</h2><div class="sub">${esc(p.title)} · ${esc(p.pt)}</div>
+      <h2>Você se jogou! 💪</h2><div class="sub">${esc(p.title)} · ${esc(p.pt)}</div>
       <div class="bubble">${esc(l[0])}<small>${esc(l[1])}</small></div>
-      <div class="cards3" style="margin-top:14px"><div class="card"><b>✔ ${L.ok}/${L.total}</b><span>Acertos</span></div><div class="card"><b>🎯 ${need}</b><span>Para passar</span></div><div class="card"><b>⚡ ${total}</b><span>XP</span></div></div>
+      <div class="cards3" style="margin-top:14px"><div class="card"><b>✔ ${L.ok}/${L.total}</b><span>Acertos</span></div><div class="card"><b>🎯 ${need}</b><span>Para concluir</span></div><div class="card"><b>⚡ ${total}</b><span>XP ganho</span></div></div>
+      <div class="xpl"><div><span>Coragem de tentar</span><b>+${TRY_BONUS} XP</b></div></div>
       <div class="done-goal"><small>🎯 Objetivo da fase</small>${esc(p.goal)}</div>
-      <p class="empty" style="margin-top:12px">Você precisa acertar ${need} de ${L.total} para concluir a fase. Releia o cartão "Aprenda" e tente de novo: os exercícios que você errou também foram para a Revisão.</p>
-    </div><div class="foot"><button class="btn" id="again" style="margin-bottom:10px">Tentar de novo</button><button class="btn ghost" id="map">Ver mapa</button></div></div>`;
+      <p class="empty" style="margin-top:12px">Errar faz parte de falar inglês: é assim que se aprende. Com ${need} acertos de ${L.total}, a fase é sua. O que você errou virou Revisão para treinar.</p>
+    </div><div class="foot"><button class="btn" id="again" style="margin-bottom:10px">Jogar de novo</button><button class="btn ghost" id="map">Ver mapa</button></div></div>`;
   sfx.tap();
   document.getElementById("again").onclick=()=>startPhase(p.id);
   document.getElementById("map").onclick=quit; window.scrollTo(0,0);
@@ -753,6 +795,7 @@ function finishChallenge(){
   const c=L.c, pr=PRIZES[c.prize], win=L.ok>=CHAL_NEED, first=win && !chalWon(c);
   const lines=[["Respostas certas",L.xp]];
   if (first) lines.push(["Desafio vencido",CHAL_BONUS]);
+  if (!win) lines.push(["Coragem de tentar",TRY_BONUS]);
   if (touchDay()) lines.push([`Sequência de ${S.streak} dia${S.streak>1?"s":""}`,5*Math.min(S.streak,7)]);
   const total=lines.reduce((s,l)=>s+l[1],0); addXP(total);
   const prev=S.challenges[c.id]||{plays:0};
@@ -764,11 +807,12 @@ function finishChallenge(){
   if (!win){
     const l=mascotLine(M(),"oops");
     app.innerHTML=`<div class="screen"><div class="end">${mbox("encourage")}
-        <h2>Quase lá!</h2><div class="sub">Desafio surpresa · ${esc(c.title)}</div>
+        <h2>Você se jogou! 💪</h2><div class="sub">Desafio surpresa · ${esc(c.title)}</div>
         <div class="bubble">${esc(l[0])}<small>${esc(l[1])}</small></div>
-        <div class="cards3" style="margin-top:14px"><div class="card"><b>✔ ${L.ok}/${L.total}</b><span>Acertos</span></div><div class="card"><b>🎯 ${CHAL_NEED}</b><span>Para vencer</span></div><div class="card"><b>⚡ ${total}</b><span>XP</span></div></div>
-        <p class="empty" style="margin-top:12px">Acerte ${CHAL_NEED} de ${L.total} para abrir o presente. Os exercícios mudam a cada tentativa, e o que você errou foi para a Revisão.</p>
-      </div><div class="foot"><button class="btn" id="again" style="margin-bottom:10px">Tentar de novo</button><button class="btn ghost" id="map">Ver mapa</button></div></div>`;
+        <div class="cards3" style="margin-top:14px"><div class="card"><b>✔ ${L.ok}/${L.total}</b><span>Acertos</span></div><div class="card"><b>🎯 ${CHAL_NEED}</b><span>Para abrir</span></div><div class="card"><b>⚡ ${total}</b><span>XP ganho</span></div></div>
+        ${xpl}
+        <p class="empty" style="margin-top:12px">Você já aprendeu a expressão secreta, e ela é sua. O presente continua te esperando: cada tentativa traz exercícios novos.</p>
+      </div><div class="foot"><button class="btn" id="again" style="margin-bottom:10px">Jogar de novo</button><button class="btn ghost" id="map">Ver mapa</button></div></div>`;
     sfx.tap();
     document.getElementById("again").onclick=()=>startChallenge(c.id);
     document.getElementById("map").onclick=quit; window.scrollTo(0,0); return;
