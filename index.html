@@ -132,6 +132,19 @@
   .stitle{font-weight:900;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:22px 4px 4px}
   .empty{color:var(--muted);font-size:14px;padding:8px 4px;margin:0}
   .ach{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  /* desafio surpresa e itens do mascote */
+  .node.chal .c{width:62px;height:58px;font-size:26px;background:var(--card);border:3px dashed var(--accent);box-shadow:0 5px 0 var(--line2);animation:shakegift 2.6s ease-in-out infinite}
+  .node.chal.won .c{border-style:solid;animation:none}
+  .node.chal.locked .c{border-color:var(--line2);background:var(--tint);animation:none;filter:grayscale(1);opacity:.65}
+  @keyframes shakegift{0%,78%,100%{transform:rotate(0)}84%{transform:rotate(-9deg)}90%{transform:rotate(9deg)}95%{transform:rotate(-4deg)}}
+  .prize{margin-top:14px;display:flex;gap:14px;align-items:center;background:var(--card);border:2px solid var(--accent);border-radius:16px;padding:12px 14px;text-align:left}
+  .prize .pe{font-size:36px}.prize b{display:block;font-family:"Baloo 2";font-size:22px;line-height:1.1}
+  .prize small{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:900}
+  .items{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .items .item{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:12px;text-align:center;font:inherit;color:inherit}
+  .items .item.on{border-color:var(--accent);background:var(--soft)}
+  .items .item.off{opacity:.55}
+  .items .e{font-size:30px;display:block}.items b{display:block;font-size:14px;margin-top:2px}.items span{font-size:12px;color:var(--muted)}
   .ach div{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px;text-align:center}
   .ach div.on{border-color:var(--accent);background:var(--soft)}
   .ach div.off{opacity:.5;filter:grayscale(1)}
@@ -276,6 +289,8 @@ const MASCOTS = {
       oops:     [["Oops! Even dinos trip sometimes.","Opa! Até dinossauro tropeça às vezes."],["No worries. We'll get it next time!","Tranquilo. Na próxima a gente acerta!"],["Rawr... almost! Read the tip.","Rawr... quase! Lê a dica."]],
       excited:  [["Roar! Another English challenge completed!","Roar! Mais um desafio de inglês concluído!"],["Phase done! You're unstoppable!","Fase vencida! Ninguém te para!"],["That was a big step!","Esse foi um passo grande!"]],
       celebrate:[["ROOOAR! A whole block done!","ROOOAR! Um bloco inteiro concluído!"],["Legend! Time to celebrate!","Lenda! Hora de comemorar!"]],
+      surprise: [["Roar! A mystery gift! Let's win it!", "Roar! Um presente misterioso! Bora ganhar!"], ["A secret challenge? I'm ready!", "Um desafio secreto? Tô pronto!"]],
+      gift:     [["ROAR! The gift is yours!", "ROAR! O presente é seu!"], ["Look at me! Do I look cool?", "Olha pra mim! Tô estiloso?"]],
       encourage:[["Five more done! Keep stomping!","Mais cinco feitos! Segue firme!"],["You're stronger in English every day.","Você fica mais forte no inglês a cada dia."],["Keep going. I'm right behind you!","Continua. Tô logo atrás de você!"]]
     }
   },
@@ -289,6 +304,8 @@ const MASCOTS = {
       oops:     [["It's okay. Take a breath and read the tip.","Tudo bem. Respira e lê a dica."],["Mistakes help us learn.","Os erros ajudam a gente a aprender."],["Gently now. You'll see it again.","Com calma. Você vai ver de novo."]],
       excited:  [["Phase complete. I'm proud of you.","Fase concluída. Tenho orgulho de você."],["Beautiful work today.","Lindo trabalho hoje."],["Calm and steady wins.","Com calma e constância se vence."]],
       celebrate:[["A whole block! What a journey.","Um bloco inteiro! Que jornada."],["You did it. Enjoy this moment.","Você conseguiu. Aproveite o momento."]],
+      surprise: [["Oh, a little surprise. Shall we open it?", "Ah, uma surpresinha. Vamos abrir?"], ["Something special is waiting for you.", "Tem algo especial esperando por você."]],
+      gift:     [["A gift, just for us. Thank you!", "Um presente, só pra gente. Obrigada!"], ["It suits me, doesn't it?", "Ficou bem em mim, né?"]],
       encourage:[["Five exercises done. You're doing great.","Cinco exercícios feitos. Você está indo muito bem."],["Slow is fine. Keep going.","Devagar está ótimo. Continue."],["Every answer brings you closer.","Cada resposta te deixa mais perto."]]
     }
   },
@@ -302,6 +319,8 @@ const MASCOTS = {
       oops:     [["Tricky one, huh? Now you know the trick.","Essa era pegadinha, né? Agora você sabe o truque."],["Even foxes miss sometimes.","Até raposa erra às vezes."],["Smart people learn from slips.","Gente esperta aprende com os deslizes."]],
       excited:  [["Phase done. Too easy for you!","Fase concluída. Fácil demais pra você!"],["Nicely played!","Bem jogado!"],["Another one in the bag.","Mais uma no papo."]],
       celebrate:[["A full block? Now that's clever.","Um bloco inteiro? Isso que é esperteza."],["Brilliant! Take a bow.","Brilhante! Pode agradecer à plateia."]],
+      surprise: [["A secret challenge… my favorite kind.", "Um desafio secreto… meu tipo favorito."], ["I smell a prize. Let's get it!", "Tô sentindo cheiro de prêmio. Bora pegar!"]],
+      gift:     [["Sneaky and stylish. Just like me.", "Esperta e estilosa. Igual a mim."], ["Got it! I knew you would.", "Ganhou! Eu sabia."]],
       encourage:[["You're getting smarter. Keep going!","Você está ficando mais esperto. Continue!"],["Five down. Your brain is warming up.","Cinco feitos. Seu cérebro está esquentando."],["Stay sharp. The next one is yours.","Fica ligado. A próxima é sua."]]
     }
   },
@@ -315,6 +334,8 @@ const MASCOTS = {
       oops:     [["Hmm, interesting! Look at the tip.","Hmm, interessante! Olha a dica."],["Now we know something new!","Agora a gente sabe algo novo!"],["Let's look closer next time.","Vamos olhar com mais atenção na próxima."]],
       excited:  [["Phase complete! What's next?","Fase concluída! Qual a próxima?"],["Wow, you learned a lot!","Uau, você aprendeu muito!"],["I'm taking notes on your progress!","Tô anotando seu progresso!"]],
       celebrate:[["A whole block! Everyone, look!","Um bloco inteiro! Gente, olha isso!"],["Amazing! I can't stop jumping!","Incrível! Não consigo parar de pular!"]],
+      surprise: [["What's inside? I need to know!", "O que tem dentro? Preciso saber!"], ["A mystery box! Let's investigate.", "Uma caixa misteriosa! Vamos investigar."]],
+      gift:     [["Wow! It's perfect, down to the last detail!", "Uau! Ficou perfeito, até no último detalhe!"], ["New item spotted! Thank you!", "Item novo à vista! Obrigado!"]],
       encourage:[["Five done! You're paying great attention.","Cinco feitos! Você está prestando muita atenção."],["Curiosity is your superpower.","A curiosidade é o seu superpoder."],["Keep exploring. You're doing well!","Continue explorando. Você está indo bem!"]]
     }
   },
@@ -328,6 +349,8 @@ const MASCOTS = {
       oops:     [["Splash! Missed the lily pad.","Tchibum! Errei a folha."],["Oops! Let's hop again later.","Opa! Depois a gente pula de novo."],["Ribbit... almost!","Ribbit... quase!"]],
       excited:  [["Phase done! Boing boing!","Fase concluída! Boing boing!"],["You hopped all the way!","Você pulou até o fim!"],["Ribbit-tastic!","Ribbit-ástico!"]],
       celebrate:[["BOING! A whole block! Pond party!","BOING! Um bloco inteiro! Festa na lagoa!"],["Highest jump ever!","O pulo mais alto da história!"]],
+      surprise: [["A surprise! Boing boing! Open it!", "Uma surpresa! Boing boing! Abre!"], ["Gift time? Party time!", "Hora do presente? Hora da festa!"]],
+      gift:     [["I look AMAZING! Boing!", "Tô INCRÍVEL! Boing!"], ["Best. Gift. Ever!", "Melhor. Presente. Do mundo!"]],
       encourage:[["Five hops done! Keep bouncing!","Cinco pulos feitos! Continua pulando!"],["You're getting so good at this!","Você está ficando muito bom nisso!"],["Hop by hop, you'll get there.","Pulo a pulo, você chega lá."]]
     }
   },
@@ -341,6 +364,8 @@ const MASCOTS = {
       oops:     [["Haha! Even mistakes make you smarter!","Haha! Até os erros te deixam mais esperto!"],["Oops! I won't tell anyone.","Opa! Não conto pra ninguém."],["That one tricked us both!","Essa enganou nós dois!"]],
       excited:  [["Phase complete! Look at you go!","Fase concluída! Olha você mandando bem!"],["Treasure found: new English!","Tesouro encontrado: inglês novo!"],["Too good! Next one?","Bom demais! Próxima?"]],
       celebrate:[["A whole block! Let's party!","Um bloco inteiro! Bora comemorar!"],["Best heist ever: a full block!","Melhor golpe da história: um bloco inteiro!"]],
+      surprise: [["Hehe, a secret challenge. Let's grab the loot!", "Hehe, um desafio secreto. Bora pegar o tesouro!"], ["Shh… there's a prize hidden here.", "Psiu… tem um prêmio escondido aqui."]],
+      gift:     [["Loot secured! Hehe!", "Tesouro garantido! Hehe!"], ["Do I look fancy now?", "Tô chique agora?"]],
       encourage:[["Five down! You're on a roll.","Cinco feitos! Você está embalado."],["Keep going. I've got snacks.","Continua. Eu tenho lanchinhos."],["You're better at this than you think.","Você é melhor nisso do que pensa."]]
     }
   }
@@ -597,8 +622,29 @@ const MascotArt = (()=>{
     partyHat: (ch,c,accent)=>{ const [x,y,r]=ch.hat; return `<g class="acc" transform="rotate(${r} ${x} ${y})">
       <path d="M${x} ${y-30} L${x-14} ${y+2} Q${x} ${y+7} ${x+14} ${y+2} Z" fill="${accent}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
       <path d="M${x-9} ${y-8} L${x+9} ${y-12} M${x-12} ${y-1} L${x+12} ${y-5}" stroke="#fff" stroke-width="2.4" opacity=".75" stroke-linecap="round"/>
-      <circle cx="${x}" cy="${y-31}" r="4.5" fill="#F2C14E" stroke="${INK}" stroke-width="1.8"/></g>`; }
+      <circle cx="${x}" cy="${y-31}" r="4.5" fill="#F2C14E" stroke="${INK}" stroke-width="1.8"/></g>`; },
+    /* prêmios dos desafios surpresa */
+    crown: (ch,c,accent)=>{ const [x,y,r]=ch.hat; return `<g class="acc" transform="rotate(${r} ${x} ${y})">
+      <path d="M${x-15} ${y+5} L${x-16} ${y-9} L${x-7} ${y-2} L${x} ${y-15} L${x+7} ${y-2} L${x+16} ${y-9} L${x+15} ${y+5} Z" fill="#F2C14E" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M${x-14} ${y+1} L${x+14} ${y+1}" stroke="${K("#F2C14E",.25)}" stroke-width="2"/>
+      <circle cx="${x}" cy="${y-16}" r="2.6" fill="#fff" stroke="${INK}" stroke-width="1.5"/><circle cx="${x-16}" cy="${y-10}" r="2.3" fill="#fff" stroke="${INK}" stroke-width="1.5"/><circle cx="${x+16}" cy="${y-10}" r="2.3" fill="#fff" stroke="${INK}" stroke-width="1.5"/>
+      <circle cx="${x}" cy="${y+2.5}" r="2.4" fill="${accent}" stroke="${INK}" stroke-width="1.2"/></g>`; },
+    cap: (ch,c,accent)=>{ const [x,y,r]=ch.hat; return `<g class="acc" transform="rotate(${r} ${x} ${y})">
+      <path d="M${x+10} ${y+5} Q${x+30} ${y+1} ${x+37} ${y+8} Q${x+24} ${y+12} ${x+8} ${y+10} Z" fill="${K(accent,.2)}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M${x-19} ${y+7} Q${x-20} ${y-14} ${x} ${y-14} Q${x+20} ${y-14} ${x+19} ${y+7} Z" fill="${accent}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M${x} ${y-14} L${x} ${y+6}" stroke="${INK}" stroke-width="1.2" opacity=".35"/><path d="M${x-12} ${y-8} Q${x-8} ${y-12} ${x-3} ${y-12}" stroke="#fff" stroke-width="2.4" fill="none" opacity=".5" stroke-linecap="round"/>
+      <circle cx="${x}" cy="${y-14.5}" r="2.6" fill="${K(accent,.2)}" stroke="${INK}" stroke-width="1.5"/></g>`; },
+    flower: (ch,c,accent)=>{ const [hx,hy]=ch.hat, x=hx+15, y=hy+4;
+      const petals=[0,72,144,216,288].map(a=>{ const t=a*Math.PI/180; return `<circle cx="${(x+Math.cos(t)*6).toFixed(1)}" cy="${(y+Math.sin(t)*6).toFixed(1)}" r="5" fill="#FFFFFF" stroke="${INK}" stroke-width="1.6"/>`; }).join("");
+      return `<g class="acc"><path d="M${x-3} ${y+5} Q${x-10} ${y+12} ${x-15} ${y+10} Q${x-11} ${y+5} ${x-3} ${y+5} Z" fill="#7FB77E" stroke="${INK}" stroke-width="1.5" stroke-linejoin="round"/>${petals}<circle cx="${x}" cy="${y}" r="4" fill="#F2C14E" stroke="${INK}" stroke-width="1.5"/></g>`; },
+    sunglasses: (ch,c,accent)=>{ const [[x1,y1],[x2,y2]]=ch.eyes, e=ch.er, w=e*2.6, h=e*1.9, y=(y1+y2)/2;
+      const lens=(cx)=>`<rect x="${cx-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${e*.7}" fill="${INK}" stroke="${INK}" stroke-width="2"/>
+        <path d="M${cx-w/2+e*.55} ${y-h/2+e*.6} L${cx-w/2+e*1.25} ${y-h/2+e*.6}" stroke="#fff" stroke-width="2.2" opacity=".55" stroke-linecap="round"/>`;
+      return `<g class="acc">${lens(x1)}${lens(x2)}
+        <path d="M${x1+w/2} ${y-h*.18} Q${(x1+x2)/2} ${y-h*.42} ${x2-w/2} ${y-h*.18}" stroke="${INK}" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <path d="M${x1-w/2} ${y-h*.2} L${x1-w/2-e*.7} ${y-h*.32}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/><path d="M${x2+w/2} ${y-h*.2} L${x2+w/2+e*.7} ${y-h*.32}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/></g>`; }
   };
+  const HEAD_ITEMS = ["partyHat","crown","cap","flower"];
 
   /* reflexo de luz: um arco claro no alto da cabeça, igual em todos */
   const SHINE = {dino:[52,52,30], lumi:[50,56,28], foxy:[48,60,26], miko:[56,42,20], bloop:[34,98,30], roki:[50,56,24]};
@@ -615,7 +661,9 @@ const MascotArt = (()=>{
       <radialGradient id="${k}body" cx="34%" cy="26%" r="85%"><stop offset="0" stop-color="${W(c.body,.38)}"/><stop offset=".5" stop-color="${c.body}"/><stop offset="1" stop-color="${K(c.body,.16)}"/></radialGradient>
       <radialGradient id="${k}iris" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="${W(c.iris,.35)}"/><stop offset="1" stop-color="${K(c.iris,.2)}"/></radialGradient>
       <radialGradient id="${k}glow"><stop offset="0" stop-color="${W(c.body,.5)}" stop-opacity=".55"/><stop offset="1" stop-color="${c.body}" stop-opacity="0"/></radialGradient></defs>`;
-    const acc = (opts.accessories||[]).concat(m.fx==="party"?["partyHat"]:[]).map(a=>ACCESSORIES[a]?ACCESSORIES[a](ch,c,accent):"").join("");
+    const worn = (opts.accessories||[]).filter(a=>ACCESSORIES[a]);
+    const party = m.fx==="party" && !worn.some(a=>HEAD_ITEMS.includes(a)) ? ["partyHat"] : [];   // chapéu de festa só se não estiver usando outro item na cabeça
+    const acc = worn.concat(party).map(a=>ACCESSORIES[a](ch,c,accent)).join("");
     const blush = m.blush ? ch.eyes.map(([x,y],i)=>`<ellipse cx="${x+(i?ch.er*.6:-ch.er*.6)}" cy="${y+ch.er*1.45}" rx="${ch.er*.55}" ry="${ch.er*.32}" fill="#F28B8B" opacity=".38"/>`).join("") : "";
     const shadow = `<ellipse class="shadow" cx="80" cy="${ch.float?154:150}" rx="${ch.float?30:40}" ry="5" fill="${INK}" opacity=".12"/>`;
     return `<svg class="msvg mood-${mood} sp-${id}${ch.float?" floaty":""}" viewBox="0 0 160 160" role="img" aria-label="${(typeof MASCOTS!=="undefined"&&MASCOTS[id]?MASCOTS[id].name:id)}">
@@ -625,7 +673,7 @@ const MascotArt = (()=>{
         ${arms(ch,c,m.arms)}${fx(ch,c,m.fx,accent)}${acc}
       </g></svg>`;
   }
-  return {render, MOODS, CHARACTERS:CH, ACCESSORIES};
+  return {render, MOODS, CHARACTERS:CH, ACCESSORIES, HEAD_ITEMS};
 })();
 function mascotSVG(id, mood="idle", opts={}){ return MascotArt.render(id, mood, opts); }
 
@@ -914,6 +962,78 @@ const BLOCK2 = {
 };
 
 
+/* =========================================================
+   DESAFIOS SURPRESA
+   Aparecem no mapa, num espaço livre do caminho, depois da fase "after".
+   São opcionais: não travam as próximas fases.
+   Conteúdo: uma expressão secreta (só aparece ao abrir) + exercícios sorteados
+   das fases anteriores do bloco + 1 exercício da expressão secreta.
+   Vencer (acertar "need" de "total") dá o prêmio: um item para o mascote.
+   ========================================================= */
+const PRIZES = {
+  sunglasses: {name: "Óculos escuros", e: "🕶️", slot: "face"},
+  crown:      {name: "Coroa",          e: "👑", slot: "head"},
+  cap:        {name: "Boné",           e: "🧢", slot: "head"},
+  flower:     {name: "Flor",           e: "🌼", slot: "head"}
+};
+
+const CHALLENGES = [
+  {
+    id: "b1c1", block: "b1", after: "b1p2", side: -64, prize: "sunglasses",
+    title: "What's up?", pt: "E aí?",
+    reading: [
+        {say: ["@", "Psst… here's a secret expression. Natives use it all the time!"], pt: "Psiu… aqui vai uma expressão secreta. Os nativos usam toda hora!"},
+        {ex: "What's up?", pt: "E aí? / Beleza? (bem informal)"},
+        {ex: "Not much. You?", pt: "Nada de mais. E você?"},
+        {tip: "💡 <b>What's up?</b> não pede um relatório nem <i>I'm fine</i>. O natural é responder <b>Not much!</b> ou <b>Nothing much, you?</b>"}
+    ],
+    question: {type: "choice", kind: "Expressão secreta", dialog: [["Leo", "Hey! What's up?"]], prompt: "Qual é a resposta mais natural?",
+      options: ["Not much. You?", "I'm 25.", "Good night!"], answer: 0,
+      explain: "<b>Not much</b> = nada de mais. É a resposta padrão para <i>What's up?</i>"}
+  },
+  {
+    id: "b1c2", block: "b1", after: "b1p4", side: 74, prize: "crown",
+    title: "My bad!", pt: "Foi mal!",
+    reading: [
+        {say: ["@", "Another secret: how friends apologize and say it's okay."], pt: "Outro segredo: como amigos pedem desculpa e dizem que está tudo bem."},
+        {ex: "My bad!", pt: "Foi mal! (informal)"},
+        {ex: "No worries!", pt: "Tranquilo! / Sem problema!"},
+        {tip: "💡 Entre amigos, <b>My bad</b> e <b>No worries</b> são super comuns. Em situações formais, prefira <i>Sorry</i> e <i>No problem</i>."}
+    ],
+    question: {type: "choice", kind: "Expressão secreta", situation: "Você esbarra no seu amigo e derruba o café dele.",
+      prompt: "O que você diz?", options: ["My bad! Sorry!", "No worries!", "You're welcome!"], answer: 0,
+      explain: "Quem errou diz <b>My bad!</b> E o amigo provavelmente responde <i>No worries!</i>"}
+  },
+  {
+    id: "b2c1", block: "b2", after: "b2p2", side: -64, prize: "cap",
+    title: "I'm swamped!", pt: "Estou atolado!",
+    reading: [
+        {say: ["@", "Busy day? Here's how to say it like a native."], pt: "Dia corrido? Veja como dizer igual a um nativo."},
+        {ex: "I'm swamped!", pt: "Estou atolado de coisas para fazer!"},
+        {ex: "It's been a long day.", pt: "Foi um dia longo/cansativo."},
+        {tip: "💡 <b>Swamped</b> vem de <i>swamp</i> (pântano): é estar “afundado” em tarefas."}
+    ],
+    question: {type: "choice", kind: "Expressão secreta", dialog: [["Maya", "Sorry, I can't talk now. I'm swamped!"]], prompt: "O que a Maya quis dizer?",
+      options: ["Que está cheia de coisas para fazer", "Que está molhada", "Que está de folga hoje"], answer: 0,
+      explain: "<b>I'm swamped</b> = estou atolado(a) de trabalho, sem tempo nenhum."}
+  },
+  {
+    id: "b2c2", block: "b2", after: "b2p4", side: 74, prize: "flower",
+    title: "Let's hang out!", pt: "Bora sair!",
+    reading: [
+        {say: ["@", "Weekend plans! Two expressions everybody uses."], pt: "Planos de fim de semana! Duas expressões que todo mundo usa."},
+        {ex: "Let's hang out on Saturday!", pt: "Bora sair/fazer algo no sábado!"},
+        {ex: "I binge-watch series on weekends.", pt: "Eu maratono séries nos fins de semana."},
+        {tip: "💡 <b>Hang out</b> é passar tempo junto, sem um plano fixo. <b>Binge-watch</b> é maratonar série."}
+    ],
+    question: {type: "build", kind: "Expressão secreta", situation: "Você quer chamar a Maya para fazer algo no fim de semana.",
+      prompt: "Monte: “Bora sair no sábado!”", words: ["Let's", "hang", "out", "on", "Saturday!", "in", "with"],
+      answer: "Let's hang out on Saturday!",
+      explain: "<b>Let's hang out</b> = bora sair / passar um tempo juntos. Dia da semana usa <b>on</b>."}
+  }
+];
+
+
 /* ================== estrutura do curso ================== */
 const MAIN = [BLOCK1, BLOCK2];                        // novos blocos entram aqui, em ordem de dificuldade
 const PEP_EVERY = 5;                          // mascote incentiva a cada 5 exercícios
@@ -923,15 +1043,20 @@ MAIN.forEach(b=>b.phases.forEach((p,i)=>PHASES[p.id]={p, b, i}));
 const QUESTIONS = {};
 Object.values(PHASES).forEach(({p})=>p.questions.forEach((q,k)=>QUESTIONS[p.id+":"+k]={...q, qid:p.id+":"+k, from:p}));
 const MAIN_PHASES = MAIN.flatMap(b=>b.phases);
+const CHAL_NEED = 3, CHAL_BONUS = 30;          // desafio surpresa: acertar 3 de 4 · bônus na 1ª vitória
+const CHAL = CHALLENGES.filter(c=>PHASES[c.after]).map(c=>({...c, b:PHASES[c.after].b}));
+const CH_BY_ID = {}; CHAL.forEach(c=>{ CH_BY_ID[c.id]=c; QUESTIONS[c.id+":s"]={...c.question, qid:c.id+":s", from:{title:"Desafio surpresa"}}; });
 
 /* ================== progresso salvo (neste aparelho) ================== */
 const KEY = "blurty-v2";
 const fresh = ()=>({profile:{mascot:null, skin:null, accessories:[]}, phases:{}, xp:0, streak:0, best:0, last:null,
-                     days:{}, history:[], review:{}, achieved:{}, stats:{answered:0, correct:0, cleared:0}});
+                     days:{}, history:[], review:{}, achieved:{}, stats:{answered:0, correct:0, cleared:0}, challenges:{}, items:[]});
 let S = fresh(), storageOK = true;
 try{ const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(fresh(), JSON.parse(raw)); }catch(e){ storageOK = false; }
 S.stats = Object.assign({answered:0, correct:0, cleared:0}, S.stats);
 S.profile = Object.assign({mascot:null, skin:null, accessories:[]}, S.profile);
+if (!S.challenges || typeof S.challenges!=="object") S.challenges = {};
+if (!Array.isArray(S.items)) S.items = [];
 if (S.profile.mascot && !MASCOTS[S.profile.mascot]) S.profile.mascot = null;
 function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ storageOK = false; } }
 
@@ -968,11 +1093,20 @@ function toast(msg){ const t=document.createElement("div"); t.className="toast";
 const dialogHTML = lines => `<div class="dlg">${lines.map(([who,t])=>`<div class="dl ${who==="Você"?"me":""}"><div class="av">${esc(who[0])}</div><div class="b"><button class="spk" data-say="${esc(t)}" aria-label="Ouvir">🔊</button><span>${esc(t)}</span></div></div>`).join("")}</div>`;
 
 /* ================== progresso / desbloqueio ================== */
+const chalOpen = c => done(c.after);
+const chalWon = c => !!(S.challenges[c.id] && S.challenges[c.id].won);
+/* itens do mascote: só um por lugar (cabeça ou rosto) */
+const withItem = id => S.profile.accessories.filter(a=>!PRIZES[a] || PRIZES[a].slot!==PRIZES[id].slot).concat([id]);
+function equip(id){ S.profile.accessories = withItem(id); persist(); }
+function unequip(id){ S.profile.accessories = S.profile.accessories.filter(a=>a!==id); persist(); }
+function goNext(nx){ nx.type==="review" ? startReview() : nx.type==="challenge" ? startChallenge(nx.c.id) : startPhase(nx.p.id); }
 function unlocked(id){ const idx=MAIN_PHASES.findIndex(p=>p.id===id); return idx===0 || done(MAIN_PHASES[idx-1].id); }
 function nextActivity(){
   const p = MAIN_PHASES.find(p=>!done(p.id));
   if (p) return {type:"phase", p};
   if (Object.keys(S.review).length) return {type:"review"};
+  const c = CHAL.find(c=>chalOpen(c) && !chalWon(c));
+  if (c) return {type:"challenge", c};
   return {type:"all"};
 }
 const overallPct = ()=>Math.round(MAIN_PHASES.filter(p=>done(p.id)).length/MAIN_PHASES.length*100);
@@ -983,6 +1117,7 @@ const ACH = [
   {id:"perfect",e:"🎯", t:"Sem erros",           d:"Conclua uma fase sem errar",   ok:()=>Object.values(S.phases).some(x=>x.stars===3)},
   {id:"b1",     e:"👋", t:"First Conversations", d:"Conclua o Bloco 1",           ok:()=>BLOCK1.phases.every(p=>done(p.id))},
   {id:"b2",     e:"☀️", t:"Daily Life",          d:"Conclua o Bloco 2",           ok:()=>BLOCK2.phases.every(p=>done(p.id))},
+  {id:"gift",   e:"🎁", t:"Presente aberto",     d:"Vença um desafio surpresa",   ok:()=>Object.values(S.challenges).some(x=>x && x.won)},
   {id:"ten",    e:"✍️", t:"10 exercícios",       d:"Responda 10 exercícios",       ok:()=>S.stats.answered>=10},
   {id:"st3",    e:"🔥", t:"3 dias seguidos",     d:"Estude 3 dias em sequência",   ok:()=>(S.best||0)>=3},
   {id:"st7",    e:"🏅", t:"Uma semana",          d:"Estude 7 dias em sequência",   ok:()=>(S.best||0)>=7},
@@ -1032,7 +1167,7 @@ function appbar(){
 }
 function nav(){
   const b=(id,i,l)=>`<button class="${tab===id?"on":""}" data-tab="${id}">${i}${l}</button>`;
-  return `<div class="nav">${b("map",'<span class="i">🗺️</span>',"Aprender")}${b("prog",'<span class="i">📈</span>',"Progresso")}${b("ach",'<span class="i">🏆</span>',"Conquistas")}${b("me",`<span class="mi">${mascotSVG(M(),"idle")}</span>`,"Perfil")}</div>`;
+  return `<div class="nav">${b("map",'<span class="i">🗺️</span>',"Aprender")}${b("prog",'<span class="i">📈</span>',"Progresso")}${b("ach",'<span class="i">🏆</span>',"Conquistas")}${b("me",`<span class="mi">${mascotSVG(M(),"idle",{accessories:S.profile.accessories})}</span>`,"Perfil")}</div>`;
 }
 function bindNav(){ app.querySelectorAll("[data-tab]").forEach(x=>x.onclick=()=>{ tab=x.dataset.tab; sfx.tap(); render(); window.scrollTo(0,0); }); }
 function render(){
@@ -1050,6 +1185,8 @@ function mapScreen(){
     next = `<button class="next" id="next"><span class="ic">${nx.p.emoji}</span><span><small>Próxima · ${esc(b.title)} · fase ${i+1}</small><b>${esc(nx.p.title)}</b><span class="g">🎯 ${esc(nx.p.goal)}</span></span></button>`;
   } else if (nx.type==="review"){
     next = `<button class="next" id="next"><span class="ic">🔁</span><span><small>Próxima atividade</small><b>Revisão</b><span class="g">Reforce ${Object.keys(S.review).length} item(ns) que você errou</span></span></button>`;
+  } else if (nx.type==="challenge"){
+    next = `<button class="next" id="next"><span class="ic">🎁</span><span><small>Próxima atividade · ${esc(nx.c.b.title)}</small><b>Desafio surpresa</b><span class="g">Vença e ganhe um item para o seu mascote</span></span></button>`;
   }
   const rc = Object.keys(S.review).length;
   const blocks = MAIN.map((b,bi)=>{
@@ -1059,7 +1196,7 @@ function mapScreen(){
       <div class="path">${b.phases.map((p,i)=>{ const ul=unlocked(p.id), d=done(p.id), cur=nx.type==="phase"&&nx.p.id===p.id;
         return `<button class="node ${d?"done":""} ${ul?"":"locked"} ${cur?"cur":""}" data-ph="${p.id}" style="transform:translateX(${offs[i%offs.length]}px)">
           ${cur?`<span class="go">START</span>`:""}<span class="c">${ul?(d?"✓":p.emoji):"🔒"}</span><span class="st">${d?starsTxt(S.phases[p.id].stars):""}</span>
-          <span class="lb">${esc(p.title)}<small>Fase ${i+1} · ${esc(p.pt)}</small></span></button>`;}).join("")}</div></div>`;
+          <span class="lb">${esc(p.title)}<small>Fase ${i+1} · ${esc(p.pt)}</small></span></button>`+CHAL.filter(c=>c.after===p.id).map(chalNode).join("");}).join("")}</div></div>`;
   }).join("");
   const soon = UPCOMING.map((u,i)=>`<div class="soon"><span class="e">${u.emoji}</span><div><b>Bloco ${MAIN.length+i+1} · ${esc(u.title)}</b><span>${u.level} · ${esc(u.pt)} · em breve</span></div></div>`).join("");
   app.innerHTML = `<div class="screen">${appbar()}
@@ -1070,7 +1207,7 @@ function mapScreen(){
     ${storageOK?"":`<p class="empty" style="margin:16px">⚠️ Este navegador não está salvando o progresso (modo anônimo?).</p>`}
   </div>${nav()}`;
   bindNav();
-  const nb=document.getElementById("next"); if(nb) nb.onclick=()=>{ sfx.tap(); nx.type==="review"?startReview():startPhase(nx.p.id); };
+  const nb=document.getElementById("next"); if(nb) nb.onclick=()=>{ sfx.tap(); goNext(nx); };
   const rb=document.getElementById("rev"); if(rb) rb.onclick=()=>{ sfx.tap(); startReview(); };
   document.getElementById("mtap").onclick=()=>{ const l=mascotLine(M(),"happy"); const h=document.querySelector(".hello");
     h.innerHTML=`${mbox("happy",M(),'id="mtap"')}<div class="bubble left">${esc(l[0])}<small>${esc(l[1])}</small></div>`; sfx.ok();
@@ -1078,6 +1215,15 @@ function mapScreen(){
   app.querySelectorAll("[data-ph]").forEach(b=>b.onclick=()=>{ const id=b.dataset.ph;
     if(!unlocked(id)){ b.classList.add("shake"); sfx.no(); setTimeout(()=>b.classList.remove("shake"),400); toast("Conclua a fase anterior para desbloquear"); return; }
     sfx.tap(); startPhase(id); });
+  app.querySelectorAll("[data-ch]").forEach(b=>b.onclick=()=>{ const c=CH_BY_ID[b.dataset.ch];
+    if(!chalOpen(c)){ b.classList.add("shake"); sfx.no(); setTimeout(()=>b.classList.remove("shake"),400); toast(`Conclua a fase “${PHASES[c.after].p.title}” para abrir este desafio`); return; }
+    sfx.tap(); startChallenge(c.id); });
+}
+function chalNode(c){
+  const op=chalOpen(c), won=chalWon(c), pr=PRIZES[c.prize];
+  return `<button class="node chal ${won?"won":""} ${op?"":"locked"}" data-ch="${c.id}" style="transform:translateX(${c.side||-60}px)">
+    <span class="c">${won?pr.e:"🎁"}</span>
+    <span class="lb">Desafio surpresa<small>${won?`Prêmio: ${esc(pr.name)}`:op?"Prêmio surpresa":`Depois de “${esc(PHASES[c.after].p.title)}”`}</small></span></button>`;
 }
 
 function progScreen(){
@@ -1121,6 +1267,7 @@ function achScreen(){
       <div class="row"><div class="grow">Primeira sessão do dia (sequência)</div><span class="tag">+5 por dia, até +35</span></div>
       <div class="row"><div class="grow">Acertar um item da revisão</div><span class="tag">+8</span></div>
       <div class="row"><div class="grow">Concluir um bloco</div><span class="tag">+100</span></div>
+      <div class="row"><div class="grow">Vencer um desafio surpresa (1ª vez)</div><span class="tag">+${CHAL_BONUS}</span></div>
     </div><p class="empty">Não existe bônus por velocidade: o que conta é entender.</p></div></div>${nav()}`;
   bindNav();
 }
@@ -1136,12 +1283,17 @@ function meScreen(){
       <div class="bubble" style="display:inline-block">“${esc(line[0])}”<small>${esc(line[1])}</small></div>
       <button class="btn" id="chg" style="margin-top:16px">Trocar mascote</button>
     </div>
+    <div class="stitle">Itens do mascote</div>
+    <div class="items">${Object.entries(PRIZES).map(([id,pr])=>{ const has=S.items.includes(id), on=S.profile.accessories.includes(id);
+      return has ? `<button class="item ${on?"on":""}" data-item="${id}"><span class="e">${pr.e}</span><b>${esc(pr.name)}</b><span>${on?"Usando · toque para tirar":"Toque para usar"}</span></button>`
+                 : `<div class="item off"><span class="e">🎁</span><b>???</b><span>Vença um desafio surpresa no mapa</span></div>`; }).join("")}</div>
     <div class="stitle">Seus números</div>
     <div class="grid"><div class="card"><b>⚡ ${S.xp}</b><span>XP</span></div><div class="card"><b>🏆 ${ACH.filter(a=>S.achieved[a.id]).length}</b><span>Conquistas</span></div></div>
     <p class="empty" style="margin-top:14px">Trocar de mascote muda só o personagem e as cores. XP, fases, conquistas, histórico e sequência continuam.</p>
     <p class="empty">Seu progresso fica salvo neste aparelho e neste navegador.</p>
   </div></div>${nav()}`;
   bindNav(); document.getElementById("chg").onclick=()=>{ sfx.tap(); pickScreen("change"); };
+  app.querySelectorAll("[data-item]").forEach(b=>b.onclick=()=>{ const id=b.dataset.item; S.profile.accessories.includes(id)?unequip(id):equip(id); sfx.ok(); meScreen(); });
 }
 
 /* ================== sessão ================== */
@@ -1152,6 +1304,34 @@ function startReview(){
   const ids=shuffle(Object.keys(S.review).filter(id=>QUESTIONS[id])).slice(0,5);
   if(!ids.length){ toast("Nada para revisar agora 🎉"); return; }
   L={mode:"review", queue:ids.map(id=>QUESTIONS[id]), total:ids.length, n:0, mistakes:0, ok:0, xp:0, cleared:0}; nextQ();
+}
+function startChallenge(id){ const c=CH_BY_ID[id];
+  const upto=c.b.phases.findIndex(p=>p.id===c.after);
+  const pool=c.b.phases.slice(0,upto+1).flatMap(p=>p.questions.map((q,k)=>QUESTIONS[p.id+":"+k]));
+  const queue=shuffle(pool).slice(0,3).concat([QUESTIONS[c.id+":s"]]);
+  L={mode:"challenge", c, queue, total:queue.length, n:0, mistakes:0, ok:0, xp:0}; chalIntro(); }
+function chalIntro(){
+  const c=L.c, won=chalWon(c), pr=PRIZES[c.prize], l=mascotLine(M(),"surprise");
+  app.innerHTML=`<div class="screen"><div class="end">${mbox("surprised")}
+      <h2>Desafio surpresa!</h2><div class="sub">${c.b.emoji} ${esc(c.b.title)}</div>
+      <div class="bubble">${esc(l[0])}<small>${esc(l[1])}</small></div>
+      <div class="done-goal"><small>🎯 Como vencer</small>Aprenda uma expressão secreta e acerte ${CHAL_NEED} de ${L.total} exercícios.</div>
+      <div class="done-goal"><small>🎁 Prêmio</small>${won?`Você já ganhou: ${pr.e} ${esc(pr.name)}. Jogue de novo para treinar e ganhar XP.`:`Um item surpresa para o seu mascote e +${CHAL_BONUS} XP.`}</div>
+    </div><div class="foot"><button class="btn" id="go" style="margin-bottom:10px">Abrir o desafio</button><button class="btn ghost" id="map">Agora não</button></div></div>`;
+  sfx.tap();
+  document.getElementById("go").onclick=()=>{ sfx.tap(); chalCard(); };
+  document.getElementById("map").onclick=quit; window.scrollTo(0,0);
+}
+function chalCard(){
+  const c=L.c;
+  app.innerHTML = `<div class="screen">${topBar()}<div class="page">
+      <div class="kicker">Desafio surpresa · Expressão secreta</div>
+      <h2>🤫 ${esc(c.title)}</h2><div class="ptitle">${esc(c.pt)}</div>
+      ${readingHTML(c.reading)}<div class="hint">🔊 toque para ouvir a pronúncia</div></div>
+    <div class="foot"><button class="btn" id="go">Começar · ${L.total} exercícios</button></div></div>`;
+  document.getElementById("quit").onclick=quit;
+  document.getElementById("go").onclick=()=>{ sfx.tap(); nextQ(); };
+  window.scrollTo(0,0);
 }
 function topBar(){ return `<div class="top"><button class="x" id="quit" aria-label="Sair">✕</button><div class="bar"><i style="width:${L.n/L.total*100}%"></i></div><div class="qcount">${Math.min(L.n+1,L.total)}/${L.total}</div></div>`; }
 function quit(){ tab="map"; render(); window.scrollTo(0,0); }
@@ -1181,10 +1361,10 @@ function learnCard(){
 }
 
 function nextQ(){
-  if (!L.queue.length) return L.mode==="review"?finishReview():finishPhase();
+  if (!L.queue.length) return L.mode==="review"?finishReview():L.mode==="challenge"?finishChallenge():finishPhase();
   const q=L.cur=L.queue.shift();
   app.innerHTML = `<div class="screen">${topBar()}<div class="q"><div class="qhead">
-      <div class="type">${L.mode==="review"?"Revisão · ":""}${esc(q.kind||{choice:"Escolha",build:"Monte a frase",match:"Associe"}[q.type])}</div><div class="qm">${mascotSVG(M(),"thinking")}</div></div>
+      <div class="type">${L.mode==="review"?"Revisão · ":L.mode==="challenge"?"Desafio · ":""}${esc(q.kind||{choice:"Escolha",build:"Monte a frase",match:"Associe"}[q.type])}</div><div class="qm">${mascotSVG(M(),"thinking")}</div></div>
       ${q.situation?`<div class="sit"><span>📍</span><span>${esc(q.situation)}</span></div>`:""}
       ${q.dialog?dialogHTML(q.dialog):""}
       <h3>${esc(q.prompt)}</h3><div id="body"></div></div>
@@ -1291,13 +1471,14 @@ function finishPhase(){
       <div class="bprog"><div class="t">${b.emoji} ${esc(b.title)} · ${nd} de ${b.phases.length} fases</div>
         <div class="steps">${b.phases.map(x=>`<i class="${done(x.id)?"on":""}"></i>`).join("")}</div>
         <div class="n">${nd===b.phases.length?esc(b.doneMsg||"Bloco completo!"):`Falta${b.phases.length-nd>1?"m":""} ${b.phases.length-nd} fase${b.phases.length-nd>1?"s":""} para completar o bloco.`}</div></div>
+      ${first && CHAL.some(c=>c.after===p.id && !chalWon(c)) ? `<div class="newach"><b>🎁 Um desafio surpresa apareceu no mapa!</b>Vença e ganhe um item para o seu mascote.</div>`:""}
       ${news.map(a=>`<div class="newach"><b>${a.e} Conquista: ${esc(a.t)}</b>${esc(a.d)}</div>`).join("")}
       ${L.mistakes?`<p class="empty" style="margin-top:12px">O que você errou foi para a <b>Revisão</b>.${stars<3?" Refaça a fase sem erros para ganhar 3 estrelas.":""}</p>`:""}
     </div><div class="foot">
-      ${nx.type!=="all"?`<button class="btn" id="nx" style="margin-bottom:10px">${nx.type==="phase"?`Próxima: ${esc(nx.p.title)}`:"Próxima: Revisão"}</button>`:""}
+      ${nx.type!=="all"?`<button class="btn" id="nx" style="margin-bottom:10px">${nx.type==="phase"?`Próxima: ${esc(nx.p.title)}`:nx.type==="challenge"?"Próxima: Desafio surpresa":"Próxima: Revisão"}</button>`:""}
       <button class="btn ghost" id="map">Ver mapa</button></div></div>`;
   sfx.win(); confetti(blockNow?130:60);
-  const nb=document.getElementById("nx"); if(nb) nb.onclick=()=>nx.type==="review"?startReview():startPhase(nx.p.id);
+  const nb=document.getElementById("nx"); if(nb) nb.onclick=()=>goNext(nx);
   document.getElementById("map").onclick=quit; window.scrollTo(0,0);
 }
 function retryPhase(){
@@ -1320,6 +1501,46 @@ function retryPhase(){
   document.getElementById("map").onclick=quit; window.scrollTo(0,0);
 }
 
+function finishChallenge(){
+  const c=L.c, pr=PRIZES[c.prize], win=L.ok>=CHAL_NEED, first=win && !chalWon(c);
+  const lines=[["Respostas certas",L.xp]];
+  if (first) lines.push(["Desafio vencido",CHAL_BONUS]);
+  if (touchDay()) lines.push([`Sequência de ${S.streak} dia${S.streak>1?"s":""}`,5*Math.min(S.streak,7)]);
+  const total=lines.reduce((s,l)=>s+l[1],0); addXP(total);
+  const prev=S.challenges[c.id]||{plays:0};
+  S.challenges[c.id]={won:prev.won||(win?dayStr():null), plays:(prev.plays||0)+1};
+  if (first && !S.items.includes(c.prize)) S.items.push(c.prize);
+  S.history.push({d:dayStr(), t:"Desafio: "+c.title, c:L.ok, n:L.total, xp:total}); S.history=S.history.slice(-40);
+  const news=checkAch(); persist();
+  const xpl=`<div class="xpl">${lines.map(x=>`<div><span>${esc(x[0])}</span><b>+${x[1]} XP</b></div>`).join("")}</div>`;
+  if (!win){
+    const l=mascotLine(M(),"oops");
+    app.innerHTML=`<div class="screen"><div class="end">${mbox("encourage")}
+        <h2>Quase lá!</h2><div class="sub">Desafio surpresa · ${esc(c.title)}</div>
+        <div class="bubble">${esc(l[0])}<small>${esc(l[1])}</small></div>
+        <div class="cards3" style="margin-top:14px"><div class="card"><b>✔ ${L.ok}/${L.total}</b><span>Acertos</span></div><div class="card"><b>🎯 ${CHAL_NEED}</b><span>Para vencer</span></div><div class="card"><b>⚡ ${total}</b><span>XP</span></div></div>
+        <p class="empty" style="margin-top:12px">Acerte ${CHAL_NEED} de ${L.total} para abrir o presente. Os exercícios mudam a cada tentativa, e o que você errou foi para a Revisão.</p>
+      </div><div class="foot"><button class="btn" id="again" style="margin-bottom:10px">Tentar de novo</button><button class="btn ghost" id="map">Ver mapa</button></div></div>`;
+    sfx.tap();
+    document.getElementById("again").onclick=()=>startChallenge(c.id);
+    document.getElementById("map").onclick=quit; window.scrollTo(0,0); return;
+  }
+  const using=S.profile.accessories.includes(c.prize), l=mascotLine(M(),"gift");
+  app.innerHTML=`<div class="screen"><div class="end">
+      <div class="mbox">${mascotSVG(M(),"excited",{accessories:withItem(c.prize)})}</div>
+      <h2>${first?"Presente aberto!":"Desafio vencido!"}</h2><div class="sub">Desafio surpresa · ${esc(c.title)}</div>
+      <div class="bubble">${esc(l[0])}<small>${esc(l[1])}</small></div>
+      <div class="prize"><span class="pe">${pr.e}</span><div><small>${first?"Novo item para o seu mascote":"Item já conquistado"}</small><b>${esc(pr.name)}</b></div></div>
+      ${xpl}
+      ${news.map(a=>`<div class="newach"><b>${a.e} Conquista: ${esc(a.t)}</b>${esc(a.d)}</div>`).join("")}
+      ${L.mistakes?`<p class="empty" style="margin-top:12px">O que você errou foi para a <b>Revisão</b>.</p>`:""}
+    </div><div class="foot">
+      ${using?"":`<button class="btn" id="use" style="margin-bottom:10px">Usar agora</button>`}
+      <button class="btn ${using?"":"ghost"}" id="map">Ver mapa</button></div></div>`;
+  sfx.win(); confetti(first?110:60);
+  const u=document.getElementById("use"); if(u) u.onclick=()=>{ equip(c.prize); sfx.ok(); toast(`${pr.e} Seu mascote está usando: ${pr.name}`); quit(); };
+  document.getElementById("map").onclick=quit; window.scrollTo(0,0);
+}
 function finishReview(){
   const bonus=touchDay()?5*Math.min(S.streak,7):0, total=L.xp+bonus; addXP(total);
   S.history.push({d:dayStr(), t:"Revisão", c:L.ok, n:L.total, xp:total}); S.history=S.history.slice(-40);

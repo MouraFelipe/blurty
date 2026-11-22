@@ -231,8 +231,29 @@ const MascotArt = (()=>{
     partyHat: (ch,c,accent)=>{ const [x,y,r]=ch.hat; return `<g class="acc" transform="rotate(${r} ${x} ${y})">
       <path d="M${x} ${y-30} L${x-14} ${y+2} Q${x} ${y+7} ${x+14} ${y+2} Z" fill="${accent}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
       <path d="M${x-9} ${y-8} L${x+9} ${y-12} M${x-12} ${y-1} L${x+12} ${y-5}" stroke="#fff" stroke-width="2.4" opacity=".75" stroke-linecap="round"/>
-      <circle cx="${x}" cy="${y-31}" r="4.5" fill="#F2C14E" stroke="${INK}" stroke-width="1.8"/></g>`; }
+      <circle cx="${x}" cy="${y-31}" r="4.5" fill="#F2C14E" stroke="${INK}" stroke-width="1.8"/></g>`; },
+    /* prêmios dos desafios surpresa */
+    crown: (ch,c,accent)=>{ const [x,y,r]=ch.hat; return `<g class="acc" transform="rotate(${r} ${x} ${y})">
+      <path d="M${x-15} ${y+5} L${x-16} ${y-9} L${x-7} ${y-2} L${x} ${y-15} L${x+7} ${y-2} L${x+16} ${y-9} L${x+15} ${y+5} Z" fill="#F2C14E" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M${x-14} ${y+1} L${x+14} ${y+1}" stroke="${K("#F2C14E",.25)}" stroke-width="2"/>
+      <circle cx="${x}" cy="${y-16}" r="2.6" fill="#fff" stroke="${INK}" stroke-width="1.5"/><circle cx="${x-16}" cy="${y-10}" r="2.3" fill="#fff" stroke="${INK}" stroke-width="1.5"/><circle cx="${x+16}" cy="${y-10}" r="2.3" fill="#fff" stroke="${INK}" stroke-width="1.5"/>
+      <circle cx="${x}" cy="${y+2.5}" r="2.4" fill="${accent}" stroke="${INK}" stroke-width="1.2"/></g>`; },
+    cap: (ch,c,accent)=>{ const [x,y,r]=ch.hat; return `<g class="acc" transform="rotate(${r} ${x} ${y})">
+      <path d="M${x+10} ${y+5} Q${x+30} ${y+1} ${x+37} ${y+8} Q${x+24} ${y+12} ${x+8} ${y+10} Z" fill="${K(accent,.2)}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M${x-19} ${y+7} Q${x-20} ${y-14} ${x} ${y-14} Q${x+20} ${y-14} ${x+19} ${y+7} Z" fill="${accent}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M${x} ${y-14} L${x} ${y+6}" stroke="${INK}" stroke-width="1.2" opacity=".35"/><path d="M${x-12} ${y-8} Q${x-8} ${y-12} ${x-3} ${y-12}" stroke="#fff" stroke-width="2.4" fill="none" opacity=".5" stroke-linecap="round"/>
+      <circle cx="${x}" cy="${y-14.5}" r="2.6" fill="${K(accent,.2)}" stroke="${INK}" stroke-width="1.5"/></g>`; },
+    flower: (ch,c,accent)=>{ const [hx,hy]=ch.hat, x=hx+15, y=hy+4;
+      const petals=[0,72,144,216,288].map(a=>{ const t=a*Math.PI/180; return `<circle cx="${(x+Math.cos(t)*6).toFixed(1)}" cy="${(y+Math.sin(t)*6).toFixed(1)}" r="5" fill="#FFFFFF" stroke="${INK}" stroke-width="1.6"/>`; }).join("");
+      return `<g class="acc"><path d="M${x-3} ${y+5} Q${x-10} ${y+12} ${x-15} ${y+10} Q${x-11} ${y+5} ${x-3} ${y+5} Z" fill="#7FB77E" stroke="${INK}" stroke-width="1.5" stroke-linejoin="round"/>${petals}<circle cx="${x}" cy="${y}" r="4" fill="#F2C14E" stroke="${INK}" stroke-width="1.5"/></g>`; },
+    sunglasses: (ch,c,accent)=>{ const [[x1,y1],[x2,y2]]=ch.eyes, e=ch.er, w=e*2.6, h=e*1.9, y=(y1+y2)/2;
+      const lens=(cx)=>`<rect x="${cx-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${e*.7}" fill="${INK}" stroke="${INK}" stroke-width="2"/>
+        <path d="M${cx-w/2+e*.55} ${y-h/2+e*.6} L${cx-w/2+e*1.25} ${y-h/2+e*.6}" stroke="#fff" stroke-width="2.2" opacity=".55" stroke-linecap="round"/>`;
+      return `<g class="acc">${lens(x1)}${lens(x2)}
+        <path d="M${x1+w/2} ${y-h*.18} Q${(x1+x2)/2} ${y-h*.42} ${x2-w/2} ${y-h*.18}" stroke="${INK}" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <path d="M${x1-w/2} ${y-h*.2} L${x1-w/2-e*.7} ${y-h*.32}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/><path d="M${x2+w/2} ${y-h*.2} L${x2+w/2+e*.7} ${y-h*.32}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/></g>`; }
   };
+  const HEAD_ITEMS = ["partyHat","crown","cap","flower"];
 
   /* reflexo de luz: um arco claro no alto da cabeça, igual em todos */
   const SHINE = {dino:[52,52,30], lumi:[50,56,28], foxy:[48,60,26], miko:[56,42,20], bloop:[34,98,30], roki:[50,56,24]};
@@ -249,7 +270,9 @@ const MascotArt = (()=>{
       <radialGradient id="${k}body" cx="34%" cy="26%" r="85%"><stop offset="0" stop-color="${W(c.body,.38)}"/><stop offset=".5" stop-color="${c.body}"/><stop offset="1" stop-color="${K(c.body,.16)}"/></radialGradient>
       <radialGradient id="${k}iris" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="${W(c.iris,.35)}"/><stop offset="1" stop-color="${K(c.iris,.2)}"/></radialGradient>
       <radialGradient id="${k}glow"><stop offset="0" stop-color="${W(c.body,.5)}" stop-opacity=".55"/><stop offset="1" stop-color="${c.body}" stop-opacity="0"/></radialGradient></defs>`;
-    const acc = (opts.accessories||[]).concat(m.fx==="party"?["partyHat"]:[]).map(a=>ACCESSORIES[a]?ACCESSORIES[a](ch,c,accent):"").join("");
+    const worn = (opts.accessories||[]).filter(a=>ACCESSORIES[a]);
+    const party = m.fx==="party" && !worn.some(a=>HEAD_ITEMS.includes(a)) ? ["partyHat"] : [];   // chapéu de festa só se não estiver usando outro item na cabeça
+    const acc = worn.concat(party).map(a=>ACCESSORIES[a](ch,c,accent)).join("");
     const blush = m.blush ? ch.eyes.map(([x,y],i)=>`<ellipse cx="${x+(i?ch.er*.6:-ch.er*.6)}" cy="${y+ch.er*1.45}" rx="${ch.er*.55}" ry="${ch.er*.32}" fill="#F28B8B" opacity=".38"/>`).join("") : "";
     const shadow = `<ellipse class="shadow" cx="80" cy="${ch.float?154:150}" rx="${ch.float?30:40}" ry="5" fill="${INK}" opacity=".12"/>`;
     return `<svg class="msvg mood-${mood} sp-${id}${ch.float?" floaty":""}" viewBox="0 0 160 160" role="img" aria-label="${(typeof MASCOTS!=="undefined"&&MASCOTS[id]?MASCOTS[id].name:id)}">
@@ -259,6 +282,6 @@ const MascotArt = (()=>{
         ${arms(ch,c,m.arms)}${fx(ch,c,m.fx,accent)}${acc}
       </g></svg>`;
   }
-  return {render, MOODS, CHARACTERS:CH, ACCESSORIES};
+  return {render, MOODS, CHARACTERS:CH, ACCESSORIES, HEAD_ITEMS};
 })();
 function mascotSVG(id, mood="idle", opts={}){ return MascotArt.render(id, mood, opts); }
