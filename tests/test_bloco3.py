@@ -21,8 +21,8 @@ def answer(p):
     p.click("#check")
     if p.query_selector(".pep"): p.click("#go")
     return ok
-def play(p, n):
-    p.click("#go"); oks = [answer(p) for _ in range(n)]; return all(oks)
+def play(p):
+    p.click("#go"); n = p.evaluate("L.total"); oks = [answer(p) for _ in range(n)]; return all(oks)
 try:
   with sync_playwright() as pw:
     b = pw.chromium.launch(**({"executable_path": os.environ["CHROME"]} if os.environ.get("CHROME") else {}))
@@ -33,7 +33,7 @@ try:
     assert p.query_selector('[data-ph="b3p1"]:not(.locked)') and p.query_selector('[data-ch="b3c1"].locked') and p.query_selector('[data-ch="b3c2"]')
     print("bloco 3 aberto depois do bloco 2, com 2 desafios no mapa")
     for i in range(1, 6):
-        p.click(f'[data-ph="b3p{i}"]'); assert play(p, 3), f"fase {i}"; p.wait_for_selector("#map, #nx")
+        p.click(f'[data-ph="b3p{i}"]'); assert play(p), f"fase {i}"; p.wait_for_selector("#map, #nx")
         if i in (2, 4):   # desafio abre depois da fase 2 e da 4
             c = "b3c1" if i == 2 else "b3c2"; p.click("#map"); p.wait_for_selector(f'[data-ch="{c}"]:not(.locked)'); p.click(f'[data-ch="{c}"]')
             p.click("#go"); p.wait_for_selector('#go:has-text("Começar")'); p.click("#go"); total = p.evaluate("L.total")
