@@ -1,6 +1,6 @@
 # Blurty
 
-**Blurt it out!** Aprenda inglês de conversa jogando, sem medo de errar: fases curtas, cada uma com um objetivo, e um mascote que acompanha você.
+**Blurty it out!** Aprenda inglês de conversa jogando, sem medo de errar: fases curtas, cada uma com um objetivo, e um mascote que acompanha você.
 
 *To blurt* é soltar as palavras sem pensar demais. No Blurty você se joga, fala sem medo e erra sem medo: errar faz parte de aprender.
 
