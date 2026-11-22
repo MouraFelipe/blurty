@@ -137,7 +137,6 @@ const BLOCK1 = {
 };
 
 const UPCOMING = [
-  {title: "Out and About", pt: "Restaurantes, lojas e pedir informação", level: "Básico", emoji: "🛍️"},
   {title: "Travel Talk", pt: "Aeroporto, hotel e imprevistos", level: "Intermediário", emoji: "✈️"},
   {title: "Real Opinions", pt: "Opinar, concordar e argumentar", level: "Avançado", emoji: "🗣️"}
 ];
