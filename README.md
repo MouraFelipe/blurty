@@ -17,10 +17,11 @@ Aprenda inglês de conversa jogando: fases curtas, cada uma com um objetivo, e u
 
 ## Conteúdo atual
 - Bloco 1 — First Conversations (iniciante): 5 fases, 15 exercícios.
-- Blocos 2 a 5 aparecem como "em breve".
+- Bloco 2 — Daily Life (básico): 5 fases, 15 exercícios. Abre quando o Bloco 1 é concluído.
+- Blocos 3 a 5 aparecem como "em breve".
 
 ## Editar
-- Conteúdo: `src/block1.js` (novos blocos seguem o mesmo formato)
+- Conteúdo: `src/block1.js` e `src/block2.js` (novos blocos seguem o mesmo formato e entram em `MAIN`, em `src/app.html`, e em `src/build.py`)
 - Mascotes, cores e mensagens: `src/mascots.js`
 - Desenho dos mascotes, expressões e acessórios: `src/mascot-art.js`
 - App: `src/app.html`

@@ -7,6 +7,7 @@
 const BLOCK1 = {
   id: "b1", title: "First Conversations", pt: "Primeiras conversas", level: "Iniciante", emoji: "👋",
   goal: "Cumprimentar, se apresentar e manter uma conversa curta com alguém que você acabou de conhecer.",
+  doneMsg: "Agora você consegue cumprimentar, se apresentar e manter uma conversa curta em inglês.",
   phases: [
     {
       id: "b1p1", title: "Greetings", pt: "Cumprimentos", emoji: "👋",
@@ -136,7 +137,6 @@ const BLOCK1 = {
 };
 
 const UPCOMING = [
-  {title: "Daily Life", pt: "Rotina, trabalho, estudos e hobbies", level: "Básico", emoji: "☀️"},
   {title: "Out and About", pt: "Restaurantes, lojas e pedir informação", level: "Básico", emoji: "🛍️"},
   {title: "Travel Talk", pt: "Aeroporto, hotel e imprevistos", level: "Intermediário", emoji: "✈️"},
   {title: "Real Opinions", pt: "Opinar, concordar e argumentar", level: "Avançado", emoji: "🗣️"}
