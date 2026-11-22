@@ -12,7 +12,9 @@ const PRIZES = {
   cap:        {name: "Boné",           e: "🧢", slot: "head"},
   flower:     {name: "Flor",           e: "🌼", slot: "head"},
   chefHat:    {name: "Chapéu de chef", e: "👨‍🍳", slot: "head"},
-  golden:     {name: "Visual dourado", e: "✨", slot: "skin"}   // muda as cores do mascote para dourado
+  golden:     {name: "Visual dourado", e: "✨", slot: "skin"},  // muda as cores do mascote para dourado
+  tyrolean:   {name: "Chapéu tirolês", e: "🪶", slot: "head"},  // alemão
+  beanie:     {name: "Gorro de lã",    e: "🧶", slot: "head"}   // alemão
 };
 
 const CHALLENGES = [

@@ -1,6 +1,6 @@
 # Blurty
 
-**Blurty it out!** Aprenda inglês de conversa jogando, sem medo de errar: fases curtas, cada uma com um objetivo, e um mascote que acompanha você.
+**Blurty it out!** Aprenda inglês e alemão de conversa jogando, sem medo de errar: fases curtas, cada uma com um objetivo, e um mascote que acompanha você.
 
 *To blurt* é soltar as palavras sem pensar demais. No Blurty você se joga, fala sem medo e erra sem medo: errar faz parte de aprender.
 
@@ -15,6 +15,7 @@ No site, o Blurty pode ser instalado na tela inicial e abre como app, até sem i
 <img src="docs/mascotes.png" alt="Os 6 mascotes do Blurty e suas expressões">
 
 ## Como funciona
+- **Idiomas:** 🇺🇸 Inglês e 🇩🇪 Alemão (🇯🇵 Japonês e 🇮🇹 Italiano em breve). No primeiro acesso você escolhe o idioma; depois troca pela bandeira no topo ou no Perfil. Dá para estudar mais de um: o progresso de cada idioma fica salvo, o XP de todos soma no total e fica separado por idioma (`S.xpBy`, pronto para o ranking). Quem já jogava continua no inglês, com tudo como estava.
 - **Mascote:** no primeiro acesso você escolhe um companheiro (Dino, Lumi, Foxy, Miko, Bloop ou Roki), cada um com desenho e personalidade próprios. Ele define as cores do app e reage às suas respostas. A cada 5 exercícios há uma pausa que alterna entre incentivo do mascote e uma **dica para evoluir no inglês** (ler em voz alta, ouvir e repetir, pensar em inglês, legenda em inglês etc., lista `TIPS` em `src/app.html`). Dá para trocar no Perfil sem perder nada.
 - **Blocos e fases:** cada bloco tem 5 fases; cada fase tem um objetivo, um cartão "Aprenda" e 3 exercícios.
 - **Exercícios:** tradução, completar frase, responder numa conversa, montar frase, situação, encontrar o erro, interpretar diálogo, associar e construir resposta.
@@ -27,12 +28,15 @@ No site, o Blurty pode ser instalado na tela inicial e abre como app, até sem i
 - Bloco 2 — Daily Life (básico): 5 fases, 15 exercícios. Abre quando o Bloco 1 é concluído.
 - Bloco 3 — Out and About (básico): café, restaurante, compras e pedir o caminho. 5 fases, 16 exercícios. Abre quando o Bloco 2 é concluído. Desafios: "It's on me!" (prêmio: chapéu de chef) e "What a steal!" (prêmio: visual dourado).
 - Blocos 4 e 5 aparecem como "em breve".
+- 🇩🇪 Alemão · Bloco 1 — Erste Gespräche (iniciante): cumprimentos, apresentações, perguntas, expressões do dia a dia e uma conversa. 5 fases, 15 exercícios. Desafios: "Na, alles klar?" (prêmio: chapéu tirolês) e "Macht nichts!" (prêmio: gorro de lã). No alemão o mascote fala em alemão e a voz é em alemão.
 
 ## Editar
 - Conteúdo: `src/block1.js`, `src/block2.js` e `src/block3.js` (novos blocos seguem o mesmo formato e entram em `MAIN`, em `src/app.html`, e em `src/build.py`)
+- Alemão: `src/de-block1.js` (bloco) e `src/de-course.js` (dicas, falas do mascote e desafios). Idiomas ficam em `COURSES`, em `src/app.html`
 - Desafios surpresa e prêmios: `src/challenges.js`
 - Mascotes, cores e mensagens: `src/mascots.js`
 - Desenho dos mascotes, expressões e acessórios: `src/mascot-art.js`
 - App: `src/app.html`
 - Gerar o `index.html`: `python3 src/build.py`
 - Teste do Bloco 3 (fases, desafios e prêmios): `python tests/test_bloco3.py` (precisa do Playwright)
+- Teste do alemão (troca de idioma, Bloco 1, desafios, XP por idioma e primeiro acesso): `python tests/test_alemao.py`

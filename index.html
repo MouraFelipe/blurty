@@ -176,6 +176,11 @@
   .brand small{display:block;font-weight:900;color:var(--accent);letter-spacing:.04em}
   .brand em{display:block;font-style:normal;color:var(--muted);font-weight:700;font-size:14px}
   .chip{background:var(--card);border:2px solid var(--line);border-radius:999px;padding:4px 10px;font-weight:900;font-size:14px;white-space:nowrap}
+  .chip.flag{font-size:18px;padding:2px 9px;line-height:1.3;cursor:pointer;font-family:inherit;color:inherit}
+  .langs{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+  .lang{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-bottom-width:4px;border-radius:16px;padding:12px 14px;font:inherit;color:inherit;cursor:pointer}
+  .lang .fl{font-size:34px;line-height:1}.lang .grow{flex:1}.lang b{font-size:18px;display:block}.lang small{color:var(--muted);display:block;font-weight:700;font-size:13px}
+  .lang.on{border-color:var(--accent)}.lang.off{opacity:.55;border-style:dashed;cursor:default}
 
   /* ----- início ----- */
   .hello{display:flex;align-items:center;gap:12px;margin:16px 16px 4px}
@@ -502,7 +507,9 @@ const MASCOTS = {
 /* mensagens sem repetir em sequência */
 const _bags = {};
 function mascotLine(id, mood){
-  const key = id+":"+mood, list = MASCOTS[id].msgs[mood] || MASCOTS[id].msgs.encourage;
+  /* no alemão (ou outro idioma com falas próprias) o mascote fala nesse idioma */
+  const alt = typeof courseMsgs==="function" ? courseMsgs() : null, src = alt || MASCOTS[id].msgs;
+  const key = (alt?"alt:":"")+id+":"+mood, list = src[mood] || src.encourage;
   if (!_bags[key] || !_bags[key].length){ _bags[key] = list.map((_,i)=>i).sort(()=>Math.random()-.5); }
   return list[_bags[key].pop()];
 }
@@ -779,6 +786,17 @@ const MascotArt = (()=>{
       <path d="M${x-11} ${y-7} L${x+11} ${y-7}" stroke="#FFFFFF" stroke-width="5"/>
       <path d="M${x-12} ${y+1} L${x+12} ${y+1}" stroke="${accent}" stroke-width="3"/>
       <path d="M${x-4} ${y-17} Q${x-1} ${y-19.5} ${x+3} ${y-18}" stroke="#D8DEE6" stroke-width="2" fill="none" stroke-linecap="round"/></g>`; },
+    tyrolean: (ch,c,accent)=>{ const [x,y,r]=ch.hat; return `<g class="acc" transform="rotate(${r} ${x} ${y})">
+      <path d="M${x-22} ${y+5} Q${x} ${y+12} ${x+22} ${y+5} Q${x+20} ${y-1} ${x+14} ${y} L${x-14} ${y} Q${x-20} ${y-1} ${x-22} ${y+5} Z" fill="#4F6B3A" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M${x-14} ${y+1} Q${x-15} ${y-16} ${x-3} ${y-17} Q${x} ${y-13} ${x+3} ${y-17} Q${x+15} ${y-16} ${x+14} ${y+1} Z" fill="#5E7D45" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M${x-14} ${y-3} Q${x} ${y+1} ${x+14} ${y-3}" stroke="#A8432F" stroke-width="3.2" fill="none"/>
+      <path d="M${x+9} ${y-3} Q${x+20} ${y-22} ${x+15} ${y-30} Q${x+11} ${y-18} ${x+9} ${y-3} Z" fill="#F4F1E6" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M${x+10} ${y-5} Q${x+14} ${y-17} ${x+15} ${y-28}" stroke="${INK}" stroke-width="1" fill="none" opacity=".5"/></g>`; },
+    beanie: (ch,c,accent)=>{ const [x,y,r]=ch.hat; return `<g class="acc" transform="rotate(${r} ${x} ${y})">
+      <path d="M${x-19} ${y+3} Q${x-21} ${y-19} ${x} ${y-20} Q${x+21} ${y-19} ${x+19} ${y+3} Z" fill="${accent}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M${x-8} ${y-18} L${x-8} ${y-2} M${x} ${y-20} L${x} ${y-2} M${x+8} ${y-18} L${x+8} ${y-2}" stroke="${K(accent,.25)}" stroke-width="1.6" stroke-linecap="round"/>
+      <rect x="${x-21}" y="${y-2}" width="42" height="9" rx="4.5" fill="${W(accent,.35)}" stroke="${INK}" stroke-width="2"/>
+      <circle cx="${x}" cy="${y-23}" r="6.5" fill="#F4F1E6" stroke="${INK}" stroke-width="2"/></g>`; },
     sunglasses: (ch,c,accent)=>{ const [[x1,y1],[x2,y2]]=ch.eyes, e=ch.er, w=e*2.6, h=e*1.9, y=(y1+y2)/2;
       const lens=(cx)=>`<rect x="${cx-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${e*.7}" fill="${INK}" stroke="${INK}" stroke-width="2"/>
         <path d="M${cx-w/2+e*.55} ${y-h/2+e*.6} L${cx-w/2+e*1.25} ${y-h/2+e*.6}" stroke="#fff" stroke-width="2.2" opacity=".55" stroke-linecap="round"/>`;
@@ -786,7 +804,7 @@ const MascotArt = (()=>{
         <path d="M${x1+w/2} ${y-h*.18} Q${(x1+x2)/2} ${y-h*.42} ${x2-w/2} ${y-h*.18}" stroke="${INK}" stroke-width="2.6" fill="none" stroke-linecap="round"/>
         <path d="M${x1-w/2} ${y-h*.2} L${x1-w/2-e*.7} ${y-h*.32}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/><path d="M${x2+w/2} ${y-h*.2} L${x2+w/2+e*.7} ${y-h*.32}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/></g>`; }
   };
-  const HEAD_ITEMS = ["partyHat","crown","cap","flower","chefHat"];
+  const HEAD_ITEMS = ["partyHat","crown","cap","flower","chefHat","tyrolean","beanie"];
   /* visuais especiais: trocam as cores do mascote */
   const SKINS = {golden: {body:"#E9B744", belly:"#FFF3CC", line:"#86600F", extra:"#C9922A"}};
   const sparkles = s => s!=="golden" ? "" : `<g class="gold-spark" fill="#FFF7D6" stroke="#C9922A" stroke-width="1.2">${[[30,48,6],[134,58,5],[128,124,4]].map(([x,y,r])=>`<path d="M${x} ${y-r} L${x+r*.3} ${y-r*.3} L${x+r} ${y} L${x+r*.3} ${y+r*.3} L${x} ${y+r} L${x-r*.3} ${y+r*.3} L${x-r} ${y} L${x-r*.3} ${y-r*.3} Z"/>`).join("")}</g>`;
@@ -1269,7 +1287,9 @@ const PRIZES = {
   cap:        {name: "Boné",           e: "🧢", slot: "head"},
   flower:     {name: "Flor",           e: "🌼", slot: "head"},
   chefHat:    {name: "Chapéu de chef", e: "👨‍🍳", slot: "head"},
-  golden:     {name: "Visual dourado", e: "✨", slot: "skin"}   // muda as cores do mascote para dourado
+  golden:     {name: "Visual dourado", e: "✨", slot: "skin"},  // muda as cores do mascote para dourado
+  tyrolean:   {name: "Chapéu tirolês", e: "🪶", slot: "head"},  // alemão
+  beanie:     {name: "Gorro de lã",    e: "🧶", slot: "head"}   // alemão
 };
 
 const CHALLENGES = [
@@ -1403,11 +1423,234 @@ const CHALLENGES = [
 ];
 
 
+/* =========================================================
+   ALEMÃO · BLOCO 1 — ERSTE GESPRÄCHE (Iniciante)
+   Mesmo formato dos blocos de inglês. Os ids começam com "de" para não misturar o progresso.
+   Blocos da leitura: {say:[personagem, de], pt} | {ex, pt} | {tip} | {p} | {dialog:[[quem, de], ...]}
+   ========================================================= */
+const DE_BLOCK1 = {
+  id: "de1", title: "Erste Gespräche", pt: "Primeiras conversas", level: "Iniciante", emoji: "👋",
+  goal: "Cumprimentar, se apresentar e manter uma conversa curta com alguém que você acabou de conhecer.",
+  doneMsg: "Agora você consegue cumprimentar, se apresentar e manter uma conversa curta em alemão.",
+  phases: [
+    {
+      id: "de1p1", title: "Begrüßungen", pt: "Cumprimentos", emoji: "👋",
+      goal: "Cumprimentar alguém e responder a “Wie geht's?”",
+      reading: [
+        {say: ["@", "Hallo! Fangen wir mit dem Wichtigsten an: Hallo sagen!"], pt: "Oi! Vamos começar pelo mais importante: dizer oi!"},
+        {ex: "Hallo!", pt: "Oi! / Olá! (o mais comum no dia a dia)"},
+        {ex: "Guten Morgen!", pt: "Bom dia!"},
+        {ex: "Guten Tag!", pt: "Bom dia! / Boa tarde! (durante o dia, mais formal)"},
+        {ex: "Wie geht's?", pt: "Tudo bem? / Como vai?"},
+        {ex: "Gut, danke. Und dir?", pt: "Bem, obrigado(a). E você?"},
+        {ex: "Tschüss!", pt: "Tchau!"},
+        {tip: "💡 <b>Gute Nacht</b> é só para se despedir antes de dormir. Para cumprimentar à noite, use <b>Guten Abend</b> ou simplesmente <b>Hallo</b>."}
+      ],
+      questions: [
+        {type: "choice", kind: "Tradução", prompt: "Como se diz “Bom dia!” (de manhã) em alemão?",
+         options: ["Guten Morgen!", "Gute Nacht!", "Guten Morgen Tag!"], answer: 0,
+         explain: "<b>Guten Morgen</b> é o cumprimento da manhã. <b>Gute Nacht</b> é para ir dormir."},
+        {type: "choice", kind: "Responda na conversa", situation: "Você entra numa padaria. A Lena está no balcão.",
+         dialog: [["Lena", "Hallo! Wie geht's?"]], prompt: "Qual é uma resposta natural?",
+         options: ["Gut, danke. Und dir?", "Ich bin 25 Jahre.", "Gute Nacht, Lena."], answer: 0,
+         explain: "Você responde e devolve a pergunta com <b>Und dir?</b> (Bem, obrigado. E você?)"},
+        {type: "choice", kind: "Encontre o erro", situation: "São 21h e você está chegando a um jantar com amigos.",
+         prompt: "Qual cumprimento NÃO combina com a situação?",
+         options: ["Hallo zusammen!", "Guten Abend!", "Gute Nacht!"], answer: 2,
+         explain: "<b>Gute Nacht</b> é para se despedir antes de dormir. Na chegada: <i>Guten Abend</i> ou <i>Hallo zusammen</i> (Oi, pessoal)."}
+      ]
+    },
+    {
+      id: "de1p2", title: "Sich vorstellen", pt: "Apresentações", emoji: "🙋",
+      goal: "Dizer seu nome, de onde você é e sua idade",
+      reading: [
+        {say: ["@", "Jetzt stellen wir uns vor. Schau, wie Lena das macht:"], pt: "Agora vamos nos apresentar. Veja como a Lena faz:"},
+        {dialog: [["Lena", "Hallo! Ich heiße Lena. Ich komme aus Berlin. Freut mich!"]]},
+        {ex: "Ich heiße Ana.", pt: "Eu me chamo Ana."},
+        {ex: "Ich bin Ana.", pt: "Eu sou a Ana."},
+        {ex: "Freut mich!", pt: "Prazer!"},
+        {ex: "Ich komme aus Brasilien.", pt: "Eu sou do Brasil. (venho do Brasil)"},
+        {ex: "Ich bin 25 Jahre alt.", pt: "Tenho 25 anos."},
+        {tip: "💡 Idade usa o verbo <b>sein</b> (ser/estar): <i>Ich bin 25</i>. Nunca <i>Ich habe 25 Jahre</i>."}
+      ],
+      questions: [
+        {type: "build", kind: "Monte a frase", situation: "Alguém acabou de perguntar o seu nome.",
+         prompt: "Monte em alemão: “Eu me chamo Ana.”", words: ["Ich", "heiße", "Ana.", "heißt", "habe"],
+         answer: "Ich heiße Ana.",
+         explain: "<b>Ich heiße</b> = eu me chamo. <i>heißt</i> é a forma do <i>du</i>: <i>Wie heißt du?</i>"},
+        {type: "choice", kind: "Encontre o erro", prompt: "Qual frase está ERRADA?",
+         options: ["Ich bin 30 Jahre alt.", "Ich habe 30 Jahre.", "Ich bin 30."], answer: 1,
+         explain: "Idade em alemão usa <b>sein</b>: <i>Ich bin 30</i>. “Ich habe 30 Jahre” é tradução literal do português."},
+        {type: "choice", kind: "Responda na conversa", situation: "Primeiro dia no curso de alemão.",
+         dialog: [["Jonas", "Hallo, ich bin Jonas. Freut mich!"]], prompt: "Qual é a melhor resposta?",
+         options: ["Freut mich auch! Ich bin Ana.", "Ja, ich freue Jonas.", "Mich auch Name ist Ana."], answer: 0,
+         explain: "<b>Freut mich auch</b> devolve a gentileza, e você já se apresenta. (Prazer também! Sou a Ana.)"}
+      ]
+    },
+    {
+      id: "de1p3", title: "Fragen stellen", pt: "Fazendo perguntas", emoji: "❓",
+      goal: "Fazer as 4 perguntas básicas para conhecer alguém",
+      reading: [
+        {say: ["@", "Ein gutes Gespräch geht in beide Richtungen. Stell Fragen!"], pt: "Uma boa conversa é de ida e volta. Faça perguntas!"},
+        {ex: "Wie heißt du?", pt: "Como você se chama?"},
+        {ex: "Woher kommst du?", pt: "De onde você é?"},
+        {ex: "Was machst du beruflich?", pt: "O que você faz? (profissão)"},
+        {ex: "Wie alt bist du?", pt: "Quantos anos você tem?"},
+        {tip: "💡 Com quem você não conhece ou em situações formais, use <b>Sie</b>: <i>Wie heißen Sie?</i> <i>Woher kommen Sie?</i> Entre amigos e jovens, use <b>du</b>."}
+      ],
+      questions: [
+        {type: "match", kind: "Associe", prompt: "Ligue cada pergunta à resposta certa",
+         pairs: [["Wie heißt du?", "Ich heiße Ana."], ["Woher kommst du?", "Ich komme aus Brasilien."], ["Was machst du beruflich?", "Ich bin Lehrerin."], ["Wie alt bist du?", "Ich bin 28."]],
+         explain: "Cada pergunta pede uma informação: nome, origem, profissão e idade. (<i>Lehrerin</i> = professora)"},
+        {type: "choice", kind: "Complete a frase", prompt: "Complete a pergunta", sentence: "___ kommst du?",
+         options: ["Woher", "Wie", "Was"], answer: 0,
+         explain: "<b>Woher</b> = de onde. <i>Woher kommst du?</i> = De onde você é?"},
+        {type: "choice", kind: "Situação", situation: "Você vai conhecer o diretor da sua nova empresa.",
+         prompt: "Como perguntar o nome dele com educação?",
+         options: ["Wie heißen Sie?", "Wie heißt du?", "Was heißt du?"], answer: 0,
+         explain: "Em situações formais, use <b>Sie</b>: <i>Wie heißen Sie?</i> Já <i>Was heißt…?</i> pergunta o que uma palavra significa."}
+      ]
+    },
+    {
+      id: "de1p4", title: "Alltagsausdrücke", pt: "Expressões do dia a dia", emoji: "🙏",
+      goal: "Agradecer, pedir licença e pedir para repetir",
+      reading: [
+        {say: ["@", "Diese kleinen Wörter machen dich höflich und natürlich."], pt: "Essas palavrinhas fazem você soar educado e natural."},
+        {ex: "Danke!", pt: "Obrigado(a)!"},
+        {ex: "Bitte!", pt: "De nada! / Por favor!"},
+        {ex: "Entschuldigung!", pt: "Com licença! / Desculpa!"},
+        {ex: "Wie bitte?", pt: "Como? (quando você não entendeu)"},
+        {ex: "Noch einmal, bitte.", pt: "Mais uma vez, por favor."},
+        {ex: "Kein Problem.", pt: "Sem problema."},
+        {tip: "💡 <b>Bitte</b> é coringa: vale “por favor”, “de nada” e, em <i>Wie bitte?</i>, “como é que é?”."}
+      ],
+      questions: [
+        {type: "choice", kind: "Situação", situation: "Você precisa passar por alguém em um corredor estreito.",
+         prompt: "O que você diz?", options: ["Entschuldigung!", "Danke schön!", "Tschüss!"], answer: 0,
+         explain: "<b>Entschuldigung</b> serve para pedir licença e também para pedir desculpas."},
+        {type: "choice", kind: "Responda na conversa", dialog: [["Você", "Danke schön!"]],
+         prompt: "O que a Lena responde, naturalmente?", options: ["Bitte schön!", "Danke auch!", "Guten Morgen!"], answer: 0,
+         explain: "<b>Bitte schön</b> (ou só <i>Bitte</i>) = de nada. Também se ouve <i>Gern geschehen</i>."},
+        {type: "build", kind: "Monte a frase", situation: "Você não entendeu o que a pessoa falou.",
+         prompt: "Monte: “Mais uma vez, por favor.”", words: ["Noch", "einmal,", "bitte.", "danke", "wie"],
+         answer: "Noch einmal, bitte.",
+         explain: "Pedir para repetir é normal, até entre nativos! Mais curto ainda: <i>Wie bitte?</i>"}
+      ]
+    },
+    {
+      id: "de1p5", title: "Lass uns reden!", pt: "Vamos conversar!", emoji: "💬",
+      goal: "Acompanhar uma conversa curta do começo ao fim",
+      reading: [
+        {say: ["@", "Jetzt alles zusammen. Hier lernt Ana Lena in einem Café kennen."], pt: "Agora tudo junto. Aqui a Ana conhece a Lena num café."},
+        {dialog: [["Lena", "Hallo! Ich bin Lena. Wie heißt du?"], ["Você", "Hallo, Lena! Ich heiße Ana. Freut mich."], ["Lena", "Freut mich auch! Woher kommst du?"], ["Você", "Ich komme aus Brasilien. Und du?"], ["Lena", "Ich komme aus Deutschland. Was machst du beruflich?"], ["Você", "Ich bin Studentin."], ["Lena", "Cool! Bis später!"]]},
+        {tip: "💡 Repare: depois de responder, a Ana devolve a pergunta com <b>Und du?</b> E profissão vem <b>sem artigo</b>: <i>Ich bin Studentin</i> (para homem, <i>Student</i>)."}
+      ],
+      questions: [
+        {type: "choice", kind: "Interprete o diálogo", dialog: [["Lena", "Ich komme aus Deutschland. Was machst du beruflich?"]],
+         prompt: "O que a Lena disse?",
+         options: ["Que é da Alemanha e perguntou a sua profissão", "Que mora no Brasil e perguntou a sua idade", "Que é estudante e perguntou o seu nome"], answer: 0,
+         explain: "<i>Ich komme aus Deutschland</i> = sou da Alemanha. <i>Was machst du beruflich?</i> = o que você faz (profissão)."},
+        {type: "build", kind: "Construa a resposta", dialog: [["Lena", "Was machst du beruflich?"]],
+         prompt: "Responda como a Ana: “Eu sou estudante.”", words: ["Ich", "bin", "Studentin.", "eine", "habe", "mache"],
+         answer: "Ich bin Studentin.",
+         explain: "Em alemão, profissão vem <b>sem artigo</b>: <i>Ich bin Studentin</i>, e não <i>Ich bin eine Studentin</i>."},
+        {type: "choice", kind: "Continue a conversa", dialog: [["Lena", "Es war schön, dich kennenzulernen!"]],
+         prompt: "Como você encerra a conversa?", options: ["Gleichfalls! Bis später!", "Guten Morgen!", "Ich komme aus Brasilien."], answer: 0,
+         explain: "<b>Gleichfalls</b> devolve a gentileza e <b>Bis später</b> encerra. (Igualmente! Até mais!)"}
+      ]
+    }
+  ]
+};
+
+const DE_UPCOMING = [
+  {title: "Alltag", pt: "Rotina, horas e dias da semana", level: "Básico", emoji: "☀️"},
+  {title: "Unterwegs", pt: "Café, compras e pedir o caminho", level: "Básico", emoji: "🛍️"}
+];
+
+
+/* =========================================================
+   ALEMÃO · dicas, falas do mascote e desafios surpresa
+   ========================================================= */
+
+/* dicas para evoluir no alemão (aparecem em ordem, uma por pausa) */
+const DE_TIPS = [
+  {e:"🗣️", t:"Leia em voz alta", d:"Leia as frases em voz alta. No alemão, quase tudo se lê do jeito que se escreve."},
+  {e:"🔊", t:"Ouça e repita", d:"Toque no alto-falante e repita logo depois. Capriche nos sons de “ch”, “ü” e “ö”."},
+  {e:"🔠", t:"Substantivo com maiúscula", d:"Em alemão, todo substantivo começa com letra maiúscula: der Tisch, das Haus, die Katze."},
+  {e:"📌", t:"Aprenda com o artigo", d:"Decore a palavra junto com o artigo: der Kaffee, die Milch, das Brot. Isso ajuda muito depois."},
+  {e:"💭", t:"Pense em alemão", d:"Narre coisas simples na cabeça: “Ich trinke Kaffee”, “Ich gehe zur Arbeit”."},
+  {e:"🎬", t:"Legenda em alemão", d:"Assista vídeos curtos com legenda em alemão. Você liga o som que ouve à palavra escrita."},
+  {e:"⏱️", t:"Pouco, todo dia", d:"10 minutos todo dia valem mais que 2 horas uma vez por semana. Mantenha a sua sequência 🔥."},
+  {e:"💪", t:"Erre sem medo", d:"Errar o artigo é normal até para quem estuda há anos. Blurty it out!"},
+  {e:"🔁", t:"Revise o que errou", d:"O que você errou vai para a Revisão. Revisar é o que transforma erro em acerto."}
+];
+
+/* falas do mascote quando o idioma é alemão (as mesmas para todos os mascotes) */
+const DE_MSGS = {
+  welcome:  [["Hallo! Bereit für Deutsch?","Oi! Pronto para o alemão?"],["Los geht's!","Vamos lá!"],["Schön, dich zu sehen!","Que bom te ver!"]],
+  happy:    [["Richtig!","Certo!"],["Super!","Show!"],["Genau!","Isso mesmo!"],["Sehr gut!","Muito bem!"]],
+  oops:     [["Hoppla! Fast!","Opa! Quase!"],["Kein Problem. Weiter geht's!","Sem problema. Bora continuar!"],["Fehler sind okay!","Errar faz parte!"]],
+  sad:      [["Hoppla! Fast!","Opa! Quase!"],["Macht nichts!","Não tem problema!"],["Fehler sind okay!","Errar faz parte!"]],
+  excited:  [["Phase geschafft!","Fase concluída!"],["Toll gemacht!","Mandou bem!"],["Weiter so!","Continue assim!"]],
+  celebrate:[["Wahnsinn! Ein ganzer Block!","Incrível! Um bloco inteiro!"],["Du bist ein Star!","Você é uma estrela!"]],
+  surprise: [["Ein Geschenk! Los geht's!","Um presente! Bora!"],["Eine geheime Aufgabe? Ich bin bereit!","Um desafio secreto? Tô pronto!"]],
+  gift:     [["Das Geschenk gehört dir!","O presente é seu!"],["Wie sehe ich aus?","Como eu tô?"]],
+  streak:   [["Tag {n}! Super!","Dia {n}! Show!"],["{n} Tage in Folge! Wahnsinn!","{n} dias seguidos! Incrível!"],["{n} Tage! Dein Deutsch wird stärker.","{n} dias! Seu alemão está ficando mais forte."]],
+  encourage:[["Weiter so!","Continue assim!"],["Du schaffst das!","Você consegue!"],["Schritt für Schritt.","Passo a passo."],["Nicht zu viel denken. Blurty it out!","Não pensa demais. Solta o alemão!"]]
+};
+
+/* desafios surpresa do alemão (prêmios em src/challenges.js) */
+const DE_CHALLENGES = [
+  {
+    id: "de1c1", block: "de1", after: "de1p2", prize: "tyrolean",
+    title: "Na, alles klar?", pt: "E aí, tudo certo?",
+    reading: [
+        {say: ["@", "Psst… hier ist ein Geheimausdruck. Die Deutschen sagen das ständig!"], pt: "Psiu… aqui vai uma expressão secreta. Os alemães falam isso o tempo todo!"},
+        {ex: "Na, alles klar?", pt: "E aí, tudo certo? (bem informal)"},
+        {ex: "Alles klar!", pt: "Tudo certo! / Beleza!"},
+        {tip: "💡 <b>Na?</b> sozinho já é um “e aí?” entre amigos. E <b>Alles klar</b> também serve para dizer “entendi” ou “combinado”."}
+    ],
+    questions: [
+      {type: "choice", kind: "Expressão secreta", prompt: "O que significa “Na, alles klar?” numa conversa entre amigos?",
+       options: ["E aí, tudo certo?", "Está tudo claro na sala?", "Você é claro?"], answer: 0,
+       explain: "<b>Na, alles klar?</b> é um cumprimento informal, tipo <i>E aí, tudo certo?</i>"},
+      {type: "build", kind: "Expressão secreta", dialog: [["Jonas", "Na, alles klar?"]], prompt: "Responda: “Tudo certo! E com você?”",
+       words: ["Alles", "klar!", "Und", "bei", "dir?", "du", "Klar"], answer: "Alles klar! Und bei dir?",
+       explain: "<b>Alles klar!</b> (tudo certo) e devolva com <b>Und bei dir?</b> (e com você?)"},
+      {type: "choice", kind: "Expressão secreta", situation: "Seu colega avisou o horário da reunião.",
+       dialog: [["Jonas", "Das Meeting ist um zehn Uhr."]], prompt: "Como dizer “Entendi, combinado!”?",
+       options: ["Alles klar!", "Gute Nacht!", "Wie alt bist du?"], answer: 0,
+       explain: "<b>Alles klar</b> também quer dizer “entendi / combinado”."}
+    ]
+  },
+  {
+    id: "de1c2", block: "de1", after: "de1p4", prize: "beanie",
+    title: "Macht nichts!", pt: "Não tem problema!",
+    reading: [
+        {say: ["@", "Noch ein Geheimnis: So entschuldigt man sich, und so sagt man, dass alles okay ist."], pt: "Outro segredo: como pedir desculpa e como dizer que está tudo bem."},
+        {ex: "Tut mir leid!", pt: "Sinto muito! / Foi mal!"},
+        {ex: "Macht nichts!", pt: "Não tem problema! / Deixa pra lá!"},
+        {tip: "💡 <b>Entschuldigung</b> é o pedido de desculpas rápido. <b>Tut mir leid</b> mostra que você sente mesmo. A resposta mais comum: <b>Macht nichts!</b>"}
+    ],
+    questions: [
+      {type: "choice", kind: "Expressão secreta", prompt: "O que significa “Macht nichts!”?",
+       options: ["Não tem problema!", "Não faça nada!", "Não sei fazer!"], answer: 0,
+       explain: "Ao pé da letra é “não faz nada”, mas significa <b>não tem problema</b>."},
+      {type: "build", kind: "Expressão secreta", dialog: [["Jonas", "Oh, tut mir leid!"]], prompt: "Responda: “Não tem problema!”",
+       words: ["Macht", "nichts!", "nicht", "Mach", "kein"], answer: "Macht nichts!",
+       explain: "<b>Macht nichts!</b> é a resposta padrão para um pedido de desculpas."},
+      {type: "choice", kind: "Expressão secreta", situation: "Você esbarrou em alguém e derrubou o café dele.",
+       prompt: "O que você diz?", options: ["Tut mir leid!", "Macht nichts!", "Alles klar!"], answer: 0,
+       explain: "Quem pede desculpa diz <b>Tut mir leid!</b> Quem recebe responde <b>Macht nichts!</b>"}
+    ]
+  }
+];
+
+
 /* ================== estrutura do curso ================== */
-const MAIN = [BLOCK1, BLOCK2, BLOCK3];                        // novos blocos entram aqui, em ordem de dificuldade
 const PEP_EVERY = 5;                          // a cada 5 exercícios, uma pausa: incentivo do mascote e dica para evoluir, alternando
 /* dicas para evoluir no inglês (aparecem em ordem, uma por pausa) */
-const TIPS = [
+const EN_TIPS = [
   {e:"🗣️", t:"Leia em voz alta", d:"Leia as frases e as respostas em voz alta. Falar ajuda a memorizar e já treina a pronúncia."},
   {e:"🔊", t:"Ouça e repita", d:"Toque no alto-falante e repita logo depois, imitando o som e o ritmo. É o jeito mais rápido de soar natural."},
   {e:"💭", t:"Pense em inglês", d:"Narre o seu dia na cabeça: “I'm making coffee”, “I'm going to work”. Frases simples já valem."},
@@ -1419,20 +1662,35 @@ const TIPS = [
   {e:"💪", t:"Erre sem medo", d:"Quem fala errado aprende mais rápido do que quem fica calado. Blurty it out!"},
   {e:"🔁", t:"Revise o que errou", d:"O que você errou vai para a Revisão. Revisar é o que transforma erro em acerto."}
 ];
+/* ================== idiomas ==================
+   Cada idioma tem os seus blocos, dicas e voz. O jogador pode estudar mais de um:
+   o XP de todos soma no total (S.xp) e fica separado por idioma em S.xpBy (para o ranking). */
+const COURSES = {
+  en: {id:"en", flag:"🇺🇸", name:"Inglês", native:"English", lang:"en-US", blocks:[BLOCK1, BLOCK2, BLOCK3], upcoming:UPCOMING, tips:EN_TIPS},
+  de: {id:"de", flag:"🇩🇪", name:"Alemão", native:"Deutsch", lang:"de-DE", blocks:[DE_BLOCK1], upcoming:DE_UPCOMING, tips:DE_TIPS, msgs:DE_MSGS}
+};
+const SOON_COURSES = [{flag:"🇯🇵", name:"Japonês", native:"日本語"}, {flag:"🇮🇹", name:"Italiano", native:"Italiano"}];
 const PASS = 2/3;                             // acertos mínimos para concluir a fase (2 de 3)
 const PHASES = {};
-MAIN.forEach(b=>b.phases.forEach((p,i)=>PHASES[p.id]={p, b, i}));
+Object.values(COURSES).forEach(co=>co.blocks.forEach(b=>b.phases.forEach((p,i)=>PHASES[p.id]={p, b, i, course:co.id})));
 const QUESTIONS = {};
-Object.values(PHASES).forEach(({p})=>p.questions.forEach((q,k)=>QUESTIONS[p.id+":"+k]={...q, qid:p.id+":"+k, from:p}));
-const MAIN_PHASES = MAIN.flatMap(b=>b.phases);
+Object.values(PHASES).forEach(({p,course})=>p.questions.forEach((q,k)=>QUESTIONS[p.id+":"+k]={...q, qid:p.id+":"+k, from:p, course}));
+const ALL_PHASES = Object.values(PHASES).map(x=>x.p);
 const CHAL_BONUS = 50, TRY_BONUS = 5;          // desafio surpresa: errar no máximo 1 · bônus na 1ª vitória · tentar sempre vale XP
-const CHAL = CHALLENGES.filter(c=>PHASES[c.after]).map(c=>({...c, b:PHASES[c.after].b}));
-const CH_BY_ID = {}; CHAL.forEach(c=>{ CH_BY_ID[c.id]=c; c.questions.forEach((q,k)=>QUESTIONS[c.id+":s"+k]={...q, qid:c.id+":s"+k, from:{title:"Desafio surpresa"}}); });
+const CHAL = CHALLENGES.concat(DE_CHALLENGES).filter(c=>PHASES[c.after]).map(c=>({...c, b:PHASES[c.after].b, course:PHASES[c.after].course}));
+const CH_BY_ID = {}; CHAL.forEach(c=>{ CH_BY_ID[c.id]=c; c.questions.forEach((q,k)=>QUESTIONS[c.id+":s"+k]={...q, qid:c.id+":s"+k, from:{title:"Desafio surpresa"}, course:c.course}); });
+/* idioma atual: MAIN e MAIN_PHASES são só os blocos dele */
+let CUR, MAIN, MAIN_PHASES;
+function setCourse(id){ CUR=COURSES[id]||COURSES.en; MAIN=CUR.blocks; MAIN_PHASES=MAIN.flatMap(b=>b.phases); }
+const LNAME = ()=>CUR.name.toLowerCase();
+function courseMsgs(){ return CUR && CUR.msgs || null; }   // falas do mascote no idioma atual (inglês usa as falas do próprio mascote)
+const myReview = ()=>Object.keys(S.review).filter(id=>QUESTIONS[id] && QUESTIONS[id].course===CUR.id);
 
 /* ================== progresso salvo (neste aparelho) ================== */
 const KEY = "blurty-v2";
 const fresh = ()=>({profile:{mascot:null, skin:null, accessories:[]}, phases:{}, xp:0, streak:0, best:0, last:null,
-                     days:{}, history:[], review:{}, achieved:{}, stats:{answered:0, correct:0, cleared:0}, challenges:{}, items:[], tipN:0});
+                     days:{}, history:[], review:{}, achieved:{}, stats:{answered:0, correct:0, cleared:0}, challenges:{}, items:[], tipN:0,
+                     course:"en", langs:["en"], xpBy:null, tipBy:{}});
 let S = fresh(), storageOK = true;
 try{ const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(fresh(), JSON.parse(raw)); }catch(e){ storageOK = false; }
 S.stats = Object.assign({answered:0, correct:0, cleared:0}, S.stats);
@@ -1440,6 +1698,13 @@ S.profile = Object.assign({mascot:null, skin:null, accessories:[]}, S.profile);
 if (!S.challenges || typeof S.challenges!=="object") S.challenges = {};
 if (!Array.isArray(S.items)) S.items = [];
 if (S.profile.mascot && !MASCOTS[S.profile.mascot]) S.profile.mascot = null;
+/* idiomas: quem já jogava continua no inglês, com todo o XP contando como inglês */
+if (!COURSES[S.course]) S.course = "en";
+if (!Array.isArray(S.langs) || !S.langs.length) S.langs = [S.course];
+S.langs = S.langs.filter(l=>COURSES[l]); if (!S.langs.includes(S.course)) S.langs.push(S.course);
+if (!S.xpBy || typeof S.xpBy!=="object") S.xpBy = {en:S.xp||0};
+if (!S.tipBy || typeof S.tipBy!=="object") S.tipBy = {en:S.tipN||0};
+setCourse(S.course);
 function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ storageOK = false; } }
 
 const dayStr = (d=new Date())=>{ const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4); return z.toISOString().slice(0,10); };
@@ -1463,7 +1728,7 @@ function streakInsights(st){
   if (st.record) out.push(`🏆 Novo recorde! Sua maior sequência agora é de ${n} dias.`);
   if (n===1 && (S.best||0)>1) out.push(`🌱 Recomeço também conta: seu recorde é de ${S.best} dias, e você pode passar dele.`);
   if (last) out.push(`✍️ Hoje você fez “${last.t}”, com ${last.c} de ${last.n} certas.`);
-  if (exprs) out.push(`🧠 Você já estudou ${exprs} expressões em inglês em ${donePh.length} fase${donePh.length>1?"s":""}.`);
+  if (exprs) out.push(`🧠 Você já estudou ${exprs} expressões em ${LNAME()} em ${donePh.length} fase${donePh.length>1?"s":""}.`);
   const ms=[3,7,14,30,60,100,365].find(x=>x>n); if (ms) out.push(`🎯 Faltam ${ms-n} dia${ms-n>1?"s":""} para chegar a ${ms} dias seguidos.`);
   return out.slice(0,3);
 }
@@ -1471,7 +1736,7 @@ function showStreak(){
   const st=STREAK_UP; STREAK_UP=null; if(!st || !M()) return;
   document.querySelectorAll(".streak-ov").forEach(x=>x.remove());
   const id=M(), act=ACTIONS[id]||["jump",""], lines=MASCOTS[id].msgs.streak||[["Day {n}!","Dia {n}!"]];
-  const pool=st.n===1?lines.filter(x=>x[0].includes("Day {n}")):lines, use=pool.length?pool:lines;
+  const pool=st.n===1?lines.filter(x=>/Day \{n\}|Tag \{n\}/.test(x[0])):lines, use=pool.length?pool:lines;
   const l=use[Math.floor(Math.random()*use.length)].map(t=>t.replace(/\{n\}/g,st.n));
   const week=[...Array(7)].map((_,i)=>{ const d=new Date(Date.now()-(6-i)*864e5), k=dayStr(d);
     return `<i class="${S.days[k]?"on":""}"><b>${"DSTQQSS"[d.getDay()]}</b>${S.days[k]?"🔥":""}</i>`; }).join("");
@@ -1510,7 +1775,7 @@ function tone(freqs){ try{ actx=actx||new (window.AudioContext||window.webkitAud
     const t=actx.currentTime+i*.09; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.14,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+.22);
     o.connect(g).connect(actx.destination); o.start(t); o.stop(t+.25); }); }catch(e){} }
 const sfx = {ok:()=>tone([660,880]), no:()=>tone([330,262]), tap:()=>tone([520]), win:()=>tone([523,659,784,1046])};
-function speak(text){ try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang="en-US"; u.rate=.9; speechSynthesis.speak(u); }catch(e){} }
+function speak(text){ try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang=CUR.lang; u.rate=.9; speechSynthesis.speak(u); }catch(e){} }
 document.addEventListener("click", e=>{ const s=e.target.closest("[data-say]"); if(s){ e.stopPropagation(); speak(s.dataset.say); } });
 function confetti(n=60){
   const cs = getComputedStyle(document.documentElement);
@@ -1533,8 +1798,8 @@ function unlocked(id){ const idx=MAIN_PHASES.findIndex(p=>p.id===id); return idx
 function nextActivity(){
   const p = MAIN_PHASES.find(p=>!done(p.id));
   if (p) return {type:"phase", p};
-  if (Object.keys(S.review).length) return {type:"review"};
-  const c = CHAL.find(c=>chalOpen(c) && !chalWon(c));
+  if (myReview().length) return {type:"review"};
+  const c = CHAL.find(c=>c.course===CUR.id && chalOpen(c) && !chalWon(c));
   if (c) return {type:"challenge", c};
   return {type:"all"};
 }
@@ -1542,11 +1807,13 @@ const overallPct = ()=>Math.round(MAIN_PHASES.filter(p=>done(p.id)).length/MAIN_
 const accuracy = ()=>S.stats.answered?Math.round(S.stats.correct/S.stats.answered*100):0;
 
 const ACH = [
-  {id:"first",  e:"🌱", t:"Primeiro passo",     d:"Conclua sua primeira fase",    ok:()=>MAIN_PHASES.some(p=>done(p.id))},
+  {id:"first",  e:"🌱", t:"Primeiro passo",     d:"Conclua sua primeira fase",    ok:()=>ALL_PHASES.some(p=>done(p.id))},
   {id:"perfect",e:"🎯", t:"Sem erros",           d:"Conclua uma fase sem errar",   ok:()=>Object.values(S.phases).some(x=>x.stars===3)},
   {id:"b1",     e:"👋", t:"First Conversations", d:"Conclua o Bloco 1",           ok:()=>BLOCK1.phases.every(p=>done(p.id))},
   {id:"b2",     e:"☀️", t:"Daily Life",          d:"Conclua o Bloco 2",           ok:()=>BLOCK2.phases.every(p=>done(p.id))},
   {id:"b3",     e:"🛍️", t:"Out and About",       d:"Conclua o Bloco 3",           ok:()=>BLOCK3.phases.every(p=>done(p.id))},
+  {id:"de1",    e:"🇩🇪", t:"Erste Gespräche",     d:"Conclua o Bloco 1 de alemão", ok:()=>DE_BLOCK1.phases.every(p=>done(p.id))},
+  {id:"poly",   e:"🌍", t:"Poliglota",           d:"Conclua fases em 2 idiomas",  ok:()=>Object.values(COURSES).filter(co=>co.blocks.some(b=>b.phases.some(p=>done(p.id)))).length>=2},
   {id:"gift",   e:"🎁", t:"Presente aberto",     d:"Vença um desafio surpresa",   ok:()=>Object.values(S.challenges).some(x=>x && x.won)},
   {id:"ten",    e:"✍️", t:"10 exercícios",       d:"Responda 10 exercícios",       ok:()=>S.stats.answered>=10},
   {id:"st3",    e:"🔥", t:"3 dias seguidos",     d:"Estude 3 dias em sequência",   ok:()=>(S.best||0)>=3},
@@ -1565,7 +1832,7 @@ function pickScreen(mode){ // mode: "first" | "change"
     const m = sel && MASCOTS[sel];
     const line = sel ? mascotLine(sel,"welcome") : null;
     app.innerHTML = `<div class="screen pick">
-      ${mode==="first"?`<div class="brand"><b>Blurty<span>.</span></b><small>Blurty it out!</small><em>Solte o seu inglês. Errar faz parte.</em></div>`:""}
+      ${mode==="first"?`<div class="brand"><b>Blurty<span>.</span></b><small>Blurty it out!</small><em>Fale sem medo. Errar faz parte.</em></div>`:""}
       <h1>${mode==="first"?"Escolha seu companheiro":"Trocar mascote"}</h1>
       <p class="sub">${mode==="first"?"Ele vai te acompanhar em toda a jornada. Dá para trocar depois no Perfil.":"Seu XP, fases, conquistas e sequência continuam iguais."}</p>
       <div class="preview">${sel ? `${mbox("welcome", sel)}<div><div class="who">${m.name}</div><div class="per">${m.speciesPt} · ${m.colorPt}<br>${esc(m.personality)}</div>
@@ -1583,7 +1850,8 @@ function pickScreen(mode){ // mode: "first" | "change"
       const changed = S.profile.mascot!==sel;
       S.profile.mascot = sel; persist(); applyTheme(sel); sfx.win();
       if (changed) confetti(40);
-      tab = mode==="first" ? "map" : "me"; greet = true; render(); window.scrollTo(0,0);
+      if (mode==="first"){ window.scrollTo(0,0); return langScreen("first"); }
+      tab = "me"; greet = true; render(); window.scrollTo(0,0);
     };
     const c = document.getElementById("cancel"); if (c) c.onclick = ()=>{ applyTheme(M()); tab="me"; render(); };
   }
@@ -1594,13 +1862,14 @@ function pickScreen(mode){ // mode: "first" | "change"
 let tab = "map", greet = true;
 function appbar(){
   return `<div class="appbar"><div class="logo">Blurty<span>.</span><small>Blurty it out!</small></div>
-    <span class="chip" title="Dias seguidos">🔥 ${streakNow()}</span><span class="chip" title="XP">⚡ ${S.xp}</span><span class="chip" title="Progresso geral">${overallPct()}%</span></div>`;
+    <button class="chip flag" id="lang" title="Idioma: ${CUR.name} · toque para trocar" aria-label="Idioma: ${CUR.name}">${CUR.flag}</button><span class="chip" title="Dias seguidos">🔥 ${streakNow()}</span><span class="chip" title="XP">⚡ ${S.xp}</span><span class="chip" title="Progresso geral">${overallPct()}%</span></div>`;
 }
 function nav(){
   const b=(id,i,l)=>`<button class="${tab===id?"on":""}" data-tab="${id}">${i}${l}</button>`;
   return `<div class="nav">${b("map",'<span class="i">🗺️</span>',"Aprender")}${b("prog",'<span class="i">📈</span>',"Progresso")}${b("ach",'<span class="i">🏆</span>',"Conquistas")}${b("me",`<span class="mi">${mascotSVG(M(),"idle",{accessories:S.profile.accessories})}</span>`,"Perfil")}</div>`;
 }
-function bindNav(){ app.querySelectorAll("[data-tab]").forEach(x=>x.onclick=()=>{ tab=x.dataset.tab; sfx.tap(); render(); window.scrollTo(0,0); }); }
+function bindNav(){ app.querySelectorAll("[data-tab]").forEach(x=>x.onclick=()=>{ tab=x.dataset.tab; sfx.tap(); render(); window.scrollTo(0,0); });
+  const lb=document.getElementById("lang"); if(lb) lb.onclick=()=>{ sfx.tap(); langScreen("change"); }; }
 function render(){
   if (!M()) return pickScreen("first");
   applyTheme(M());
@@ -1615,11 +1884,11 @@ function mapScreen(){
   if (nx.type==="phase"){ const {b,i}=PHASES[nx.p.id];
     next = `<button class="next" id="next"><span class="ic">${nx.p.emoji}</span><span><small>Próxima · ${esc(b.title)} · fase ${i+1}</small><b>${esc(nx.p.title)}</b><span class="g">🎯 ${esc(nx.p.goal)}</span></span></button>`;
   } else if (nx.type==="review"){
-    next = `<button class="next" id="next"><span class="ic">🔁</span><span><small>Próxima atividade</small><b>Revisão</b><span class="g">Reforce ${Object.keys(S.review).length} item(ns) que você errou</span></span></button>`;
+    next = `<button class="next" id="next"><span class="ic">🔁</span><span><small>Próxima atividade</small><b>Revisão</b><span class="g">Reforce ${myReview().length} item(ns) que você errou</span></span></button>`;
   } else if (nx.type==="challenge"){
     next = `<button class="next" id="next"><span class="ic">🎁</span><span><small>Próxima atividade · ${esc(nx.c.b.title)}</small><b>Desafio surpresa</b><span class="g">Vença e ganhe um item para o seu mascote</span></span></button>`;
   }
-  const rc = Object.keys(S.review).length;
+  const rc = myReview().length;
   const blocks = MAIN.map((b,bi)=>{
     const n=b.phases.filter(p=>done(p.id)).length, offs=[0,56,76,36,-30];
     return `<div class="block"><div class="bhead"><span class="lvl">Bloco ${bi+1} · ${b.level}</span><h2>${b.emoji} ${esc(b.title)}</h2><p>${esc(b.goal)}</p>
@@ -1627,12 +1896,12 @@ function mapScreen(){
       <div class="path">${b.phases.map((p,i)=>{ const ul=unlocked(p.id), d=done(p.id), cur=nx.type==="phase"&&nx.p.id===p.id, off=offs[i%offs.length];
         /* desafio que vem depois da fase anterior fica ao lado desta fase, do lado livre do caminho */
         const side=off>0?"l":"r", last=i===b.phases.length-1;
-        const chs=CHAL.filter(c=>c.after===(i?b.phases[i-1].id:null) || (last && c.after===p.id)).map(c=>chalNode(c,side)).join("");
+        const chs=CHAL.filter(c=>c.course===CUR.id).filter(c=>c.after===(i?b.phases[i-1].id:null) || (last && c.after===p.id)).map(c=>chalNode(c,side)).join("");
         return `<div class="step">${chs}<button class="node ${d?"done":""} ${ul?"":"locked"} ${cur?"cur":""}" data-ph="${p.id}" style="transform:translateX(${offs[i%offs.length]}px)">
           ${cur?`<span class="go">START</span>`:""}<span class="c">${ul?(d?"✓":p.emoji):"🔒"}</span><span class="st">${d?starsTxt(S.phases[p.id].stars):""}</span>
           <span class="lb">${esc(p.title)}<small>Fase ${i+1} · ${esc(p.pt)}</small></span></button></div>`;}).join("")}</div></div>`;
   }).join("");
-  const soon = UPCOMING.map((u,i)=>`<div class="soon"><span class="e">${u.emoji}</span><div><b>Bloco ${MAIN.length+i+1} · ${esc(u.title)}</b><span>${u.level} · ${esc(u.pt)} · em breve</span></div></div>`).join("");
+  const soon = CUR.upcoming.map((u,i)=>`<div class="soon"><span class="e">${u.emoji}</span><div><b>Bloco ${MAIN.length+i+1} · ${esc(u.title)}</b><span>${u.level} · ${esc(u.pt)} · em breve</span></div></div>`).join("");
   app.innerHTML = `<div class="screen">${appbar()}
     <div class="hello">${mbox(mood, M(), 'id="mtap" title="Toque em mim"')}<div class="bubble left">${esc(line[0])}<small>${esc(line[1])}</small></div></div>
     ${next}
@@ -1664,14 +1933,14 @@ function progScreen(){
   const dp=MAIN_PHASES.filter(p=>done(p.id)).length, db=MAIN.filter(b=>b.phases.every(p=>done(p.id))).length, pct=overallPct();
   const last7=[...Array(7)].map((_,i)=>{ const d=new Date(Date.now()-(6-i)*864e5); return {k:dayStr(d), l:["D","S","T","Q","Q","S","S"][d.getDay()]}; });
   const mx=Math.max(10,...last7.map(d=>S.days[d.k]||0));
-  const rev=Object.entries(S.review).sort((a,b)=>b[1].n-a[1].n);
+  const rev=myReview().map(id=>[id,S.review[id]]).sort((a,b)=>b[1].n-a[1].n);
   const rows=MAIN_PHASES.filter(p=>S.phases[p.id]).map(p=>{ const r=S.phases[p.id];
     return `<div class="row"><span>${p.emoji}</span><div class="grow"><b>${esc(p.title)}</b><small>${starsTxt(r.stars)} · jogada ${r.plays}x</small></div><span class="tag">${r.best}%</span></div>`;}).join("");
   app.innerHTML = `<div class="screen">${appbar()}<div class="pad"><h1 class="h1">Seu progresso</h1>
     <div class="grid">
       <div class="card big"><div class="ring" style="background:conic-gradient(var(--accent) ${pct*3.6}deg, var(--tint) 0)"><i>${pct}%</i></div>
-        <div><b style="font-size:20px">Progresso geral</b><span style="text-transform:none;letter-spacing:0;font-size:14px;font-weight:700">${dp} de ${MAIN_PHASES.length} fases · ${db} de ${MAIN.length} bloco(s) concluído(s)</span></div></div>
-      <div class="card"><b>⚡ ${S.xp}</b><span>XP total</span></div>
+        <div><b style="font-size:20px">${CUR.flag} Progresso em ${esc(LNAME())}</b><span style="text-transform:none;letter-spacing:0;font-size:14px;font-weight:700">${dp} de ${MAIN_PHASES.length} fases · ${db} de ${MAIN.length} bloco(s) concluído(s)</span></div></div>
+      <div class="card"><b>⚡ ${S.xp}</b><span>XP total · ${xpByTxt()}</span></div>
       <div class="card"><b>🔥 ${streakNow()}</b><span>Dias seguidos · recorde ${S.best||0}</span></div>
       <div class="card"><b>🎯 ${accuracy()}%</b><span>Taxa de acertos</span></div>
       <div class="card"><b>✍️ ${S.stats.answered}</b><span>Exercícios feitos</span></div>
@@ -1684,7 +1953,7 @@ function progScreen(){
       :`<p class="empty">Nada pendente. Quando você errar uma pergunta, ela aparece aqui.</p>`}
     <div class="stitle">Desempenho por fase</div>${rows?`<div class="list">${rows}</div>`:`<p class="empty">Conclua uma fase para ver seu desempenho.</p>`}
     <div class="stitle">Histórico</div>
-    ${S.history.length?`<div class="list">${S.history.slice(-8).reverse().map(h=>`<div class="row"><div class="grow"><b>${esc(h.t)}</b><small>${h.d.split("-").reverse().join("/")} · ${h.c}/${h.n} certas</small></div><span class="tag">+${h.xp} XP</span></div>`).join("")}</div>`:`<p class="empty">Aparece aqui depois da primeira fase.</p>`}
+    ${S.history.length?`<div class="list">${S.history.slice(-8).reverse().map(h=>`<div class="row"><div class="grow"><b>${h.lang&&COURSES[h.lang]?COURSES[h.lang].flag+" ":""}${esc(h.t)}</b><small>${h.d.split("-").reverse().join("/")} · ${h.c}/${h.n} certas</small></div><span class="tag">+${h.xp} XP</span></div>`).join("")}</div>`:`<p class="empty">Aparece aqui depois da primeira fase.</p>`}
   </div></div>${nav()}`;
   bindNav(); const r=document.getElementById("revgo"); if(r) r.onclick=()=>startReview();
 }
@@ -1738,6 +2007,10 @@ function meScreen(){
     <div class="items">${Object.entries(PRIZES).map(([id,pr])=>{ const has=S.items.includes(id), on=S.profile.accessories.includes(id);
       return has ? `<button class="item ${on?"on":""}" data-item="${id}"><span class="e">${pr.e}</span><b>${esc(pr.name)}</b><span>${on?"Usando · toque para tirar":"Toque para usar"}</span></button>`
                  : `<div class="item off"><span class="e">🎁</span><b>???</b><span>Vença um desafio surpresa no mapa</span></div>`; }).join("")}</div>
+    <div class="stitle">Seus idiomas</div>
+    <div class="list">${S.langs.map(l=>{ const co=COURSES[l], ph=co.blocks.flatMap(b=>b.phases), d=ph.filter(p=>done(p.id)).length;
+      return `<div class="row"><span style="font-size:24px">${co.flag}</span><div class="grow"><b>${co.name}${l===CUR.id?" · estudando agora":""}</b><small>${d} de ${ph.length} fases · ⚡ ${S.xpBy[l]||0} XP</small></div></div>`; }).join("")}</div>
+    <button class="btn ghost" id="langs" style="margin-top:12px">Trocar ou adicionar idioma</button>
     <div class="stitle">Seus números</div>
     <div class="grid"><div class="card"><b>⚡ ${S.xp}</b><span>XP</span></div><div class="card"><b>🏆 ${ACH.filter(a=>S.achieved[a.id]).length}</b><span>Conquistas</span></div></div>
     <div class="stitle">Blurty no celular</div>
@@ -1749,8 +2022,30 @@ function meScreen(){
     <p class="empty">Seu progresso fica salvo neste aparelho e neste navegador.</p>
   </div></div>${nav()}`;
   bindNav(); document.getElementById("chg").onclick=()=>{ sfx.tap(); pickScreen("change"); };
+  document.getElementById("langs").onclick=()=>{ sfx.tap(); langScreen("change"); };
   bindApp();
   app.querySelectorAll("[data-item]").forEach(b=>b.onclick=()=>{ const id=b.dataset.item; S.profile.accessories.includes(id)?unequip(id):equip(id); sfx.ok(); meScreen(); });
+}
+
+/* ================== escolha de idioma ================== */
+function langScreen(mode){ // mode: "first" | "change"
+  const card=co=>{ const ph=co.blocks.flatMap(b=>b.phases), d=ph.filter(p=>done(p.id)).length, has=S.langs.includes(co.id) && mode!=="first", on=co.id===CUR.id && mode!=="first";
+    return `<button class="lang ${on?"on":""}" data-lang="${co.id}"><span class="fl">${co.flag}</span><span class="grow"><b>${co.name}</b><small>${esc(co.native)} · ${co.blocks.length} bloco${co.blocks.length>1?"s":""} · ${ph.length} fases</small>
+      ${has?`<small>✔ ${d} de ${ph.length} fases · ⚡ ${S.xpBy[co.id]||0} XP</small>`:""}</span><span class="tag">${on?"Estudando":has?"Continuar":"Começar"}</span></button>`; };
+  app.innerHTML=`<div class="screen pick"><div>
+      <h1 class="h1">${mode==="first"?"O que você quer aprender?":"Seus idiomas"}</h1>
+      <p class="sub">${mode==="first"?"Dá para estudar mais de um idioma. O XP de todos soma no seu total.":"Troque quando quiser: o progresso de cada idioma fica salvo, e o XP de todos soma no total."}</p>
+      <div class="langs">${Object.values(COURSES).map(card).join("")}
+        ${SOON_COURSES.map(x=>`<div class="lang off"><span class="fl">${x.flag}</span><span class="grow"><b>${x.name}</b><small>${esc(x.native)} · em breve</small></span></div>`).join("")}</div>
+      ${mode==="change"?`<div class="foot"><button class="btn ghost" id="cancel">Voltar</button></div>`:""}
+    </div></div>`;
+  app.querySelectorAll("[data-lang]").forEach(b=>b.onclick=()=>{ const id=b.dataset.lang, isNew=!S.langs.includes(id);
+    if (mode==="first") S.langs=[id]; else if (isNew) S.langs.push(id);
+    S.course=id; setCourse(id); persist(); sfx.win();
+    if (mode!=="first") toast(`${CUR.flag} Agora você está estudando ${LNAME()}`);
+    tab="map"; greet=true; render(); window.scrollTo(0,0); });
+  const c=document.getElementById("cancel"); if(c) c.onclick=()=>{ sfx.tap(); render(); };
+  window.scrollTo(0,0);
 }
 
 /* ================== sessão ================== */
@@ -1758,13 +2053,13 @@ let L;
 function startPhase(id){ const {p,b}=PHASES[id];
   L={mode:"phase", p, b, queue:p.questions.map((q,k)=>QUESTIONS[p.id+":"+k]), total:p.questions.length, n:0, mistakes:0, ok:0, xp:0}; learnCard(); }
 function startReview(){
-  const ids=shuffle(Object.keys(S.review).filter(id=>QUESTIONS[id])).slice(0,5);
+  const ids=shuffle(myReview()).slice(0,5);
   if(!ids.length){ toast("Nada para revisar agora 🎉"); return; }
   L={mode:"review", queue:ids.map(id=>QUESTIONS[id]), total:ids.length, n:0, mistakes:0, ok:0, xp:0, cleared:0}; nextQ();
 }
 function startChallenge(id){ const c=CH_BY_ID[id];
   const queue=shuffle(c.questions.map((q,k)=>QUESTIONS[c.id+":s"+k]));      // tudo novo: exercícios da expressão secreta
-  const missed=shuffle(Object.keys(S.review).filter(id=>QUESTIONS[id] && !id.startsWith(c.id+":")));
+  const missed=shuffle(myReview().filter(id=>!id.startsWith(c.id+":")));
   const mine=missed.find(id=>QUESTIONS[id].from && PHASES[QUESTIONS[id].qid.split(":")[0]] && PHASES[QUESTIONS[id].qid.split(":")[0]].b===c.b) || missed[0];
   if (mine) queue.push({...QUESTIONS[mine], kind:"Revanche · "+(QUESTIONS[mine].kind||"Exercício")});   // algo que a pessoa já errou
   L={mode:"challenge", c, queue, total:queue.length, need:queue.length-1, revenge:!!mine, n:0, mistakes:0, ok:0, xp:0}; chalIntro(); }
@@ -1901,16 +2196,17 @@ function pepTalk(){
 }
 
 function tipTalk(){
-  const tp=TIPS[(S.tipN||0)%TIPS.length]; S.tipN=(S.tipN||0)+1; persist();
+  const T=CUR.tips, n=S.tipBy[CUR.id]||0, tp=T[n%T.length]; S.tipBy[CUR.id]=n+1; persist();
   app.innerHTML=`<div class="screen pep">${mbox("happy")}
-    <div class="kicker" style="margin-top:6px">💡 Dica para evoluir no inglês</div>
+    <div class="kicker" style="margin-top:6px">💡 Dica para evoluir no ${esc(LNAME())}</div>
     <div class="bubble tip"><span class="te">${tp.e}</span>${esc(tp.t)}<small>${esc(tp.d)}</small></div>
     <div class="meta">✍️ ${S.stats.answered} exercícios feitos · 🎯 ${accuracy()}% de acertos</div>
     <div class="foot"><button class="btn" id="go">Continuar</button></div></div>`;
   sfx.ok(); document.getElementById("go").onclick=()=>{ sfx.tap(); nextQ(); };
 }
 
-function addXP(n){ S.xp+=n; const t=dayStr(); S.days[t]=(S.days[t]||0)+n; }
+function addXP(n){ S.xp+=n; S.xpBy[CUR.id]=(S.xpBy[CUR.id]||0)+n; const t=dayStr(); S.days[t]=(S.days[t]||0)+n; }
+const xpByTxt = ()=>S.langs.map(l=>`${COURSES[l].flag} ${S.xpBy[l]||0}`).join(" · ");
 
 function finishPhase(){
   if (L.ok < Math.ceil(L.total*PASS)) return retryPhase();
@@ -1925,7 +2221,7 @@ function finishPhase(){
   const blockNow = first && b.phases.every(x=>done(x.id));
   if (blockNow) lines.push(["Bloco completo!",100]);
   const total=lines.reduce((s,l)=>s+l[1],0); addXP(total);
-  S.history.push({d:dayStr(), t:p.title, c:L.ok, n:L.total, xp:total}); S.history=S.history.slice(-40);
+  S.history.push({d:dayStr(), t:p.title, c:L.ok, n:L.total, xp:total, lang:CUR.id}); S.history=S.history.slice(-40);
   const news=checkAch(); persist();
   const nd=b.phases.filter(x=>done(x.id)).length, nx=nextActivity();
   const mood=blockNow?"celebrate":"excited", l=mascotLine(M(),mood);
@@ -1955,7 +2251,7 @@ function retryPhase(){
   const bonus=touchDay()?5*Math.min(S.streak,7):0, total=L.xp+bonus+TRY_BONUS; addXP(total);
   const prev=S.phases[p.id]||{stars:0,best:0,plays:0};
   S.phases[p.id]={stars:prev.stars, best:Math.max(prev.best,acc), plays:prev.plays+1};
-  S.history.push({d:dayStr(), t:p.title, c:L.ok, n:L.total, xp:total}); S.history=S.history.slice(-40);
+  S.history.push({d:dayStr(), t:p.title, c:L.ok, n:L.total, xp:total, lang:CUR.id}); S.history=S.history.slice(-40);
   checkAch(); persist();
   const l=mascotLine(M(),"oops");
   app.innerHTML=`<div class="screen"><div class="end">${mbox("encourage")}
@@ -1964,7 +2260,7 @@ function retryPhase(){
       <div class="cards3" style="margin-top:14px"><div class="card"><b>✔ ${L.ok}/${L.total}</b><span>Acertos</span></div><div class="card"><b>🎯 ${need}</b><span>Para concluir</span></div><div class="card"><b>⚡ ${total}</b><span>XP ganho</span></div></div>
       <div class="xpl"><div><span>Coragem de tentar</span><b>+${TRY_BONUS} XP</b></div></div>
       <div class="done-goal"><small>🎯 Objetivo da fase</small>${esc(p.goal)}</div>
-      <p class="empty" style="margin-top:12px">Errar faz parte de falar inglês: é assim que se aprende. Com ${need} acertos de ${L.total}, a fase é sua. O que você errou virou Revisão para treinar.</p>
+      <p class="empty" style="margin-top:12px">Errar faz parte de falar ${esc(LNAME())}: é assim que se aprende. Com ${need} acertos de ${L.total}, a fase é sua. O que você errou virou Revisão para treinar.</p>
     </div><div class="foot"><button class="btn" id="again" style="margin-bottom:10px">Jogar de novo</button><button class="btn ghost" id="map">Ver mapa</button></div></div>`;
   sfx.tap();
   document.getElementById("again").onclick=()=>startPhase(p.id);
@@ -1981,7 +2277,7 @@ function finishChallenge(){
   const prev=S.challenges[c.id]||{plays:0};
   S.challenges[c.id]={won:prev.won||(win?dayStr():null), plays:(prev.plays||0)+1};
   if (first && !S.items.includes(c.prize)) S.items.push(c.prize);
-  S.history.push({d:dayStr(), t:"Desafio: "+c.title, c:L.ok, n:L.total, xp:total}); S.history=S.history.slice(-40);
+  S.history.push({d:dayStr(), t:"Desafio: "+c.title, c:L.ok, n:L.total, xp:total, lang:CUR.id}); S.history=S.history.slice(-40);
   const news=checkAch(); persist();
   const xpl=`<div class="xpl">${lines.map(x=>`<div><span>${esc(x[0])}</span><b>+${x[1]} XP</b></div>`).join("")}</div>`;
   if (!win){
@@ -2015,9 +2311,9 @@ function finishChallenge(){
 }
 function finishReview(){
   const bonus=touchDay()?5*Math.min(S.streak,7):0, total=L.xp+bonus; addXP(total);
-  S.history.push({d:dayStr(), t:"Revisão", c:L.ok, n:L.total, xp:total}); S.history=S.history.slice(-40);
+  S.history.push({d:dayStr(), t:"Revisão", c:L.ok, n:L.total, xp:total, lang:CUR.id}); S.history=S.history.slice(-40);
   const news=checkAch(); persist();
-  const left=Object.keys(S.review).length, l=mascotLine(M(),"excited");
+  const left=myReview().length, l=mascotLine(M(),"excited");
   app.innerHTML=`<div class="screen"><div class="end">${mbox("excited")}
       <h2>Revisão feita!</h2><div class="sub">Você reforçou ${L.cleared} de ${L.total} item(ns)</div>
       <div class="bubble">${esc(l[0])}<small>${esc(l[1])}</small></div>

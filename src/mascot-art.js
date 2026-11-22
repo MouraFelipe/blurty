@@ -260,6 +260,17 @@ const MascotArt = (()=>{
       <path d="M${x-11} ${y-7} L${x+11} ${y-7}" stroke="#FFFFFF" stroke-width="5"/>
       <path d="M${x-12} ${y+1} L${x+12} ${y+1}" stroke="${accent}" stroke-width="3"/>
       <path d="M${x-4} ${y-17} Q${x-1} ${y-19.5} ${x+3} ${y-18}" stroke="#D8DEE6" stroke-width="2" fill="none" stroke-linecap="round"/></g>`; },
+    tyrolean: (ch,c,accent)=>{ const [x,y,r]=ch.hat; return `<g class="acc" transform="rotate(${r} ${x} ${y})">
+      <path d="M${x-22} ${y+5} Q${x} ${y+12} ${x+22} ${y+5} Q${x+20} ${y-1} ${x+14} ${y} L${x-14} ${y} Q${x-20} ${y-1} ${x-22} ${y+5} Z" fill="#4F6B3A" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M${x-14} ${y+1} Q${x-15} ${y-16} ${x-3} ${y-17} Q${x} ${y-13} ${x+3} ${y-17} Q${x+15} ${y-16} ${x+14} ${y+1} Z" fill="#5E7D45" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M${x-14} ${y-3} Q${x} ${y+1} ${x+14} ${y-3}" stroke="#A8432F" stroke-width="3.2" fill="none"/>
+      <path d="M${x+9} ${y-3} Q${x+20} ${y-22} ${x+15} ${y-30} Q${x+11} ${y-18} ${x+9} ${y-3} Z" fill="#F4F1E6" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M${x+10} ${y-5} Q${x+14} ${y-17} ${x+15} ${y-28}" stroke="${INK}" stroke-width="1" fill="none" opacity=".5"/></g>`; },
+    beanie: (ch,c,accent)=>{ const [x,y,r]=ch.hat; return `<g class="acc" transform="rotate(${r} ${x} ${y})">
+      <path d="M${x-19} ${y+3} Q${x-21} ${y-19} ${x} ${y-20} Q${x+21} ${y-19} ${x+19} ${y+3} Z" fill="${accent}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M${x-8} ${y-18} L${x-8} ${y-2} M${x} ${y-20} L${x} ${y-2} M${x+8} ${y-18} L${x+8} ${y-2}" stroke="${K(accent,.25)}" stroke-width="1.6" stroke-linecap="round"/>
+      <rect x="${x-21}" y="${y-2}" width="42" height="9" rx="4.5" fill="${W(accent,.35)}" stroke="${INK}" stroke-width="2"/>
+      <circle cx="${x}" cy="${y-23}" r="6.5" fill="#F4F1E6" stroke="${INK}" stroke-width="2"/></g>`; },
     sunglasses: (ch,c,accent)=>{ const [[x1,y1],[x2,y2]]=ch.eyes, e=ch.er, w=e*2.6, h=e*1.9, y=(y1+y2)/2;
       const lens=(cx)=>`<rect x="${cx-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${e*.7}" fill="${INK}" stroke="${INK}" stroke-width="2"/>
         <path d="M${cx-w/2+e*.55} ${y-h/2+e*.6} L${cx-w/2+e*1.25} ${y-h/2+e*.6}" stroke="#fff" stroke-width="2.2" opacity=".55" stroke-linecap="round"/>`;
@@ -267,7 +278,7 @@ const MascotArt = (()=>{
         <path d="M${x1+w/2} ${y-h*.18} Q${(x1+x2)/2} ${y-h*.42} ${x2-w/2} ${y-h*.18}" stroke="${INK}" stroke-width="2.6" fill="none" stroke-linecap="round"/>
         <path d="M${x1-w/2} ${y-h*.2} L${x1-w/2-e*.7} ${y-h*.32}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/><path d="M${x2+w/2} ${y-h*.2} L${x2+w/2+e*.7} ${y-h*.32}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/></g>`; }
   };
-  const HEAD_ITEMS = ["partyHat","crown","cap","flower","chefHat"];
+  const HEAD_ITEMS = ["partyHat","crown","cap","flower","chefHat","tyrolean","beanie"];
   /* visuais especiais: trocam as cores do mascote */
   const SKINS = {golden: {body:"#E9B744", belly:"#FFF3CC", line:"#86600F", extra:"#C9922A"}};
   const sparkles = s => s!=="golden" ? "" : `<g class="gold-spark" fill="#FFF7D6" stroke="#C9922A" stroke-width="1.2">${[[30,48,6],[134,58,5],[128,124,4]].map(([x,y,r])=>`<path d="M${x} ${y-r} L${x+r*.3} ${y-r*.3} L${x+r} ${y} L${x+r*.3} ${y+r*.3} L${x} ${y+r} L${x-r*.3} ${y+r*.3} L${x-r} ${y} L${x-r*.3} ${y-r*.3} Z"/>`).join("")}</g>`;
