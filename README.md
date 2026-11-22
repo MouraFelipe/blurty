@@ -13,6 +13,7 @@ Aprenda inglês de conversa jogando: fases curtas, cada uma com um objetivo, e u
 - **Mascote:** no primeiro acesso você escolhe um companheiro (Dino, Lumi, Foxy, Miko, Bloop ou Roki), cada um com desenho e personalidade próprios. Ele define as cores do app, reage às suas respostas e te incentiva a cada 5 exercícios. Dá para trocar no Perfil sem perder nada.
 - **Blocos e fases:** cada bloco tem 5 fases; cada fase tem um objetivo, um cartão "Aprenda" e 3 exercícios.
 - **Exercícios:** tradução, completar frase, responder numa conversa, montar frase, situação, encontrar o erro, interpretar diálogo, associar e construir resposta.
+- **Desafios surpresa:** no caminho do mapa aparece um 🎁 depois das fases 2 e 4 de cada bloco. Ele é opcional e só mostra o conteúdo ao abrir: uma expressão secreta e 4 exercícios (3 sorteados das fases anteriores e 1 da expressão). Acertando 3 de 4, você ganha um item para o mascote (óculos escuros, coroa, boné ou flor) e +30 XP. Os itens ficam no Perfil para usar ou tirar.
 - **Progresso:** XP, sequência de dias, taxa de acertos, histórico, conquistas e revisão do que você errou. Fica salvo no navegador.
 
 ## Conteúdo atual
@@ -22,6 +23,7 @@ Aprenda inglês de conversa jogando: fases curtas, cada uma com um objetivo, e u
 
 ## Editar
 - Conteúdo: `src/block1.js` e `src/block2.js` (novos blocos seguem o mesmo formato e entram em `MAIN`, em `src/app.html`, e em `src/build.py`)
+- Desafios surpresa e prêmios: `src/challenges.js`
 - Mascotes, cores e mensagens: `src/mascots.js`
 - Desenho dos mascotes, expressões e acessórios: `src/mascot-art.js`
 - App: `src/app.html`

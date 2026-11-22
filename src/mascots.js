@@ -15,6 +15,8 @@ const MASCOTS = {
       oops:     [["Oops! Even dinos trip sometimes.","Opa! Até dinossauro tropeça às vezes."],["No worries. We'll get it next time!","Tranquilo. Na próxima a gente acerta!"],["Rawr... almost! Read the tip.","Rawr... quase! Lê a dica."]],
       excited:  [["Roar! Another English challenge completed!","Roar! Mais um desafio de inglês concluído!"],["Phase done! You're unstoppable!","Fase vencida! Ninguém te para!"],["That was a big step!","Esse foi um passo grande!"]],
       celebrate:[["ROOOAR! A whole block done!","ROOOAR! Um bloco inteiro concluído!"],["Legend! Time to celebrate!","Lenda! Hora de comemorar!"]],
+      surprise: [["Roar! A mystery gift! Let's win it!", "Roar! Um presente misterioso! Bora ganhar!"], ["A secret challenge? I'm ready!", "Um desafio secreto? Tô pronto!"]],
+      gift:     [["ROAR! The gift is yours!", "ROAR! O presente é seu!"], ["Look at me! Do I look cool?", "Olha pra mim! Tô estiloso?"]],
       encourage:[["Five more done! Keep stomping!","Mais cinco feitos! Segue firme!"],["You're stronger in English every day.","Você fica mais forte no inglês a cada dia."],["Keep going. I'm right behind you!","Continua. Tô logo atrás de você!"]]
     }
   },
@@ -28,6 +30,8 @@ const MASCOTS = {
       oops:     [["It's okay. Take a breath and read the tip.","Tudo bem. Respira e lê a dica."],["Mistakes help us learn.","Os erros ajudam a gente a aprender."],["Gently now. You'll see it again.","Com calma. Você vai ver de novo."]],
       excited:  [["Phase complete. I'm proud of you.","Fase concluída. Tenho orgulho de você."],["Beautiful work today.","Lindo trabalho hoje."],["Calm and steady wins.","Com calma e constância se vence."]],
       celebrate:[["A whole block! What a journey.","Um bloco inteiro! Que jornada."],["You did it. Enjoy this moment.","Você conseguiu. Aproveite o momento."]],
+      surprise: [["Oh, a little surprise. Shall we open it?", "Ah, uma surpresinha. Vamos abrir?"], ["Something special is waiting for you.", "Tem algo especial esperando por você."]],
+      gift:     [["A gift, just for us. Thank you!", "Um presente, só pra gente. Obrigada!"], ["It suits me, doesn't it?", "Ficou bem em mim, né?"]],
       encourage:[["Five exercises done. You're doing great.","Cinco exercícios feitos. Você está indo muito bem."],["Slow is fine. Keep going.","Devagar está ótimo. Continue."],["Every answer brings you closer.","Cada resposta te deixa mais perto."]]
     }
   },
@@ -41,6 +45,8 @@ const MASCOTS = {
       oops:     [["Tricky one, huh? Now you know the trick.","Essa era pegadinha, né? Agora você sabe o truque."],["Even foxes miss sometimes.","Até raposa erra às vezes."],["Smart people learn from slips.","Gente esperta aprende com os deslizes."]],
       excited:  [["Phase done. Too easy for you!","Fase concluída. Fácil demais pra você!"],["Nicely played!","Bem jogado!"],["Another one in the bag.","Mais uma no papo."]],
       celebrate:[["A full block? Now that's clever.","Um bloco inteiro? Isso que é esperteza."],["Brilliant! Take a bow.","Brilhante! Pode agradecer à plateia."]],
+      surprise: [["A secret challenge… my favorite kind.", "Um desafio secreto… meu tipo favorito."], ["I smell a prize. Let's get it!", "Tô sentindo cheiro de prêmio. Bora pegar!"]],
+      gift:     [["Sneaky and stylish. Just like me.", "Esperta e estilosa. Igual a mim."], ["Got it! I knew you would.", "Ganhou! Eu sabia."]],
       encourage:[["You're getting smarter. Keep going!","Você está ficando mais esperto. Continue!"],["Five down. Your brain is warming up.","Cinco feitos. Seu cérebro está esquentando."],["Stay sharp. The next one is yours.","Fica ligado. A próxima é sua."]]
     }
   },
@@ -54,6 +60,8 @@ const MASCOTS = {
       oops:     [["Hmm, interesting! Look at the tip.","Hmm, interessante! Olha a dica."],["Now we know something new!","Agora a gente sabe algo novo!"],["Let's look closer next time.","Vamos olhar com mais atenção na próxima."]],
       excited:  [["Phase complete! What's next?","Fase concluída! Qual a próxima?"],["Wow, you learned a lot!","Uau, você aprendeu muito!"],["I'm taking notes on your progress!","Tô anotando seu progresso!"]],
       celebrate:[["A whole block! Everyone, look!","Um bloco inteiro! Gente, olha isso!"],["Amazing! I can't stop jumping!","Incrível! Não consigo parar de pular!"]],
+      surprise: [["What's inside? I need to know!", "O que tem dentro? Preciso saber!"], ["A mystery box! Let's investigate.", "Uma caixa misteriosa! Vamos investigar."]],
+      gift:     [["Wow! It's perfect, down to the last detail!", "Uau! Ficou perfeito, até no último detalhe!"], ["New item spotted! Thank you!", "Item novo à vista! Obrigado!"]],
       encourage:[["Five done! You're paying great attention.","Cinco feitos! Você está prestando muita atenção."],["Curiosity is your superpower.","A curiosidade é o seu superpoder."],["Keep exploring. You're doing well!","Continue explorando. Você está indo bem!"]]
     }
   },
@@ -67,6 +75,8 @@ const MASCOTS = {
       oops:     [["Splash! Missed the lily pad.","Tchibum! Errei a folha."],["Oops! Let's hop again later.","Opa! Depois a gente pula de novo."],["Ribbit... almost!","Ribbit... quase!"]],
       excited:  [["Phase done! Boing boing!","Fase concluída! Boing boing!"],["You hopped all the way!","Você pulou até o fim!"],["Ribbit-tastic!","Ribbit-ástico!"]],
       celebrate:[["BOING! A whole block! Pond party!","BOING! Um bloco inteiro! Festa na lagoa!"],["Highest jump ever!","O pulo mais alto da história!"]],
+      surprise: [["A surprise! Boing boing! Open it!", "Uma surpresa! Boing boing! Abre!"], ["Gift time? Party time!", "Hora do presente? Hora da festa!"]],
+      gift:     [["I look AMAZING! Boing!", "Tô INCRÍVEL! Boing!"], ["Best. Gift. Ever!", "Melhor. Presente. Do mundo!"]],
       encourage:[["Five hops done! Keep bouncing!","Cinco pulos feitos! Continua pulando!"],["You're getting so good at this!","Você está ficando muito bom nisso!"],["Hop by hop, you'll get there.","Pulo a pulo, você chega lá."]]
     }
   },
@@ -80,6 +90,8 @@ const MASCOTS = {
       oops:     [["Haha! Even mistakes make you smarter!","Haha! Até os erros te deixam mais esperto!"],["Oops! I won't tell anyone.","Opa! Não conto pra ninguém."],["That one tricked us both!","Essa enganou nós dois!"]],
       excited:  [["Phase complete! Look at you go!","Fase concluída! Olha você mandando bem!"],["Treasure found: new English!","Tesouro encontrado: inglês novo!"],["Too good! Next one?","Bom demais! Próxima?"]],
       celebrate:[["A whole block! Let's party!","Um bloco inteiro! Bora comemorar!"],["Best heist ever: a full block!","Melhor golpe da história: um bloco inteiro!"]],
+      surprise: [["Hehe, a secret challenge. Let's grab the loot!", "Hehe, um desafio secreto. Bora pegar o tesouro!"], ["Shh… there's a prize hidden here.", "Psiu… tem um prêmio escondido aqui."]],
+      gift:     [["Loot secured! Hehe!", "Tesouro garantido! Hehe!"], ["Do I look fancy now?", "Tô chique agora?"]],
       encourage:[["Five down! You're on a roll.","Cinco feitos! Você está embalado."],["Keep going. I've got snacks.","Continua. Eu tenho lanchinhos."],["You're better at this than you think.","Você é melhor nisso do que pensa."]]
     }
   }
