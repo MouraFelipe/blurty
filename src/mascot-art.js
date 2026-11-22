@@ -253,6 +253,13 @@ const MascotArt = (()=>{
     flower: (ch,c,accent)=>{ const [hx,hy]=ch.hat, x=hx+15, y=hy+4;
       const petals=[0,72,144,216,288].map(a=>{ const t=a*Math.PI/180; return `<circle cx="${(x+Math.cos(t)*6).toFixed(1)}" cy="${(y+Math.sin(t)*6).toFixed(1)}" r="5" fill="#FFFFFF" stroke="${INK}" stroke-width="1.6"/>`; }).join("");
       return `<g class="acc"><path d="M${x-3} ${y+5} Q${x-10} ${y+12} ${x-15} ${y+10} Q${x-11} ${y+5} ${x-3} ${y+5} Z" fill="#7FB77E" stroke="${INK}" stroke-width="1.5" stroke-linejoin="round"/>${petals}<circle cx="${x}" cy="${y}" r="4" fill="#F2C14E" stroke="${INK}" stroke-width="1.5"/></g>`; },
+    chefHat: (ch,c,accent)=>{ const [x,y,r]=ch.hat; return `<g class="acc" transform="rotate(${r} ${x} ${y})">
+      <path d="M${x-12} ${y+5} L${x-12} ${y-6} L${x+12} ${y-6} L${x+12} ${y+5} Z" fill="#FFFFFF" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="${x-10}" cy="${y-10}" r="7" fill="#FFFFFF" stroke="${INK}" stroke-width="2"/><circle cx="${x+10}" cy="${y-10}" r="7" fill="#FFFFFF" stroke="${INK}" stroke-width="2"/>
+      <circle cx="${x}" cy="${y-13.5}" r="8.5" fill="#FFFFFF" stroke="${INK}" stroke-width="2"/>
+      <path d="M${x-11} ${y-7} L${x+11} ${y-7}" stroke="#FFFFFF" stroke-width="5"/>
+      <path d="M${x-12} ${y+1} L${x+12} ${y+1}" stroke="${accent}" stroke-width="3"/>
+      <path d="M${x-4} ${y-17} Q${x-1} ${y-19.5} ${x+3} ${y-18}" stroke="#D8DEE6" stroke-width="2" fill="none" stroke-linecap="round"/></g>`; },
     sunglasses: (ch,c,accent)=>{ const [[x1,y1],[x2,y2]]=ch.eyes, e=ch.er, w=e*2.6, h=e*1.9, y=(y1+y2)/2;
       const lens=(cx)=>`<rect x="${cx-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${e*.7}" fill="${INK}" stroke="${INK}" stroke-width="2"/>
         <path d="M${cx-w/2+e*.55} ${y-h/2+e*.6} L${cx-w/2+e*1.25} ${y-h/2+e*.6}" stroke="#fff" stroke-width="2.2" opacity=".55" stroke-linecap="round"/>`;
@@ -260,7 +267,10 @@ const MascotArt = (()=>{
         <path d="M${x1+w/2} ${y-h*.18} Q${(x1+x2)/2} ${y-h*.42} ${x2-w/2} ${y-h*.18}" stroke="${INK}" stroke-width="2.6" fill="none" stroke-linecap="round"/>
         <path d="M${x1-w/2} ${y-h*.2} L${x1-w/2-e*.7} ${y-h*.32}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/><path d="M${x2+w/2} ${y-h*.2} L${x2+w/2+e*.7} ${y-h*.32}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/></g>`; }
   };
-  const HEAD_ITEMS = ["partyHat","crown","cap","flower"];
+  const HEAD_ITEMS = ["partyHat","crown","cap","flower","chefHat"];
+  /* visuais especiais: trocam as cores do mascote */
+  const SKINS = {golden: {body:"#E9B744", belly:"#FFF3CC", line:"#86600F", extra:"#C9922A"}};
+  const sparkles = s => s!=="golden" ? "" : `<g class="gold-spark" fill="#FFF7D6" stroke="#C9922A" stroke-width="1.2">${[[30,48,6],[134,58,5],[128,124,4]].map(([x,y,r])=>`<path d="M${x} ${y-r} L${x+r*.3} ${y-r*.3} L${x+r} ${y} L${x+r*.3} ${y+r*.3} L${x} ${y+r} L${x-r*.3} ${y+r*.3} L${x-r} ${y} L${x-r*.3} ${y-r*.3} Z"/>`).join("")}</g>`;
 
   /* reflexo de luz: um arco claro no alto da cabeça, igual em todos */
   const SHINE = {dino:[52,52,30], lumi:[50,56,28], foxy:[48,60,26], miko:[56,42,20], bloop:[34,98,30], roki:[50,56,24]};
@@ -271,8 +281,8 @@ const MascotArt = (()=>{
     const ch = CH[id]; if (!ch) return "";
     const m = MOODS[mood] || MOODS.idle;
     const accent = (typeof MASCOTS!=="undefined" && MASCOTS[id]) ? MASCOTS[id].pal.accent : ch.colors.line;
-    const k = "m"+(++uid)+"_";
-    const c = {...ch.colors, id:k, g:`url(#${k}body)`};
+    const k = "m"+(++uid)+"_", skin = (opts.accessories||[]).find(a=>SKINS[a]);
+    const c = {...ch.colors, ...(skin?SKINS[skin]:{}), id:k, g:`url(#${k}body)`};
     const defs = `<defs>
       <radialGradient id="${k}body" cx="34%" cy="26%" r="85%"><stop offset="0" stop-color="${W(c.body,.38)}"/><stop offset=".5" stop-color="${c.body}"/><stop offset="1" stop-color="${K(c.body,.16)}"/></radialGradient>
       <radialGradient id="${k}iris" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="${W(c.iris,.35)}"/><stop offset="1" stop-color="${K(c.iris,.2)}"/></radialGradient>
@@ -285,10 +295,10 @@ const MascotArt = (()=>{
     return `<svg class="msvg mood-${mood} sp-${id}${ch.float?" floaty":""}" viewBox="0 0 160 160" role="img" aria-label="${(typeof MASCOTS!=="undefined"&&MASCOTS[id]?MASCOTS[id].name:id)}">
       ${defs}${shadow}<g class="whole">
         <g class="p-back">${ch.back(c)}</g>${ch.tail?`<g class="p-tail">${ch.tail(c)}</g>`:""}${ch.antenna?`<g class="p-ant">${ch.antenna(c)}</g>`:""}${ch.feet(c)}${ch.body(c)}${shine(ch)}
-        ${brows(ch,c,m.brow)}${eyes(ch,c,m.eyes,ch.colors.body)}${blush}${mouth(ch,m.mouth)}
-        ${arms(ch,c,m.arms)}${fx(ch,c,m.fx,accent)}${acc}
+        ${brows(ch,c,m.brow)}${eyes(ch,c,m.eyes,c.body)}${blush}${mouth(ch,m.mouth)}
+        ${arms(ch,c,m.arms)}${fx(ch,c,m.fx,accent)}${acc}${sparkles(skin)}
       </g></svg>`;
   }
-  return {render, MOODS, CHARACTERS:CH, ACCESSORIES, HEAD_ITEMS};
+  return {render, MOODS, CHARACTERS:CH, ACCESSORIES, HEAD_ITEMS, SKINS};
 })();
 function mascotSVG(id, mood="idle", opts={}){ return MascotArt.render(id, mood, opts); }

@@ -399,10 +399,12 @@
 
 /*BLOCK2*/
 
+/*BLOCK3*/
+
 /*CHALLENGES*/
 
 /* ================== estrutura do curso ================== */
-const MAIN = [BLOCK1, BLOCK2];                        // novos blocos entram aqui, em ordem de dificuldade
+const MAIN = [BLOCK1, BLOCK2, BLOCK3];                        // novos blocos entram aqui, em ordem de dificuldade
 const PEP_EVERY = 5;                          // mascote incentiva a cada 5 exercícios
 const PASS = 2/3;                             // acertos mínimos para concluir a fase (2 de 3)
 const PHASES = {};
@@ -509,7 +511,7 @@ const dialogHTML = lines => `<div class="dlg">${lines.map(([who,t])=>`<div class
 /* ================== progresso / desbloqueio ================== */
 const chalOpen = c => done(c.after);
 const chalWon = c => !!(S.challenges[c.id] && S.challenges[c.id].won);
-/* itens do mascote: só um por lugar (cabeça ou rosto) */
+/* itens do mascote: só um por lugar (cabeça, rosto ou visual) */
 const withItem = id => S.profile.accessories.filter(a=>!PRIZES[a] || PRIZES[a].slot!==PRIZES[id].slot).concat([id]);
 function equip(id){ S.profile.accessories = withItem(id); persist(); }
 function unequip(id){ S.profile.accessories = S.profile.accessories.filter(a=>a!==id); persist(); }
@@ -531,6 +533,7 @@ const ACH = [
   {id:"perfect",e:"🎯", t:"Sem erros",           d:"Conclua uma fase sem errar",   ok:()=>Object.values(S.phases).some(x=>x.stars===3)},
   {id:"b1",     e:"👋", t:"First Conversations", d:"Conclua o Bloco 1",           ok:()=>BLOCK1.phases.every(p=>done(p.id))},
   {id:"b2",     e:"☀️", t:"Daily Life",          d:"Conclua o Bloco 2",           ok:()=>BLOCK2.phases.every(p=>done(p.id))},
+  {id:"b3",     e:"🛍️", t:"Out and About",       d:"Conclua o Bloco 3",           ok:()=>BLOCK3.phases.every(p=>done(p.id))},
   {id:"gift",   e:"🎁", t:"Presente aberto",     d:"Vença um desafio surpresa",   ok:()=>Object.values(S.challenges).some(x=>x && x.won)},
   {id:"ten",    e:"✍️", t:"10 exercícios",       d:"Responda 10 exercícios",       ok:()=>S.stats.answered>=10},
   {id:"st3",    e:"🔥", t:"3 dias seguidos",     d:"Estude 3 dias em sequência",   ok:()=>(S.best||0)>=3},
@@ -713,7 +716,7 @@ function meScreen(){
     <div class="card" style="text-align:center;padding:18px">
       <div style="width:150px;height:150px;margin:0 auto">${mascotSVG(M(),"welcome",{accessories:S.profile.accessories})}</div>
       <div class="disp" style="font-size:30px;font-weight:800;line-height:1">${m.name}</div>
-      <div style="color:var(--muted);font-weight:800">${m.speciesPt} · ${m.colorPt}</div>
+      <div style="color:var(--muted);font-weight:800">${m.speciesPt} · ${S.profile.accessories.includes("golden")?"Dourado ✨":m.colorPt}</div>
       <p style="margin:8px 0 12px">${esc(m.personality)}</p>
       <div class="bubble" style="display:inline-block">“${esc(line[0])}”<small>${esc(line[1])}</small></div>
       <button class="btn" id="chg" style="margin-top:16px">Trocar mascote</button>

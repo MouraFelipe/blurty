@@ -10,7 +10,9 @@ const PRIZES = {
   sunglasses: {name: "Óculos escuros", e: "🕶️", slot: "face"},
   crown:      {name: "Coroa",          e: "👑", slot: "head"},
   cap:        {name: "Boné",           e: "🧢", slot: "head"},
-  flower:     {name: "Flor",           e: "🌼", slot: "head"}
+  flower:     {name: "Flor",           e: "🌼", slot: "head"},
+  chefHat:    {name: "Chapéu de chef", e: "👨‍🍳", slot: "head"},
+  golden:     {name: "Visual dourado", e: "✨", slot: "skin"}   // muda as cores do mascote para dourado
 };
 
 const CHALLENGES = [
@@ -97,6 +99,48 @@ const CHALLENGES = [
       prompt: "Monte: “Bora sair no sábado!”", words: ["Let's", "hang", "out", "on", "Saturday!", "in", "with"],
       answer: "Let's hang out on Saturday!",
       explain: "<b>Let's hang out</b> = bora sair / passar um tempo juntos. Dia da semana usa <b>on</b>."}
+    ]
+  },
+  {
+    id: "b3c1", block: "b3", after: "b3p2", prize: "chefHat",
+    title: "It's on me!", pt: "Essa é por minha conta!",
+    reading: [
+        {say: ["@", "Psst… two secret expressions for when the check arrives."], pt: "Psiu… duas expressões secretas para quando a conta chega."},
+        {ex: "It's on me!", pt: "Essa é por minha conta! / Eu pago!"},
+        {ex: "Let's split the check.", pt: "Vamos rachar a conta."},
+        {tip: "💡 <b>It's on me</b> = eu pago. Se for a outra pessoa: <b>It's on you!</b> E <b>split</b> = dividir, rachar."}
+    ],
+    questions: [
+      {type: "choice", kind: "Expressão secreta", dialog: [["Leo", "Put your wallet away. It's on me!"]], prompt: "O que o Leo quis dizer?",
+       options: ["Que ele vai pagar", "Que a carteira está com ele", "Que a conta caiu em cima dele"], answer: 0,
+       explain: "<b>It's on me!</b> = eu pago / é por minha conta."},
+      {type: "build", kind: "Expressão secreta", situation: "Você quer dividir a conta com a Maya.", prompt: "Monte: “Vamos rachar a conta.”",
+       words: ["Let's", "split", "the", "check.", "divide", "broke"], answer: "Let's split the check.",
+       explain: "<b>Split the check</b> (ou <i>split the bill</i>) = rachar a conta."},
+      {type: "choice", kind: "Expressão secreta", situation: "Seu amigo pagou o almoço ontem. Hoje você quer pagar.",
+      prompt: "O que você diz?", options: ["Today it's on me!", "Today it's on you!", "Today I'm on it!"], answer: 0,
+      explain: "Quem paga diz <b>It's on me</b>. <i>I'm on it</i> = estou cuidando disso, outra coisa."}
+    ]
+  },
+  {
+    id: "b3c2", block: "b3", after: "b3p4", prize: "golden",
+    title: "What a steal!", pt: "Que pechincha!",
+    reading: [
+        {say: ["@", "Shopping secret: how to say something is super cheap… or way too expensive."], pt: "Segredo das compras: como dizer que algo está baratíssimo… ou caro demais."},
+        {ex: "What a steal!", pt: "Que pechincha! (preço ótimo)"},
+        {ex: "That's a rip-off!", pt: "Isso é um roubo! (caro demais)"},
+        {tip: "💡 Como verbo, <b>steal</b> é roubar, mas <b>a steal</b> é uma pechincha. Já <b>a rip-off</b> é quando o preço é um absurdo."}
+    ],
+    questions: [
+      {type: "choice", kind: "Expressão secreta", dialog: [["Maya", "These shoes were only ten dollars!"]], prompt: "Qual é a reação natural?",
+       options: ["What a steal!", "What a rip-off!", "Steal them!"], answer: 0,
+       explain: "Preço ótimo = <b>What a steal!</b> <i>Rip-off</i> é o contrário."},
+      {type: "choice", kind: "Expressão secreta", situation: "Uma garrafinha de água custa 9 dólares no aeroporto.", prompt: "O que você diz?",
+       options: ["That's a rip-off!", "That's a steal!", "That's on me!"], answer: 0,
+       explain: "Caro demais = <b>That's a rip-off!</b>"},
+      {type: "choice", kind: "Expressão secreta", dialog: [["Leo", "I got this jacket for 20 bucks. It was a steal!"]], prompt: "O que o Leo disse da jaqueta?",
+      options: ["Que comprou muito barato", "Que roubou a jaqueta", "Que pagou caro demais"], answer: 0,
+      explain: "<b>It was a steal</b> = foi uma pechincha. <b>Bucks</b> = dólares, informal."}
     ]
   }
 ];

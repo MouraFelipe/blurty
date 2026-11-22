@@ -769,6 +769,13 @@ const MascotArt = (()=>{
     flower: (ch,c,accent)=>{ const [hx,hy]=ch.hat, x=hx+15, y=hy+4;
       const petals=[0,72,144,216,288].map(a=>{ const t=a*Math.PI/180; return `<circle cx="${(x+Math.cos(t)*6).toFixed(1)}" cy="${(y+Math.sin(t)*6).toFixed(1)}" r="5" fill="#FFFFFF" stroke="${INK}" stroke-width="1.6"/>`; }).join("");
       return `<g class="acc"><path d="M${x-3} ${y+5} Q${x-10} ${y+12} ${x-15} ${y+10} Q${x-11} ${y+5} ${x-3} ${y+5} Z" fill="#7FB77E" stroke="${INK}" stroke-width="1.5" stroke-linejoin="round"/>${petals}<circle cx="${x}" cy="${y}" r="4" fill="#F2C14E" stroke="${INK}" stroke-width="1.5"/></g>`; },
+    chefHat: (ch,c,accent)=>{ const [x,y,r]=ch.hat; return `<g class="acc" transform="rotate(${r} ${x} ${y})">
+      <path d="M${x-12} ${y+5} L${x-12} ${y-6} L${x+12} ${y-6} L${x+12} ${y+5} Z" fill="#FFFFFF" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="${x-10}" cy="${y-10}" r="7" fill="#FFFFFF" stroke="${INK}" stroke-width="2"/><circle cx="${x+10}" cy="${y-10}" r="7" fill="#FFFFFF" stroke="${INK}" stroke-width="2"/>
+      <circle cx="${x}" cy="${y-13.5}" r="8.5" fill="#FFFFFF" stroke="${INK}" stroke-width="2"/>
+      <path d="M${x-11} ${y-7} L${x+11} ${y-7}" stroke="#FFFFFF" stroke-width="5"/>
+      <path d="M${x-12} ${y+1} L${x+12} ${y+1}" stroke="${accent}" stroke-width="3"/>
+      <path d="M${x-4} ${y-17} Q${x-1} ${y-19.5} ${x+3} ${y-18}" stroke="#D8DEE6" stroke-width="2" fill="none" stroke-linecap="round"/></g>`; },
     sunglasses: (ch,c,accent)=>{ const [[x1,y1],[x2,y2]]=ch.eyes, e=ch.er, w=e*2.6, h=e*1.9, y=(y1+y2)/2;
       const lens=(cx)=>`<rect x="${cx-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="${e*.7}" fill="${INK}" stroke="${INK}" stroke-width="2"/>
         <path d="M${cx-w/2+e*.55} ${y-h/2+e*.6} L${cx-w/2+e*1.25} ${y-h/2+e*.6}" stroke="#fff" stroke-width="2.2" opacity=".55" stroke-linecap="round"/>`;
@@ -776,7 +783,10 @@ const MascotArt = (()=>{
         <path d="M${x1+w/2} ${y-h*.18} Q${(x1+x2)/2} ${y-h*.42} ${x2-w/2} ${y-h*.18}" stroke="${INK}" stroke-width="2.6" fill="none" stroke-linecap="round"/>
         <path d="M${x1-w/2} ${y-h*.2} L${x1-w/2-e*.7} ${y-h*.32}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/><path d="M${x2+w/2} ${y-h*.2} L${x2+w/2+e*.7} ${y-h*.32}" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/></g>`; }
   };
-  const HEAD_ITEMS = ["partyHat","crown","cap","flower"];
+  const HEAD_ITEMS = ["partyHat","crown","cap","flower","chefHat"];
+  /* visuais especiais: trocam as cores do mascote */
+  const SKINS = {golden: {body:"#E9B744", belly:"#FFF3CC", line:"#86600F", extra:"#C9922A"}};
+  const sparkles = s => s!=="golden" ? "" : `<g class="gold-spark" fill="#FFF7D6" stroke="#C9922A" stroke-width="1.2">${[[30,48,6],[134,58,5],[128,124,4]].map(([x,y,r])=>`<path d="M${x} ${y-r} L${x+r*.3} ${y-r*.3} L${x+r} ${y} L${x+r*.3} ${y+r*.3} L${x} ${y+r} L${x-r*.3} ${y+r*.3} L${x-r} ${y} L${x-r*.3} ${y-r*.3} Z"/>`).join("")}</g>`;
 
   /* reflexo de luz: um arco claro no alto da cabeça, igual em todos */
   const SHINE = {dino:[52,52,30], lumi:[50,56,28], foxy:[48,60,26], miko:[56,42,20], bloop:[34,98,30], roki:[50,56,24]};
@@ -787,8 +797,8 @@ const MascotArt = (()=>{
     const ch = CH[id]; if (!ch) return "";
     const m = MOODS[mood] || MOODS.idle;
     const accent = (typeof MASCOTS!=="undefined" && MASCOTS[id]) ? MASCOTS[id].pal.accent : ch.colors.line;
-    const k = "m"+(++uid)+"_";
-    const c = {...ch.colors, id:k, g:`url(#${k}body)`};
+    const k = "m"+(++uid)+"_", skin = (opts.accessories||[]).find(a=>SKINS[a]);
+    const c = {...ch.colors, ...(skin?SKINS[skin]:{}), id:k, g:`url(#${k}body)`};
     const defs = `<defs>
       <radialGradient id="${k}body" cx="34%" cy="26%" r="85%"><stop offset="0" stop-color="${W(c.body,.38)}"/><stop offset=".5" stop-color="${c.body}"/><stop offset="1" stop-color="${K(c.body,.16)}"/></radialGradient>
       <radialGradient id="${k}iris" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="${W(c.iris,.35)}"/><stop offset="1" stop-color="${K(c.iris,.2)}"/></radialGradient>
@@ -801,11 +811,11 @@ const MascotArt = (()=>{
     return `<svg class="msvg mood-${mood} sp-${id}${ch.float?" floaty":""}" viewBox="0 0 160 160" role="img" aria-label="${(typeof MASCOTS!=="undefined"&&MASCOTS[id]?MASCOTS[id].name:id)}">
       ${defs}${shadow}<g class="whole">
         <g class="p-back">${ch.back(c)}</g>${ch.tail?`<g class="p-tail">${ch.tail(c)}</g>`:""}${ch.antenna?`<g class="p-ant">${ch.antenna(c)}</g>`:""}${ch.feet(c)}${ch.body(c)}${shine(ch)}
-        ${brows(ch,c,m.brow)}${eyes(ch,c,m.eyes,ch.colors.body)}${blush}${mouth(ch,m.mouth)}
-        ${arms(ch,c,m.arms)}${fx(ch,c,m.fx,accent)}${acc}
+        ${brows(ch,c,m.brow)}${eyes(ch,c,m.eyes,c.body)}${blush}${mouth(ch,m.mouth)}
+        ${arms(ch,c,m.arms)}${fx(ch,c,m.fx,accent)}${acc}${sparkles(skin)}
       </g></svg>`;
   }
-  return {render, MOODS, CHARACTERS:CH, ACCESSORIES, HEAD_ITEMS};
+  return {render, MOODS, CHARACTERS:CH, ACCESSORIES, HEAD_ITEMS, SKINS};
 })();
 function mascotSVG(id, mood="idle", opts={}){ return MascotArt.render(id, mood, opts); }
 
@@ -949,7 +959,6 @@ const BLOCK1 = {
 };
 
 const UPCOMING = [
-  {title: "Out and About", pt: "Restaurantes, lojas e pedir informação", level: "Básico", emoji: "🛍️"},
   {title: "Travel Talk", pt: "Aeroporto, hotel e imprevistos", level: "Intermediário", emoji: "✈️"},
   {title: "Real Opinions", pt: "Opinar, concordar e argumentar", level: "Avançado", emoji: "🗣️"}
 ];
@@ -1095,6 +1104,145 @@ const BLOCK2 = {
 
 
 /* =========================================================
+   BLOCO 3 — OUT AND ABOUT (Básico)
+   Mesmo formato do Bloco 1 (ver src/block1.js).
+   ========================================================= */
+const BLOCK3 = {
+  id: "b3", title: "Out and About", pt: "Restaurantes, lojas e pedir informação", level: "Básico", emoji: "🛍️",
+  goal: "Pedir comida, fazer compras e pedir informação na rua.",
+  doneMsg: "Agora você consegue pedir num café ou restaurante, perguntar preço e tamanho nas lojas e pedir e entender o caminho na rua.",
+  phases: [
+    {
+      id: "b3p1", title: "At the Café", pt: "No café", emoji: "☕",
+      goal: "Pedir algo para comer ou beber num café",
+      reading: [
+        {say: ["@", "Hungry? Let's order something at a café!"], pt: "Com fome? Vamos pedir algo num café!"},
+        {dialog: [["Barista", "Hi! What can I get you?"], ["Maya", "Can I get a coffee, please?"], ["Barista", "Sure! For here or to go?"], ["Maya", "To go, please."]]},
+        {ex: "Can I get a coffee, please?", pt: "Pode me ver um café, por favor?"},
+        {ex: "I'd like a sandwich.", pt: "Eu queria um sanduíche."},
+        {ex: "For here or to go?", pt: "Para comer aqui ou para levar?"},
+        {ex: "To go, please.", pt: "Para levar, por favor."},
+        {ex: "That's all, thanks.", pt: "É só isso, obrigado(a)."},
+        {tip: "💡 Para pedir, use <b>Can I get…?</b> ou <b>I'd like…</b>. <i>I want…</i> soa direto demais com quem está te atendendo."}
+      ],
+      questions: [
+        {type: "choice", kind: "Tradução", prompt: "Como se diz “Para levar, por favor.”?",
+         options: ["To go, please.", "To take, please.", "For bring, please."], answer: 0,
+         explain: "<b>To go</b> = para levar. <b>For here</b> = para comer aqui."},
+        {type: "choice", kind: "Responda na conversa", dialog: [["Barista", "What can I get you?"]],
+         prompt: "Qual é o pedido mais natural e educado?",
+         options: ["Can I get a latte, please?", "I want latte.", "Give me a latte."], answer: 0,
+         explain: "<b>Can I get…, please?</b> é o jeito natural de pedir. <i>Give me</i> e <i>I want</i> soam rudes no balcão."},
+        {type: "build", kind: "Monte a frase", situation: "O atendente pergunta se você quer mais alguma coisa.",
+         prompt: "Monte: “É só isso, obrigado.”", words: ["That's", "all,", "thanks.", "everything", "is", "only"],
+         answer: "That's all, thanks.",
+         explain: "<b>That's all</b> = é só isso. Jeito curto e natural de fechar o pedido."}
+      ]
+    },
+    {
+      id: "b3p2", title: "At the Restaurant", pt: "No restaurante", emoji: "🍝",
+      goal: "Pedir mesa, fazer o pedido e pedir a conta",
+      reading: [
+        {say: ["@", "Now a real restaurant: from the table to the check."], pt: "Agora um restaurante de verdade: da mesa até a conta."},
+        {ex: "A table for two, please.", pt: "Uma mesa para dois, por favor."},
+        {ex: "Can I see the menu?", pt: "Posso ver o cardápio?"},
+        {ex: "I'll have the chicken.", pt: "Eu vou querer o frango."},
+        {ex: "Could we get some water?", pt: "Pode trazer uma água para a gente?"},
+        {ex: "Can we get the check, please?", pt: "A conta, por favor."},
+        {tip: "💡 Na hora de pedir o prato, o natural é <b>I'll have…</b> (vou querer…). Nos EUA a conta é <b>the check</b>; no Reino Unido, <b>the bill</b>."}
+      ],
+      questions: [
+        {type: "choice", kind: "Complete a frase", prompt: "Complete a frase", sentence: "I'll ___ the pasta, please.",
+         options: ["have", "take of", "eat the"], answer: 0,
+         explain: "<b>I'll have…</b> = vou querer… É o jeito mais comum de fazer o pedido."},
+        {type: "match", kind: "Associe", prompt: "Ligue cada palavra ao significado",
+         pairs: [["menu", "cardápio"], ["check", "conta"], ["table", "mesa"], ["waiter", "garçom"]],
+         explain: "Palavras básicas do restaurante. Lembre: a conta é <b>check</b> (EUA) ou <b>bill</b> (Reino Unido)."},
+        {type: "choice", kind: "Responda na conversa", situation: "Você terminou de comer e quer pagar.",
+         dialog: [["Waiter", "How was everything?"]], prompt: "O que você diz?",
+         options: ["It was great! Can we get the check, please?", "It was great! Can we get the count, please?", "I was great! The account, please."], answer: 0,
+         explain: "A conta é <b>the check</b> (ou <i>the bill</i>). <i>Count</i> e <i>account</i> não servem aqui."}
+      ]
+    },
+    {
+      id: "b3p3", title: "Shopping", pt: "Compras", emoji: "👕",
+      goal: "Perguntar preço e tamanho e pedir para provar",
+      reading: [
+        {say: ["@", "Shopping time! Let's ask about prices and sizes."], pt: "Hora das compras! Vamos perguntar preço e tamanho."},
+        {dialog: [["Clerk", "Hi! Can I help you?"], ["Leo", "I'm just looking, thanks."]]},
+        {ex: "How much is this?", pt: "Quanto custa isto?"},
+        {ex: "How much are these shoes?", pt: "Quanto custam estes sapatos?"},
+        {ex: "Do you have this in medium?", pt: "Tem este no tamanho M?"},
+        {ex: "Can I try it on?", pt: "Posso provar?"},
+        {ex: "It's too small.", pt: "Está pequeno demais."},
+        {tip: "💡 <b>How much is</b> para uma coisa, <b>How much are</b> para várias (<i>shoes</i>, <i>jeans</i>). E quando o vendedor te aborda e você só está olhando: <b>I'm just looking, thanks.</b>"}
+      ],
+      questions: [
+        {type: "choice", kind: "Complete a frase", prompt: "Complete a frase", sentence: "How much ___ these jeans?",
+         options: ["are", "is", "does"], answer: 0,
+         explain: "<b>Jeans</b> (e <i>shoes</i>, <i>pants</i>) é plural em inglês: <i>How much <b>are</b> these jeans?</i>"},
+        {type: "choice", kind: "Responda na conversa", situation: "Você só está dando uma olhada.",
+         dialog: [["Clerk", "Hi! Can I help you?"]], prompt: "O que você responde?",
+         options: ["I'm just looking, thanks.", "I'm just seeing, thanks.", "No, I don't need you."], answer: 0,
+         explain: "<b>I'm just looking</b> = só estou olhando. É educado e todo mundo entende."},
+        {type: "build", kind: "Monte a frase", situation: "Você gostou de uma camiseta e quer experimentar.",
+         prompt: "Monte: “Posso provar?”", words: ["Can", "I", "try", "it", "on?", "prove", "in"],
+         answer: "Can I try it on?",
+         explain: "<b>Try on</b> = provar (roupa). <i>Prove</i> é “comprovar”, outra coisa."}
+      ]
+    },
+    {
+      id: "b3p4", title: "Which Way?", pt: "Qual caminho?", emoji: "🧭",
+      goal: "Pedir e entender o caminho na rua",
+      reading: [
+        {say: ["@", "Lost in the city? Let's ask for directions."], pt: "Perdido na cidade? Vamos pedir informação."},
+        {ex: "Excuse me, where's the subway station?", pt: "Com licença, onde fica a estação de metrô?"},
+        {ex: "How do I get to the museum?", pt: "Como eu chego ao museu?"},
+        {ex: "Go straight ahead.", pt: "Siga em frente."},
+        {ex: "Turn left at the corner.", pt: "Vire à esquerda na esquina."},
+        {ex: "It's next to the bank.", pt: "Fica ao lado do banco."},
+        {ex: "It's across from the park.", pt: "Fica em frente ao parque (do outro lado da rua)."},
+        {tip: "💡 Comece com <b>Excuse me</b> para chamar a atenção de alguém. <b>Across from</b> = em frente, do outro lado da rua."}
+      ],
+      questions: [
+        {type: "match", kind: "Associe", prompt: "Ligue cada expressão ao significado",
+         pairs: [["turn left", "vire à esquerda"], ["turn right", "vire à direita"], ["go straight", "siga em frente"], ["next to", "ao lado de"]],
+         explain: "Com essas quatro você já entende a maioria das direções."},
+        {type: "choice", kind: "Interprete", dialog: [["Woman", "Go straight and turn right. It's across from the park."]],
+         prompt: "Para onde você vai?",
+         options: ["Em frente, depois à direita; fica em frente ao parque", "Em frente, depois à esquerda; fica dentro do parque", "À direita, depois em frente; fica ao lado do parque"], answer: 0,
+         explain: "<b>Turn right</b> = vire à direita. <b>Across from the park</b> = em frente ao parque, do outro lado da rua."},
+        {type: "choice", kind: "Tradução", prompt: "Como se diz “Como eu chego ao museu?”",
+         options: ["How do I get to the museum?", "How I arrive in the museum?", "Where I go to museum?"], answer: 0,
+         explain: "<b>How do I get to…?</b> é a pergunta padrão para pedir caminho. <b>Get to</b> = chegar a."}
+      ]
+    },
+    {
+      id: "b3p5", title: "Let's Talk!", pt: "Vamos conversar!", emoji: "💬",
+      goal: "Pedir comida e informação numa conversa do começo ao fim",
+      reading: [
+        {say: ["@", "Let's put it all together. You're at a food truck in New York."], pt: "Vamos juntar tudo. Você está num food truck em Nova York."},
+        {dialog: [["Seller", "Hi there! What can I get you?"], ["Você", "Can I get a hot dog and a soda, please?"], ["Seller", "Sure! For here or to go?"], ["Você", "To go. How much is it?"], ["Seller", "That's eight dollars."], ["Você", "Here you go. Excuse me, how do I get to Central Park?"], ["Seller", "Go straight for two blocks. You can't miss it!"]]},
+        {tip: "💡 <b>Here you go</b> = aqui está (ao entregar algo). <b>Two blocks</b> = dois quarteirões. <b>You can't miss it!</b> = não tem erro!"}
+      ],
+      questions: [
+        {type: "choice", kind: "Interprete o diálogo", dialog: [["Seller", "That's eight dollars."]],
+         prompt: "Quanto custou?", options: ["8 dólares", "18 dólares", "80 dólares"], answer: 0,
+         explain: "<b>Eight</b> = 8. Cuidado: <i>eighteen</i> = 18 e <i>eighty</i> = 80."},
+        {type: "build", kind: "Construa a resposta", dialog: [["Seller", "That's eight dollars."]],
+         prompt: "Entregue o dinheiro: “Aqui está.”", words: ["Here", "you", "go.", "stay", "take", "your"],
+         answer: "Here you go.",
+         explain: "<b>Here you go</b> = aqui está, ao entregar alguma coisa. Também se diz <i>Here you are</i>."},
+        {type: "choice", kind: "Continue a conversa", dialog: [["Seller", "Go straight for two blocks. You can't miss it!"]],
+         prompt: "Como você encerra a conversa?", options: ["Thanks so much! Have a good one!", "You're welcome!", "Turn left, please."], answer: 0,
+         explain: "Agradeça com <b>Thanks so much!</b> e despeça-se com <b>Have a good one!</b> <i>You're welcome</i> é a resposta a um obrigado."}
+      ]
+    }
+  ]
+};
+
+
+/* =========================================================
    DESAFIOS SURPRESA
    Aparecem no mapa, num espaço livre do caminho, depois da fase "after".
    São opcionais: não travam as próximas fases.
@@ -1106,7 +1254,9 @@ const PRIZES = {
   sunglasses: {name: "Óculos escuros", e: "🕶️", slot: "face"},
   crown:      {name: "Coroa",          e: "👑", slot: "head"},
   cap:        {name: "Boné",           e: "🧢", slot: "head"},
-  flower:     {name: "Flor",           e: "🌼", slot: "head"}
+  flower:     {name: "Flor",           e: "🌼", slot: "head"},
+  chefHat:    {name: "Chapéu de chef", e: "👨‍🍳", slot: "head"},
+  golden:     {name: "Visual dourado", e: "✨", slot: "skin"}   // muda as cores do mascote para dourado
 };
 
 const CHALLENGES = [
@@ -1194,12 +1344,54 @@ const CHALLENGES = [
       answer: "Let's hang out on Saturday!",
       explain: "<b>Let's hang out</b> = bora sair / passar um tempo juntos. Dia da semana usa <b>on</b>."}
     ]
+  },
+  {
+    id: "b3c1", block: "b3", after: "b3p2", prize: "chefHat",
+    title: "It's on me!", pt: "Essa é por minha conta!",
+    reading: [
+        {say: ["@", "Psst… two secret expressions for when the check arrives."], pt: "Psiu… duas expressões secretas para quando a conta chega."},
+        {ex: "It's on me!", pt: "Essa é por minha conta! / Eu pago!"},
+        {ex: "Let's split the check.", pt: "Vamos rachar a conta."},
+        {tip: "💡 <b>It's on me</b> = eu pago. Se for a outra pessoa: <b>It's on you!</b> E <b>split</b> = dividir, rachar."}
+    ],
+    questions: [
+      {type: "choice", kind: "Expressão secreta", dialog: [["Leo", "Put your wallet away. It's on me!"]], prompt: "O que o Leo quis dizer?",
+       options: ["Que ele vai pagar", "Que a carteira está com ele", "Que a conta caiu em cima dele"], answer: 0,
+       explain: "<b>It's on me!</b> = eu pago / é por minha conta."},
+      {type: "build", kind: "Expressão secreta", situation: "Você quer dividir a conta com a Maya.", prompt: "Monte: “Vamos rachar a conta.”",
+       words: ["Let's", "split", "the", "check.", "divide", "broke"], answer: "Let's split the check.",
+       explain: "<b>Split the check</b> (ou <i>split the bill</i>) = rachar a conta."},
+      {type: "choice", kind: "Expressão secreta", situation: "Seu amigo pagou o almoço ontem. Hoje você quer pagar.",
+      prompt: "O que você diz?", options: ["Today it's on me!", "Today it's on you!", "Today I'm on it!"], answer: 0,
+      explain: "Quem paga diz <b>It's on me</b>. <i>I'm on it</i> = estou cuidando disso, outra coisa."}
+    ]
+  },
+  {
+    id: "b3c2", block: "b3", after: "b3p4", prize: "golden",
+    title: "What a steal!", pt: "Que pechincha!",
+    reading: [
+        {say: ["@", "Shopping secret: how to say something is super cheap… or way too expensive."], pt: "Segredo das compras: como dizer que algo está baratíssimo… ou caro demais."},
+        {ex: "What a steal!", pt: "Que pechincha! (preço ótimo)"},
+        {ex: "That's a rip-off!", pt: "Isso é um roubo! (caro demais)"},
+        {tip: "💡 Como verbo, <b>steal</b> é roubar, mas <b>a steal</b> é uma pechincha. Já <b>a rip-off</b> é quando o preço é um absurdo."}
+    ],
+    questions: [
+      {type: "choice", kind: "Expressão secreta", dialog: [["Maya", "These shoes were only ten dollars!"]], prompt: "Qual é a reação natural?",
+       options: ["What a steal!", "What a rip-off!", "Steal them!"], answer: 0,
+       explain: "Preço ótimo = <b>What a steal!</b> <i>Rip-off</i> é o contrário."},
+      {type: "choice", kind: "Expressão secreta", situation: "Uma garrafinha de água custa 9 dólares no aeroporto.", prompt: "O que você diz?",
+       options: ["That's a rip-off!", "That's a steal!", "That's on me!"], answer: 0,
+       explain: "Caro demais = <b>That's a rip-off!</b>"},
+      {type: "choice", kind: "Expressão secreta", dialog: [["Leo", "I got this jacket for 20 bucks. It was a steal!"]], prompt: "O que o Leo disse da jaqueta?",
+      options: ["Que comprou muito barato", "Que roubou a jaqueta", "Que pagou caro demais"], answer: 0,
+      explain: "<b>It was a steal</b> = foi uma pechincha. <b>Bucks</b> = dólares, informal."}
+    ]
   }
 ];
 
 
 /* ================== estrutura do curso ================== */
-const MAIN = [BLOCK1, BLOCK2];                        // novos blocos entram aqui, em ordem de dificuldade
+const MAIN = [BLOCK1, BLOCK2, BLOCK3];                        // novos blocos entram aqui, em ordem de dificuldade
 const PEP_EVERY = 5;                          // mascote incentiva a cada 5 exercícios
 const PASS = 2/3;                             // acertos mínimos para concluir a fase (2 de 3)
 const PHASES = {};
@@ -1306,7 +1498,7 @@ const dialogHTML = lines => `<div class="dlg">${lines.map(([who,t])=>`<div class
 /* ================== progresso / desbloqueio ================== */
 const chalOpen = c => done(c.after);
 const chalWon = c => !!(S.challenges[c.id] && S.challenges[c.id].won);
-/* itens do mascote: só um por lugar (cabeça ou rosto) */
+/* itens do mascote: só um por lugar (cabeça, rosto ou visual) */
 const withItem = id => S.profile.accessories.filter(a=>!PRIZES[a] || PRIZES[a].slot!==PRIZES[id].slot).concat([id]);
 function equip(id){ S.profile.accessories = withItem(id); persist(); }
 function unequip(id){ S.profile.accessories = S.profile.accessories.filter(a=>a!==id); persist(); }
@@ -1328,6 +1520,7 @@ const ACH = [
   {id:"perfect",e:"🎯", t:"Sem erros",           d:"Conclua uma fase sem errar",   ok:()=>Object.values(S.phases).some(x=>x.stars===3)},
   {id:"b1",     e:"👋", t:"First Conversations", d:"Conclua o Bloco 1",           ok:()=>BLOCK1.phases.every(p=>done(p.id))},
   {id:"b2",     e:"☀️", t:"Daily Life",          d:"Conclua o Bloco 2",           ok:()=>BLOCK2.phases.every(p=>done(p.id))},
+  {id:"b3",     e:"🛍️", t:"Out and About",       d:"Conclua o Bloco 3",           ok:()=>BLOCK3.phases.every(p=>done(p.id))},
   {id:"gift",   e:"🎁", t:"Presente aberto",     d:"Vença um desafio surpresa",   ok:()=>Object.values(S.challenges).some(x=>x && x.won)},
   {id:"ten",    e:"✍️", t:"10 exercícios",       d:"Responda 10 exercícios",       ok:()=>S.stats.answered>=10},
   {id:"st3",    e:"🔥", t:"3 dias seguidos",     d:"Estude 3 dias em sequência",   ok:()=>(S.best||0)>=3},
@@ -1510,7 +1703,7 @@ function meScreen(){
     <div class="card" style="text-align:center;padding:18px">
       <div style="width:150px;height:150px;margin:0 auto">${mascotSVG(M(),"welcome",{accessories:S.profile.accessories})}</div>
       <div class="disp" style="font-size:30px;font-weight:800;line-height:1">${m.name}</div>
-      <div style="color:var(--muted);font-weight:800">${m.speciesPt} · ${m.colorPt}</div>
+      <div style="color:var(--muted);font-weight:800">${m.speciesPt} · ${S.profile.accessories.includes("golden")?"Dourado ✨":m.colorPt}</div>
       <p style="margin:8px 0 12px">${esc(m.personality)}</p>
       <div class="bubble" style="display:inline-block">“${esc(line[0])}”<small>${esc(line[1])}</small></div>
       <button class="btn" id="chg" style="margin-top:16px">Trocar mascote</button>
