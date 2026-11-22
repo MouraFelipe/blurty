@@ -21,8 +21,8 @@ const MascotArt = (()=>{
       colors:{body:"#6DBB82", belly:"#E7F3DC", line:"#2F6A43", iris:"#7A5A1E", extra:"#4F9C67"},
       eyes:[[64,66],[96,66]], er:10.5, mouth:[80,90,13], brow:{w:4.2, base:"determined"},
       arms:{L:[46,100], R:[114,100], len:22, w:13}, hat:[80,24,0], think:[124,34], tear:[58,82],
+      tail:c=>`<path d="M112 116 C140 122 156 104 150 84 C146 96 132 104 114 100 Z" fill="${c.g}" stroke="${c.line}" stroke-width="2.6" stroke-linejoin="round"/>`,
       back:c=>`
-        <path d="M112 116 C140 122 156 104 150 84 C146 96 132 104 114 100 Z" fill="${c.g}" stroke="${c.line}" stroke-width="2.6" stroke-linejoin="round"/>
         ${[[58,34,-28],[76,26,-8],[96,28,14],[112,40,34],[122,58,52]].map(([x,y,r])=>`<path d="M${x-8} ${y+8} Q${x} ${y-12} ${x+8} ${y+8} Z" fill="${c.extra}" stroke="${c.line}" stroke-width="2.4" stroke-linejoin="round" transform="rotate(${r} ${x} ${y})"/>`).join("")}`,
       body:c=>`
         <path d="M80 30 C114 30 126 58 124 88 C122 120 106 142 80 142 C54 142 38 120 36 88 C34 58 46 30 80 30 Z" fill="${c.g}" stroke="${c.line}" stroke-width="2.8"/>
@@ -30,18 +30,19 @@ const MascotArt = (()=>{
         <path d="M62 112 Q80 116 98 112 M60 122 Q80 126 100 122" stroke="${K(c.belly,.12)}" stroke-width="2" fill="none" stroke-linecap="round"/>
         <circle cx="70" cy="42" r="3" fill="${c.extra}"/><circle cx="90" cy="38" r="2.4" fill="${c.extra}"/><circle cx="82" cy="46" r="1.8" fill="${c.extra}"/>
         <ellipse cx="74" cy="80" rx="2" ry="1.4" fill="${c.line}"/><ellipse cx="86" cy="80" rx="2" ry="1.4" fill="${c.line}"/>`,
-      feet:c=>[[62,144],[98,144]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="15" ry="7.5" fill="${c.extra}" stroke="${c.line}" stroke-width="2.4"/><path d="M${x-8} ${y-1} v3 M${x} ${y-1} v3 M${x+8} ${y-1} v3" stroke="#F4F1E6" stroke-width="2.4" stroke-linecap="round"/>`).join("")
+      feet:c=>[[62,144],[98,144]].map(([x,y],i)=>`<g class="p-foot pf${i}"><ellipse cx="${x}" cy="${y}" rx="15" ry="7.5" fill="${c.extra}" stroke="${c.line}" stroke-width="2.4"/><path d="M${x-8} ${y-1} v3 M${x} ${y-1} v3 M${x+8} ${y-1} v3" stroke="#F4F1E6" stroke-width="2.4" stroke-linecap="round"/></g>`).join("")
     },
     /* LUMI — criatura original: um pequeno ser de luz que flutua; gota macia, orelhas-folha e antena luminosa */
     lumi: {
       colors:{body:"#AE97E2", belly:"#F3EEFF", line:"#5B4596", iris:"#4E3A92", extra:"#FFE7A3"},
       eyes:[[64,76],[96,76]], er:12, mouth:[80,98,11], brow:{w:3, base:"soft"}, float:true,
       arms:{L:[40,100], R:[120,100], len:14, w:12}, hat:[80,30,0], think:[126,40], tear:[56,94],
-      back:c=>`
-        <circle cx="80" cy="84" r="70" fill="url(#${c.id}glow)"/>
+      antenna:c=>`
         <path d="M80 32 C84 22 92 14 98 10" stroke="${c.line}" stroke-width="2.6" fill="none" stroke-linecap="round"/>
         <circle class="orb" cx="99" cy="9" r="9" fill="${c.extra}" stroke="#E3B94F" stroke-width="2"/>
-        <circle cx="96" cy="6" r="2.6" fill="#fff" opacity=".9"/>
+        <circle cx="96" cy="6" r="2.6" fill="#fff" opacity=".9"/>`,
+      back:c=>`
+        <circle cx="80" cy="84" r="70" fill="url(#${c.id}glow)"/>
         <path d="M46 52 C26 44 20 26 28 18 C40 22 50 36 52 50 Z" fill="${c.g}" stroke="${c.line}" stroke-width="2.6" stroke-linejoin="round"/>
         <path d="M114 52 C134 44 140 26 132 18 C120 22 110 36 108 50 Z" fill="${c.g}" stroke="${c.line}" stroke-width="2.6" stroke-linejoin="round"/>
         <path d="M44 46 C36 40 32 32 33 26 M116 46 C124 40 128 32 127 26" stroke="${W(c.body,.45)}" stroke-width="2.2" fill="none" stroke-linecap="round"/>`,
@@ -57,9 +58,10 @@ const MascotArt = (()=>{
       colors:{body:"#EE9446", belly:"#FFF6EC", line:"#8F4A16", iris:"#8A5A12", extra:"#6E3510"},
       eyes:[[64,72],[96,72]], er:9.5, mouth:[80,93,10], brow:{w:3, base:"sly"}, sly:true,
       arms:{L:[58,114], R:[102,114], len:17, w:11}, hat:[80,40,0], think:[122,44], tear:[58,86],
-      back:c=>`
+      tail:c=>`
         <path d="M100 136 C140 144 158 106 140 70 C136 62 126 64 128 74 C136 102 122 120 100 120 Z" fill="${c.g}" stroke="${c.line}" stroke-width="2.6" stroke-linejoin="round"/>
-        <path d="M140 70 C136 62 126 64 128 74 C130 84 140 88 144 80 C144 76 142 72 140 70 Z" fill="${c.belly}" stroke="${c.line}" stroke-width="2.2"/>
+        <path d="M140 70 C136 62 126 64 128 74 C130 84 140 88 144 80 C144 76 142 72 140 70 Z" fill="${c.belly}" stroke="${c.line}" stroke-width="2.2"/>`,
+      back:c=>`
         <path d="M42 64 L46 16 L74 46 Z" fill="${c.g}" stroke="${c.line}" stroke-width="2.6" stroke-linejoin="round"/>
         <path d="M118 64 L114 16 L86 46 Z" fill="${c.g}" stroke="${c.line}" stroke-width="2.6" stroke-linejoin="round"/>
         <path d="M50 54 L51 28 L65 45 Z M110 54 L109 28 L95 45 Z" fill="${c.extra}" opacity=".85"/>`,
@@ -69,16 +71,17 @@ const MascotArt = (()=>{
         <path d="M80 40 C106 40 124 54 128 74 C122 76 118 80 120 84 C110 96 96 102 80 102 C64 102 50 96 40 84 C42 80 38 76 32 74 C36 54 54 40 80 40 Z" fill="${c.g}" stroke="${c.line}" stroke-width="2.8" stroke-linejoin="round"/>
         <path d="M46 80 Q80 112 114 80 Q108 100 80 101 Q52 100 46 80 Z" fill="${c.belly}"/>
         <path d="M74 84 Q80 80 86 84 Q84 90 80 90 Q76 90 74 84 Z" fill="${INK}"/>`,
-      feet:c=>[[66,145],[94,145]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="11" ry="6.5" fill="${c.extra}" stroke="${c.line}" stroke-width="2.2"/>`).join("")
+      feet:c=>[[66,145],[94,145]].map(([x,y],i)=>`<g class="p-foot pf${i}"><ellipse cx="${x}" cy="${y}" rx="11" ry="6.5" fill="${c.extra}" stroke="${c.line}" stroke-width="2.2"/></g>`).join("")
     },
     /* MIKO — suricato alto e esguio, cabeça pequena, manchas escuras nos olhos, patinhas juntas no peito */
     miko: {
       colors:{body:"#86AEDB", belly:"#EAF2FB", line:"#34587F", iris:"#2F4D74", extra:"#3E6390"},
       eyes:[[67,52],[93,52]], er:8.5, mouth:[80,71,7], brow:{w:2.8, base:"up"}, rest:"front",
       arms:{L:[64,88], R:[96,88], len:16, w:10}, hat:[80,24,0], think:[112,26], tear:[62,64],
-      back:c=>`
+      tail:c=>`
         <path d="M104 140 C126 138 130 112 122 92 C120 86 114 88 116 94 C122 114 116 128 102 130 Z" fill="${c.g}" stroke="${c.line}" stroke-width="2.4" stroke-linejoin="round"/>
-        <path d="M118 92 C120 86 114 88 116 94 Z" fill="${c.extra}" stroke="${c.line}" stroke-width="2"/>
+        <path d="M118 92 C120 86 114 88 116 94 Z" fill="${c.extra}" stroke="${c.line}" stroke-width="2"/>`,
+      back:c=>`
         <circle cx="47" cy="50" r="7" fill="${c.g}" stroke="${c.line}" stroke-width="2.4"/><circle cx="113" cy="50" r="7" fill="${c.g}" stroke="${c.line}" stroke-width="2.4"/>
         <circle cx="47" cy="50" r="3" fill="${c.extra}"/><circle cx="113" cy="50" r="3" fill="${c.extra}"/>`,
       body:c=>`
@@ -90,7 +93,7 @@ const MascotArt = (()=>{
         <ellipse cx="93" cy="53" rx="10" ry="11.5" fill="${c.extra}" opacity=".75" transform="rotate(-18 93 53)"/>
         <ellipse cx="80" cy="65" rx="4" ry="2.8" fill="${INK}"/>
         <path d="M62 34 Q80 28 98 34" stroke="${c.extra}" stroke-width="3" fill="none" stroke-linecap="round" opacity=".6"/>`,
-      feet:c=>[[68,148],[92,148]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="10" ry="5.5" fill="${c.extra}" stroke="${c.line}" stroke-width="2.2"/>`).join("")
+      feet:c=>[[68,148],[92,148]].map(([x,y],i)=>`<g class="p-foot pf${i}"><ellipse cx="${x}" cy="${y}" rx="10" ry="5.5" fill="${c.extra}" stroke="${c.line}" stroke-width="2.2"/></g>`).join("")
     },
     /* BLOOP — sapo largo e baixinho, olhos em cúpulas, bocão, pintas nas costas e pés grandes */
     bloop: {
@@ -105,18 +108,19 @@ const MascotArt = (()=>{
         <path d="M40 76 Q54 66 68 76 M92 76 Q106 66 120 76" fill="${c.g}"/>
         <ellipse cx="80" cy="122" rx="32" ry="20" fill="${c.belly}"/>
         <circle cx="36" cy="104" r="5" fill="${c.extra}"/><circle cx="126" cy="100" r="4" fill="${c.extra}"/><circle cx="118" cy="114" r="2.8" fill="${c.extra}"/><circle cx="44" cy="118" r="2.6" fill="${c.extra}"/>`,
-      feet:c=>[[50,142,-1],[110,142,1]].map(([x,y,s])=>`<path d="M${x-18} ${y+3} Q${x-14} ${y-8} ${x} ${y-6} Q${x+14} ${y-8} ${x+18} ${y+3} Q${x+12} ${y+7} ${x+6} ${y+3} Q${x} ${y+8} ${x-6} ${y+3} Q${x-12} ${y+7} ${x-18} ${y+3} Z" fill="${c.extra}" stroke="${c.line}" stroke-width="2.4" stroke-linejoin="round"/>`).join("")
+      feet:c=>[[50,142,-1],[110,142,1]].map(([x,y,s],i)=>`<g class="p-foot pf${i}"><path d="M${x-18} ${y+3} Q${x-14} ${y-8} ${x} ${y-6} Q${x+14} ${y-8} ${x+18} ${y+3} Q${x+12} ${y+7} ${x+6} ${y+3} Q${x} ${y+8} ${x-6} ${y+3} Q${x-12} ${y+7} ${x-18} ${y+3} Z" fill="${c.extra}" stroke="${c.line}" stroke-width="2.4" stroke-linejoin="round"/></g>`).join("")
     },
     /* ROKI — guaxinim gordinho e redondo, máscara, orelhas redondas, cauda listrada enorme */
     roki: {
       colors:{body:"#E9877A", belly:"#FCEEEA", line:"#8A3A31", iris:"#3A2522", extra:"#5B3B37"},
       eyes:[[66,68],[94,68]], er:8.5, mouth:[80,92,9], brow:{w:3, base:"mischief", color:"#FFF4F1"},
       arms:{L:[48,112], R:[112,112], len:18, w:12}, hat:[80,28,0], think:[122,36], tear:[60,82],
-      back:c=>`
+      tail:c=>`
         <clipPath id="${c.id}tail"><path d="M50 132 C14 136 0 104 16 78 C22 70 34 74 30 84 C22 104 34 120 54 118 Z"/></clipPath>
         <path d="M50 132 C14 136 0 104 16 78 C22 70 34 74 30 84 C22 104 34 120 54 118 Z" fill="${c.g}"/>
         <g clip-path="url(#${c.id}tail)" fill="${c.extra}"><rect x="0" y="80" width="40" height="8" transform="rotate(-24 20 84)"/><rect x="2" y="98" width="40" height="8" transform="rotate(-10 22 102)"/><rect x="12" y="116" width="40" height="8" transform="rotate(14 32 120)"/></g>
-        <path d="M50 132 C14 136 0 104 16 78 C22 70 34 74 30 84 C22 104 34 120 54 118 Z" fill="none" stroke="${c.line}" stroke-width="2.6"/>
+        <path d="M50 132 C14 136 0 104 16 78 C22 70 34 74 30 84 C22 104 34 120 54 118 Z" fill="none" stroke="${c.line}" stroke-width="2.6"/>`,
+      back:c=>`
         <circle cx="50" cy="40" r="13" fill="${c.g}" stroke="${c.line}" stroke-width="2.6"/><circle cx="110" cy="40" r="13" fill="${c.g}" stroke="${c.line}" stroke-width="2.6"/>
         <circle cx="50" cy="41" r="6.5" fill="${c.extra}"/><circle cx="110" cy="41" r="6.5" fill="${c.extra}"/>`,
       body:c=>`
@@ -126,7 +130,7 @@ const MascotArt = (()=>{
         <path d="M46 68 Q56 54 72 62 Q80 66 88 62 Q104 54 114 68 Q110 82 96 78 Q80 74 64 78 Q50 82 46 68 Z" fill="${c.extra}"/>
         <ellipse cx="80" cy="88" rx="15" ry="10" fill="${c.belly}"/>
         <ellipse cx="80" cy="82" rx="5" ry="3.4" fill="${INK}"/>`,
-      feet:c=>[[66,144],[94,144]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="12" ry="6.5" fill="${c.extra}" stroke="${c.line}" stroke-width="2.2"/>`).join("")
+      feet:c=>[[66,144],[94,144]].map(([x,y],i)=>`<g class="p-foot pf${i}"><ellipse cx="${x}" cy="${y}" rx="12" ry="6.5" fill="${c.extra}" stroke="${c.line}" stroke-width="2.2"/></g>`).join("")
     }
   };
 
@@ -207,10 +211,13 @@ const MascotArt = (()=>{
     if (pose==="up"){ a=155; b=-155; }
     if (pose==="wave"){ b=-150; clsR="arm-wave"; }
     if (pose==="chin"){ const [mx,my]=ch.mouth; b=aim(R[0],R[1],mx+6,my+8); }
-    if (pose==="thumb"){ b=-128;
-      const t=b*Math.PI/180, hx2=R[0]-Math.sin(t)*len, hy2=R[1]+Math.cos(t)*len;
-      extra=`<rect x="${hx2-w*.24}" y="${hy2-w*1.3}" width="${w*.48}" height="${w*.95}" rx="${w*.24}" fill="${c.g}" stroke="${c.line}" stroke-width="2.2"/>`; }
-    return arm(L[0],L[1],a,len,w,c) + arm(R[0],R[1],b,len,w,c,clsR) + extra;
+    if (pose==="thumb"){ b=-118;   // joinha: mão fechada com o polegar gordinho para cima, levemente inclinado
+      const t=b*Math.PI/180, x=R[0]-Math.sin(t)*len, y=R[1]+Math.cos(t)*len, u=w*1.2;
+      extra=`<g class="thumbup">
+        <rect x="${x-u*.56}" y="${y-u*1.22}" width="${u*.56}" height="${u*1.02}" rx="${u*.28}" fill="${c.g}" stroke="${c.line}" stroke-width="2.2" transform="rotate(-14 ${x-u*.28} ${y-u*.35})"/>
+        <rect x="${x-u*.64}" y="${y-u*.5}" width="${u*1.28}" height="${u*1.02}" rx="${u*.4}" fill="${c.g}" stroke="${c.line}" stroke-width="2.4"/>
+        <path d="M${x+u*.64} ${y-u*.16} h${-u*.46} M${x+u*.64} ${y+u*.18} h${-u*.46}" stroke="${c.line}" stroke-width="1.8" stroke-linecap="round"/></g>`; }
+    return arm(L[0],L[1],a,len,w,c,"arm arm-l") + arm(R[0],R[1],b,len,w,c,("arm arm-r "+clsR).trim()) + extra;
   }
   function fx(ch,c,kind,accent){
     const [tx,ty]=ch.think;
@@ -277,7 +284,7 @@ const MascotArt = (()=>{
     const shadow = `<ellipse class="shadow" cx="80" cy="${ch.float?154:150}" rx="${ch.float?30:40}" ry="5" fill="${INK}" opacity=".12"/>`;
     return `<svg class="msvg mood-${mood} sp-${id}${ch.float?" floaty":""}" viewBox="0 0 160 160" role="img" aria-label="${(typeof MASCOTS!=="undefined"&&MASCOTS[id]?MASCOTS[id].name:id)}">
       ${defs}${shadow}<g class="whole">
-        ${ch.back(c)}${ch.feet(c)}${ch.body(c)}${shine(ch)}
+        <g class="p-back">${ch.back(c)}</g>${ch.tail?`<g class="p-tail">${ch.tail(c)}</g>`:""}${ch.antenna?`<g class="p-ant">${ch.antenna(c)}</g>`:""}${ch.feet(c)}${ch.body(c)}${shine(ch)}
         ${brows(ch,c,m.brow)}${eyes(ch,c,m.eyes,ch.colors.body)}${blush}${mouth(ch,m.mouth)}
         ${arms(ch,c,m.arms)}${fx(ch,c,m.fx,accent)}${acc}
       </g></svg>`;
