@@ -265,8 +265,10 @@
 
 /*BLOCK1*/
 
+/*BLOCK2*/
+
 /* ================== estrutura do curso ================== */
-const MAIN = [BLOCK1];                        // novos blocos entram aqui, em ordem de dificuldade
+const MAIN = [BLOCK1, BLOCK2];                        // novos blocos entram aqui, em ordem de dificuldade
 const PEP_EVERY = 5;                          // mascote incentiva a cada 5 exercícios
 const PASS = 2/3;                             // acertos mínimos para concluir a fase (2 de 3)
 const PHASES = {};
@@ -333,6 +335,7 @@ const ACH = [
   {id:"first",  e:"🌱", t:"Primeiro passo",     d:"Conclua sua primeira fase",    ok:()=>MAIN_PHASES.some(p=>done(p.id))},
   {id:"perfect",e:"🎯", t:"Sem erros",           d:"Conclua uma fase sem errar",   ok:()=>Object.values(S.phases).some(x=>x.stars===3)},
   {id:"b1",     e:"👋", t:"First Conversations", d:"Conclua o Bloco 1",           ok:()=>BLOCK1.phases.every(p=>done(p.id))},
+  {id:"b2",     e:"☀️", t:"Daily Life",          d:"Conclua o Bloco 2",           ok:()=>BLOCK2.phases.every(p=>done(p.id))},
   {id:"ten",    e:"✍️", t:"10 exercícios",       d:"Responda 10 exercícios",       ok:()=>S.stats.answered>=10},
   {id:"st3",    e:"🔥", t:"3 dias seguidos",     d:"Estude 3 dias em sequência",   ok:()=>(S.best||0)>=3},
   {id:"st7",    e:"🏅", t:"Uma semana",          d:"Estude 7 dias em sequência",   ok:()=>(S.best||0)>=7},
@@ -640,7 +643,7 @@ function finishPhase(){
       <div class="xpl">${lines.map(x=>`<div><span>${esc(x[0])}</span><b>+${x[1]} XP</b></div>`).join("")}</div>
       <div class="bprog"><div class="t">${b.emoji} ${esc(b.title)} · ${nd} de ${b.phases.length} fases</div>
         <div class="steps">${b.phases.map(x=>`<i class="${done(x.id)?"on":""}"></i>`).join("")}</div>
-        <div class="n">${nd===b.phases.length?"Agora você consegue cumprimentar, se apresentar e manter uma conversa curta em inglês.":`Falta${b.phases.length-nd>1?"m":""} ${b.phases.length-nd} fase${b.phases.length-nd>1?"s":""} para completar o bloco.`}</div></div>
+        <div class="n">${nd===b.phases.length?esc(b.doneMsg||"Bloco completo!"):`Falta${b.phases.length-nd>1?"m":""} ${b.phases.length-nd} fase${b.phases.length-nd>1?"s":""} para completar o bloco.`}</div></div>
       ${news.map(a=>`<div class="newach"><b>${a.e} Conquista: ${esc(a.t)}</b>${esc(a.d)}</div>`).join("")}
       ${L.mistakes?`<p class="empty" style="margin-top:12px">O que você errou foi para a <b>Revisão</b>.${stars<3?" Refaça a fase sem erros para ganhar 3 estrelas.":""}</p>`:""}
     </div><div class="foot">
