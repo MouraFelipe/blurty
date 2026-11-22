@@ -19,6 +19,7 @@ No site, o Blurty pode ser instalado na tela inicial e abre como app, até sem i
 - **Blocos e fases:** cada bloco tem 5 fases; cada fase tem um objetivo, um cartão "Aprenda" e 3 exercícios.
 - **Exercícios:** tradução, completar frase, responder numa conversa, montar frase, situação, encontrar o erro, interpretar diálogo, associar e construir resposta.
 - **Desafios surpresa:** ao lado do caminho do mapa, como um extra, aparece um 🎁 depois das fases 2 e 4 de cada bloco. Ele é opcional e só mostra o conteúdo ao abrir: uma expressão secreta, 3 exercícios novos sobre ela e 1 revanche de algo que você já errou (se houver). Errando no máximo 1, você ganha um item para o mascote (óculos escuros, coroa, boné ou flor) e +50 XP. Os itens ficam no Perfil, em "Personalize o seu mascote". Não vencer também vale: a expressão secreta já foi aprendida e a tentativa dá XP.
+- **Sequência de dias (🔥):** conta os dias seguidos em que você conclui ao menos uma atividade (fase, revisão ou desafio). No primeiro dia novo, aparece uma comemoração: o mascote faz uma ação própria, com efeito de fogo, uma fala dele e dados reais do seu progresso (recorde, o que você fez hoje, expressões estudadas e quanto falta para a próxima meta).
 - **Progresso:** XP, sequência de dias, taxa de acertos, histórico, conquistas e revisão do que você errou. Fica salvo no navegador.
 
 ## Conteúdo atual
