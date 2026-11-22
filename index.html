@@ -1123,12 +1123,13 @@ const BLOCK3 = {
         {ex: "For here or to go?", pt: "Para comer aqui ou para levar?"},
         {ex: "To go, please.", pt: "Para levar, por favor."},
         {ex: "That's all, thanks.", pt: "É só isso, obrigado(a)."},
-        {tip: "💡 Para pedir, use <b>Can I get…?</b> ou <b>I'd like…</b>. <i>I want…</i> soa direto demais com quem está te atendendo."}
+        {tip: "💡 Para pedir, use <b>Can I get…?</b> ou <b>I'd like…</b>. <i>I want…</i> soa direto demais com quem está te atendendo."},
+        {tip: "🇬🇧 No Reino Unido, a pergunta costuma ser <b>Eat in or take away?</b> e a resposta, <b>Take away, please.</b> Nos EUA: <i>For here or to go?</i> / <i>To go, please.</i>"}
       ],
       questions: [
         {type: "choice", kind: "Tradução", prompt: "Como se diz “Para levar, por favor.”?",
          options: ["To go, please.", "To take, please.", "For bring, please."], answer: 0,
-         explain: "<b>To go</b> = para levar. <b>For here</b> = para comer aqui."},
+         explain: "<b>To go</b> = para levar. <b>For here</b> = para comer aqui. No Reino Unido também se diz <b>take away</b>, mas <i>to take</i> sozinho não se usa."},
         {type: "choice", kind: "Responda na conversa", dialog: [["Barista", "What can I get you?"]],
          prompt: "Qual é o pedido mais natural e educado?",
          options: ["Can I get a latte, please?", "I want latte.", "Give me a latte."], answer: 0,
@@ -1149,7 +1150,7 @@ const BLOCK3 = {
         {ex: "I'll have the chicken.", pt: "Eu vou querer o frango."},
         {ex: "Could we get some water?", pt: "Pode trazer uma água para a gente?"},
         {ex: "Can we get the check, please?", pt: "A conta, por favor."},
-        {tip: "💡 Na hora de pedir o prato, o natural é <b>I'll have…</b> (vou querer…). Nos EUA a conta é <b>the check</b>; no Reino Unido, <b>the bill</b>."}
+        {tip: "💡 Na hora de pedir o prato, o natural é <b>I'll have…</b> (vou querer…). Nos EUA a conta é <b>the check</b>; 🇬🇧 no Reino Unido, <b>the bill</b>: <i>Can we have the bill, please?</i>"}
       ],
       questions: [
         {type: "choice", kind: "Complete a frase", prompt: "Complete a frase", sentence: "I'll ___ the pasta, please.",
@@ -1175,7 +1176,8 @@ const BLOCK3 = {
         {ex: "Do you have this in medium?", pt: "Tem este no tamanho M?"},
         {ex: "Can I try it on?", pt: "Posso provar?"},
         {ex: "It's too small.", pt: "Está pequeno demais."},
-        {tip: "💡 <b>How much is</b> para uma coisa, <b>How much are</b> para várias (<i>shoes</i>, <i>jeans</i>). E quando o vendedor te aborda e você só está olhando: <b>I'm just looking, thanks.</b>"}
+        {tip: "💡 <b>How much is</b> para uma coisa, <b>How much are</b> para várias (<i>shoes</i>, <i>jeans</i>). E quando o vendedor te aborda e você só está olhando: <b>I'm just looking, thanks.</b>"},
+        {tip: "🇬🇧 Loja: <b>store</b> (EUA) ou <b>shop</b> (Reino Unido). Calça: <b>pants</b> (EUA) ou <b>trousers</b> (Reino Unido), porque lá <i>pants</i> é cueca!"}
       ],
       questions: [
         {type: "choice", kind: "Complete a frase", prompt: "Complete a frase", sentence: "How much ___ these jeans?",
@@ -1202,7 +1204,8 @@ const BLOCK3 = {
         {ex: "Turn left at the corner.", pt: "Vire à esquerda na esquina."},
         {ex: "It's next to the bank.", pt: "Fica ao lado do banco."},
         {ex: "It's across from the park.", pt: "Fica em frente ao parque (do outro lado da rua)."},
-        {tip: "💡 Comece com <b>Excuse me</b> para chamar a atenção de alguém. <b>Across from</b> = em frente, do outro lado da rua."}
+        {tip: "💡 Comece com <b>Excuse me</b> para chamar a atenção de alguém. <b>Across from</b> = em frente, do outro lado da rua."},
+        {tip: "🇬🇧 No Reino Unido, metrô é <b>the underground</b> (em Londres, <b>the Tube</b>) e “em frente” é <b>opposite</b>: <i>It's opposite the park.</i>"}
       ],
       questions: [
         {type: "match", kind: "Associe", prompt: "Ligue cada expressão ao significado",
