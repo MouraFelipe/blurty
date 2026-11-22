@@ -360,6 +360,9 @@
   .pep .mbox{width:170px;height:170px}
   .pep .bubble{font-size:20px;max-width:380px;margin-top:10px}
   .pep .bubble::before{content:"";position:absolute;left:50%;top:-9px;width:14px;height:14px;background:var(--card);border-left:2px solid var(--line);border-top:2px solid var(--line);transform:translateX(-50%) rotate(45deg)}
+  .pep .bubble.tip{font-size:21px}
+  .pep .bubble.tip .te{display:block;font-size:34px;line-height:1;margin-bottom:6px}
+  .pep .bubble.tip small{font-size:15px;line-height:1.4;margin-top:6px}
   .pep .meta{margin-top:14px;color:var(--muted);font-weight:800;font-size:14px}
   .end{padding:22px 20px 190px;text-align:center}
   .end .mbox{width:150px;height:150px;margin:0 auto}
@@ -1176,7 +1179,10 @@ const BLOCK3 = {
         {ex: "Do you have this in medium?", pt: "Tem este no tamanho M?"},
         {ex: "Can I try it on?", pt: "Posso provar?"},
         {ex: "It's too small.", pt: "Está pequeno demais."},
+        {ex: "It's cheap.", pt: "É barato."},
+        {ex: "It's too expensive.", pt: "É caro demais."},
         {tip: "💡 <b>How much is</b> para uma coisa, <b>How much are</b> para várias (<i>shoes</i>, <i>jeans</i>). E quando o vendedor te aborda e você só está olhando: <b>I'm just looking, thanks.</b>"},
+        {tip: "💡 <b>Cheap</b> (fala-se “tchíp”) = barato e <b>expensive</b> = caro. Cuidado: <i>cheap</i> às vezes soa como “de qualidade ruim”, e <i>He's cheap</i> = ele é pão-duro. Para elogiar o preço, diga <b>It's a good price!</b>"},
         {tip: "🇬🇧 Loja: <b>store</b> (EUA) ou <b>shop</b> (Reino Unido). Calça: <b>pants</b> (EUA) ou <b>trousers</b> (Reino Unido), porque lá <i>pants</i> é cueca!"}
       ],
       questions: [
@@ -1190,7 +1196,11 @@ const BLOCK3 = {
         {type: "build", kind: "Monte a frase", situation: "Você gostou de uma camiseta e quer experimentar.",
          prompt: "Monte: “Posso provar?”", words: ["Can", "I", "try", "it", "on?", "prove", "in"],
          answer: "Can I try it on?",
-         explain: "<b>Try on</b> = provar (roupa). <i>Prove</i> é “comprovar”, outra coisa."}
+         explain: "<b>Try on</b> = provar (roupa). <i>Prove</i> é “comprovar”, outra coisa."},
+        {type: "choice", kind: "Responda na conversa", situation: "Você achou o preço alto demais.",
+         dialog: [["Clerk", "These sneakers are 200 dollars."]], prompt: "O que você diz?",
+         options: ["Hmm, they're too expensive.", "Wow, they're so cheap!", "They're too small."], answer: 0,
+         explain: "<b>Expensive</b> = caro e <b>cheap</b> = barato. <i>Too expensive</i> = caro demais. Como <i>sneakers</i> é plural, use <b>they're</b>."}
       ]
     },
     {
@@ -1395,7 +1405,20 @@ const CHALLENGES = [
 
 /* ================== estrutura do curso ================== */
 const MAIN = [BLOCK1, BLOCK2, BLOCK3];                        // novos blocos entram aqui, em ordem de dificuldade
-const PEP_EVERY = 5;                          // mascote incentiva a cada 5 exercícios
+const PEP_EVERY = 5;                          // a cada 5 exercícios, uma pausa: incentivo do mascote e dica para evoluir, alternando
+/* dicas para evoluir no inglês (aparecem em ordem, uma por pausa) */
+const TIPS = [
+  {e:"🗣️", t:"Leia em voz alta", d:"Leia as frases e as respostas em voz alta. Falar ajuda a memorizar e já treina a pronúncia."},
+  {e:"🔊", t:"Ouça e repita", d:"Toque no alto-falante e repita logo depois, imitando o som e o ritmo. É o jeito mais rápido de soar natural."},
+  {e:"💭", t:"Pense em inglês", d:"Narre o seu dia na cabeça: “I'm making coffee”, “I'm going to work”. Frases simples já valem."},
+  {e:"🎬", t:"Legenda em inglês", d:"Assista séries com legenda em inglês, não em português. Você liga o som que ouve à palavra escrita."},
+  {e:"📱", t:"Celular em inglês", d:"Mude o idioma do celular para inglês. Você aprende palavras do dia a dia sem esforço."},
+  {e:"🎧", t:"Música e podcast", d:"Ouça músicas e podcasts em inglês e tente pegar palavras soltas. Depois procure a letra e cante junto."},
+  {e:"📝", t:"3 frases por dia", d:"Anote 3 frases novas por dia e use numa mensagem ou conversa. Usar é o que fixa."},
+  {e:"⏱️", t:"Pouco, todo dia", d:"10 minutos todo dia valem mais que 2 horas uma vez por semana. Mantenha a sua sequência 🔥."},
+  {e:"💪", t:"Erre sem medo", d:"Quem fala errado aprende mais rápido do que quem fica calado. Blurty it out!"},
+  {e:"🔁", t:"Revise o que errou", d:"O que você errou vai para a Revisão. Revisar é o que transforma erro em acerto."}
+];
 const PASS = 2/3;                             // acertos mínimos para concluir a fase (2 de 3)
 const PHASES = {};
 MAIN.forEach(b=>b.phases.forEach((p,i)=>PHASES[p.id]={p, b, i}));
@@ -1409,7 +1432,7 @@ const CH_BY_ID = {}; CHAL.forEach(c=>{ CH_BY_ID[c.id]=c; c.questions.forEach((q,
 /* ================== progresso salvo (neste aparelho) ================== */
 const KEY = "blurty-v2";
 const fresh = ()=>({profile:{mascot:null, skin:null, accessories:[]}, phases:{}, xp:0, streak:0, best:0, last:null,
-                     days:{}, history:[], review:{}, achieved:{}, stats:{answered:0, correct:0, cleared:0}, challenges:{}, items:[]});
+                     days:{}, history:[], review:{}, achieved:{}, stats:{answered:0, correct:0, cleared:0}, challenges:{}, items:[], tipN:0});
 let S = fresh(), storageOK = true;
 try{ const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(fresh(), JSON.parse(raw)); }catch(e){ storageOK = false; }
 S.stats = Object.assign({answered:0, correct:0, cleared:0}, S.stats);
@@ -1762,7 +1785,7 @@ function chalCard(){
   app.innerHTML = `<div class="screen">${topBar()}<div class="page">
       <div class="kicker">Desafio surpresa · Expressão secreta</div>
       <h2>🤫 ${esc(c.title)}</h2><div class="ptitle">${esc(c.pt)}</div>
-      ${readingHTML(c.reading)}<div class="hint">🔊 toque para ouvir a pronúncia</div></div>
+      ${readingHTML(c.reading)}<div class="hint">🔊 toque para ouvir e repita em voz alta</div></div>
     <div class="foot"><button class="btn" id="go">Começar · ${L.total} exercícios</button></div></div>`;
   document.getElementById("quit").onclick=quit;
   document.getElementById("go").onclick=()=>{ sfx.tap(); nextQ(); };
@@ -1788,7 +1811,7 @@ function learnCard(){
       <div class="kicker">${esc(b.title)} · Fase ${i+1} de ${b.phases.length}</div>
       <h2>${p.emoji} ${esc(p.title)}</h2><div class="ptitle">${esc(p.pt)}</div>
       <div class="goal"><span>🎯</span><span><small>Objetivo desta fase</small>${esc(p.goal)}</span></div>
-      ${readingHTML(p.reading)}<div class="hint">🔊 toque para ouvir a pronúncia</div></div>
+      ${readingHTML(p.reading)}<div class="hint">🔊 toque para ouvir e repita em voz alta</div></div>
     <div class="foot"><button class="btn" id="go">Praticar · ${p.questions.length} exercícios</button></div></div>`;
   document.getElementById("quit").onclick=quit;
   document.getElementById("go").onclick=()=>{ sfx.tap(); nextQ(); };
@@ -1868,12 +1891,23 @@ function result(ok, correctText){
 }
 
 function pepTalk(){
+  if ((S.stats.answered/PEP_EVERY)%2===0) return tipTalk();   // alterna: incentivo, dica, incentivo, dica…
   const l=mascotLine(M(),"encourage");
   app.innerHTML=`<div class="screen pep">${mbox("encourage")}
     <div class="bubble">${esc(l[0])}<small>${esc(l[1])}</small></div>
     <div class="meta">✍️ ${S.stats.answered} exercícios feitos · 🎯 ${accuracy()}% de acertos</div>
     <div class="foot"><button class="btn" id="go">Continuar</button></div></div>`;
   sfx.win(); document.getElementById("go").onclick=()=>{ sfx.tap(); nextQ(); };
+}
+
+function tipTalk(){
+  const tp=TIPS[(S.tipN||0)%TIPS.length]; S.tipN=(S.tipN||0)+1; persist();
+  app.innerHTML=`<div class="screen pep">${mbox("happy")}
+    <div class="kicker" style="margin-top:6px">💡 Dica para evoluir no inglês</div>
+    <div class="bubble tip"><span class="te">${tp.e}</span>${esc(tp.t)}<small>${esc(tp.d)}</small></div>
+    <div class="meta">✍️ ${S.stats.answered} exercícios feitos · 🎯 ${accuracy()}% de acertos</div>
+    <div class="foot"><button class="btn" id="go">Continuar</button></div></div>`;
+  sfx.ok(); document.getElementById("go").onclick=()=>{ sfx.tap(); nextQ(); };
 }
 
 function addXP(n){ S.xp+=n; const t=dayStr(); S.days[t]=(S.days[t]||0)+n; }

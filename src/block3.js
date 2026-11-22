@@ -71,7 +71,10 @@ const BLOCK3 = {
         {ex: "Do you have this in medium?", pt: "Tem este no tamanho M?"},
         {ex: "Can I try it on?", pt: "Posso provar?"},
         {ex: "It's too small.", pt: "Está pequeno demais."},
+        {ex: "It's cheap.", pt: "É barato."},
+        {ex: "It's too expensive.", pt: "É caro demais."},
         {tip: "💡 <b>How much is</b> para uma coisa, <b>How much are</b> para várias (<i>shoes</i>, <i>jeans</i>). E quando o vendedor te aborda e você só está olhando: <b>I'm just looking, thanks.</b>"},
+        {tip: "💡 <b>Cheap</b> (fala-se “tchíp”) = barato e <b>expensive</b> = caro. Cuidado: <i>cheap</i> às vezes soa como “de qualidade ruim”, e <i>He's cheap</i> = ele é pão-duro. Para elogiar o preço, diga <b>It's a good price!</b>"},
         {tip: "🇬🇧 Loja: <b>store</b> (EUA) ou <b>shop</b> (Reino Unido). Calça: <b>pants</b> (EUA) ou <b>trousers</b> (Reino Unido), porque lá <i>pants</i> é cueca!"}
       ],
       questions: [
@@ -85,7 +88,11 @@ const BLOCK3 = {
         {type: "build", kind: "Monte a frase", situation: "Você gostou de uma camiseta e quer experimentar.",
          prompt: "Monte: “Posso provar?”", words: ["Can", "I", "try", "it", "on?", "prove", "in"],
          answer: "Can I try it on?",
-         explain: "<b>Try on</b> = provar (roupa). <i>Prove</i> é “comprovar”, outra coisa."}
+         explain: "<b>Try on</b> = provar (roupa). <i>Prove</i> é “comprovar”, outra coisa."},
+        {type: "choice", kind: "Responda na conversa", situation: "Você achou o preço alto demais.",
+         dialog: [["Clerk", "These sneakers are 200 dollars."]], prompt: "O que você diz?",
+         options: ["Hmm, they're too expensive.", "Wow, they're so cheap!", "They're too small."], answer: 0,
+         explain: "<b>Expensive</b> = caro e <b>cheap</b> = barato. <i>Too expensive</i> = caro demais. Como <i>sneakers</i> é plural, use <b>they're</b>."}
       ]
     },
     {
