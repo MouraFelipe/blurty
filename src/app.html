@@ -150,7 +150,12 @@
   .empty{color:var(--muted);font-size:14px;padding:8px 4px;margin:0}
   .ach{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
   /* desafio surpresa e itens do mascote */
-  .node.chal .c{width:62px;height:58px;font-size:26px;background:var(--card);border:3px dashed var(--accent);box-shadow:0 5px 0 var(--line2);animation:shakegift 2.6s ease-in-out infinite}
+  .step{position:relative;width:100%;display:flex;justify-content:center}
+  .node.chal{position:absolute;top:4px;width:96px;z-index:1}
+  .node.chal.side-l{left:6px}.node.chal.side-r{right:6px}
+  .node.chal .lb{font-size:12px;max-width:96px}.node.chal .lb small{font-size:11px}
+  .node.chal .extra{display:inline-block;font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:var(--soft);border-radius:99px;padding:1px 7px;margin-bottom:2px}
+  .node.chal .c{width:54px;height:50px;font-size:26px;background:var(--card);border:3px dashed var(--accent);box-shadow:0 5px 0 var(--line2);animation:shakegift 2.6s ease-in-out infinite}
   .node.chal.won .c{border-style:solid;animation:none}
   .node.chal.locked .c{border-color:var(--line2);background:var(--tint);animation:none;filter:grayscale(1);opacity:.65}
   @keyframes shakegift{0%,78%,100%{transform:rotate(0)}84%{transform:rotate(-9deg)}90%{transform:rotate(9deg)}95%{transform:rotate(-4deg)}}
@@ -308,9 +313,9 @@ MAIN.forEach(b=>b.phases.forEach((p,i)=>PHASES[p.id]={p, b, i}));
 const QUESTIONS = {};
 Object.values(PHASES).forEach(({p})=>p.questions.forEach((q,k)=>QUESTIONS[p.id+":"+k]={...q, qid:p.id+":"+k, from:p}));
 const MAIN_PHASES = MAIN.flatMap(b=>b.phases);
-const CHAL_NEED = 3, CHAL_BONUS = 50, TRY_BONUS = 5;          // desafio surpresa: acertar 3 de 4 · bônus na 1ª vitória · tentar sempre vale XP
+const CHAL_BONUS = 50, TRY_BONUS = 5;          // desafio surpresa: errar no máximo 1 · bônus na 1ª vitória · tentar sempre vale XP
 const CHAL = CHALLENGES.filter(c=>PHASES[c.after]).map(c=>({...c, b:PHASES[c.after].b}));
-const CH_BY_ID = {}; CHAL.forEach(c=>{ CH_BY_ID[c.id]=c; QUESTIONS[c.id+":s"]={...c.question, qid:c.id+":s", from:{title:"Desafio surpresa"}}; });
+const CH_BY_ID = {}; CHAL.forEach(c=>{ CH_BY_ID[c.id]=c; c.questions.forEach((q,k)=>QUESTIONS[c.id+":s"+k]={...q, qid:c.id+":s"+k, from:{title:"Desafio surpresa"}}); });
 
 /* ================== progresso salvo (neste aparelho) ================== */
 const KEY = "blurty-v2";
@@ -459,10 +464,13 @@ function mapScreen(){
     const n=b.phases.filter(p=>done(p.id)).length, offs=[0,56,76,36,-30];
     return `<div class="block"><div class="bhead"><span class="lvl">Bloco ${bi+1} · ${b.level}</span><h2>${b.emoji} ${esc(b.title)}</h2><p>${esc(b.goal)}</p>
         <div class="pbar"><i style="width:${n/b.phases.length*100}%"></i></div><div class="pcount">${n} de ${b.phases.length} fases${n===b.phases.length?" · bloco completo 🎉":""}</div></div>
-      <div class="path">${b.phases.map((p,i)=>{ const ul=unlocked(p.id), d=done(p.id), cur=nx.type==="phase"&&nx.p.id===p.id;
-        return `<button class="node ${d?"done":""} ${ul?"":"locked"} ${cur?"cur":""}" data-ph="${p.id}" style="transform:translateX(${offs[i%offs.length]}px)">
+      <div class="path">${b.phases.map((p,i)=>{ const ul=unlocked(p.id), d=done(p.id), cur=nx.type==="phase"&&nx.p.id===p.id, off=offs[i%offs.length];
+        /* desafio que vem depois da fase anterior fica ao lado desta fase, do lado livre do caminho */
+        const side=off>0?"l":"r", last=i===b.phases.length-1;
+        const chs=CHAL.filter(c=>c.after===(i?b.phases[i-1].id:null) || (last && c.after===p.id)).map(c=>chalNode(c,side)).join("");
+        return `<div class="step">${chs}<button class="node ${d?"done":""} ${ul?"":"locked"} ${cur?"cur":""}" data-ph="${p.id}" style="transform:translateX(${offs[i%offs.length]}px)">
           ${cur?`<span class="go">START</span>`:""}<span class="c">${ul?(d?"✓":p.emoji):"🔒"}</span><span class="st">${d?starsTxt(S.phases[p.id].stars):""}</span>
-          <span class="lb">${esc(p.title)}<small>Fase ${i+1} · ${esc(p.pt)}</small></span></button>`+CHAL.filter(c=>c.after===p.id).map(chalNode).join("");}).join("")}</div></div>`;
+          <span class="lb">${esc(p.title)}<small>Fase ${i+1} · ${esc(p.pt)}</small></span></button></div>`;}).join("")}</div></div>`;
   }).join("");
   const soon = UPCOMING.map((u,i)=>`<div class="soon"><span class="e">${u.emoji}</span><div><b>Bloco ${MAIN.length+i+1} · ${esc(u.title)}</b><span>${u.level} · ${esc(u.pt)} · em breve</span></div></div>`).join("");
   app.innerHTML = `<div class="screen">${appbar()}
@@ -485,11 +493,11 @@ function mapScreen(){
     if(!chalOpen(c)){ b.classList.add("shake"); sfx.no(); setTimeout(()=>b.classList.remove("shake"),400); toast(`Conclua a fase “${PHASES[c.after].p.title}” para abrir este desafio`); return; }
     sfx.tap(); startChallenge(c.id); });
 }
-function chalNode(c){
+function chalNode(c, side){
   const op=chalOpen(c), won=chalWon(c), pr=PRIZES[c.prize];
-  return `<button class="node chal ${won?"won":""} ${op?"":"locked"}" data-ch="${c.id}" style="transform:translateX(${c.side||-60}px)">
+  return `<button class="node chal side-${side} ${won?"won":""} ${op?"":"locked"}" data-ch="${c.id}">
     <span class="c">${won?pr.e:"🎁"}</span>
-    <span class="lb">Desafio surpresa<small>${won?`Prêmio: ${esc(pr.name)}`:op?"Prêmio surpresa":`Depois de “${esc(PHASES[c.after].p.title)}”`}</small></span></button>`;
+    <span class="lb"><span class="extra">Extra</span>Desafio surpresa<small>${won?`Prêmio: ${esc(pr.name)}`:op?"Prêmio surpresa":`Depois de “${esc(PHASES[c.after].p.title)}”`}</small></span></button>`;
 }
 
 function progScreen(){
@@ -595,16 +603,17 @@ function startReview(){
   L={mode:"review", queue:ids.map(id=>QUESTIONS[id]), total:ids.length, n:0, mistakes:0, ok:0, xp:0, cleared:0}; nextQ();
 }
 function startChallenge(id){ const c=CH_BY_ID[id];
-  const upto=c.b.phases.findIndex(p=>p.id===c.after);
-  const pool=c.b.phases.slice(0,upto+1).flatMap(p=>p.questions.map((q,k)=>QUESTIONS[p.id+":"+k]));
-  const queue=shuffle(pool).slice(0,3).concat([QUESTIONS[c.id+":s"]]);
-  L={mode:"challenge", c, queue, total:queue.length, n:0, mistakes:0, ok:0, xp:0}; chalIntro(); }
+  const queue=shuffle(c.questions.map((q,k)=>QUESTIONS[c.id+":s"+k]));      // tudo novo: exercícios da expressão secreta
+  const missed=shuffle(Object.keys(S.review).filter(id=>QUESTIONS[id] && !id.startsWith(c.id+":")));
+  const mine=missed.find(id=>QUESTIONS[id].from && PHASES[QUESTIONS[id].qid.split(":")[0]] && PHASES[QUESTIONS[id].qid.split(":")[0]].b===c.b) || missed[0];
+  if (mine) queue.push({...QUESTIONS[mine], kind:"Revanche · "+(QUESTIONS[mine].kind||"Exercício")});   // algo que a pessoa já errou
+  L={mode:"challenge", c, queue, total:queue.length, need:queue.length-1, revenge:!!mine, n:0, mistakes:0, ok:0, xp:0}; chalIntro(); }
 function chalIntro(){
   const c=L.c, won=chalWon(c), pr=PRIZES[c.prize], l=mascotLine(M(),"surprise");
   app.innerHTML=`<div class="screen"><div class="end">${mbox("surprised")}
       <h2>Desafio surpresa!</h2><div class="sub">${c.b.emoji} ${esc(c.b.title)}</div>
       <div class="bubble">${esc(l[0])}<small>${esc(l[1])}</small></div>
-      <div class="done-goal"><small>🎯 Como vencer</small>Aprenda uma expressão secreta e acerte ${CHAL_NEED} de ${L.total} exercícios.</div>
+      <div class="done-goal"><small>🎯 Como vencer</small>Aprenda uma expressão secreta e acerte ${L.need} de ${L.total}: ${c.questions.length} exercícios novos${L.revenge?" e 1 revanche de algo que você já errou":""}.</div>
       <div class="done-goal"><small>🎁 Prêmio</small>${won?`Você já ganhou: ${pr.e} ${esc(pr.name)}. Jogue de novo para treinar e ganhar XP.`:`Um item surpresa para o seu mascote e +${CHAL_BONUS} XP.`}</div>
     </div><div class="foot"><button class="btn" id="go" style="margin-bottom:10px">Abrir o desafio</button><button class="btn ghost" id="map">Agora não</button></div></div>`;
   sfx.tap();
@@ -792,7 +801,7 @@ function retryPhase(){
 }
 
 function finishChallenge(){
-  const c=L.c, pr=PRIZES[c.prize], win=L.ok>=CHAL_NEED, first=win && !chalWon(c);
+  const c=L.c, pr=PRIZES[c.prize], win=L.ok>=L.need, first=win && !chalWon(c);
   const lines=[["Respostas certas",L.xp]];
   if (first) lines.push(["Desafio vencido",CHAL_BONUS]);
   if (!win) lines.push(["Coragem de tentar",TRY_BONUS]);
@@ -809,7 +818,7 @@ function finishChallenge(){
     app.innerHTML=`<div class="screen"><div class="end">${mbox("encourage")}
         <h2>Você se jogou! 💪</h2><div class="sub">Desafio surpresa · ${esc(c.title)}</div>
         <div class="bubble">${esc(l[0])}<small>${esc(l[1])}</small></div>
-        <div class="cards3" style="margin-top:14px"><div class="card"><b>✔ ${L.ok}/${L.total}</b><span>Acertos</span></div><div class="card"><b>🎯 ${CHAL_NEED}</b><span>Para abrir</span></div><div class="card"><b>⚡ ${total}</b><span>XP ganho</span></div></div>
+        <div class="cards3" style="margin-top:14px"><div class="card"><b>✔ ${L.ok}/${L.total}</b><span>Acertos</span></div><div class="card"><b>🎯 ${L.need}</b><span>Para abrir</span></div><div class="card"><b>⚡ ${total}</b><span>XP ganho</span></div></div>
         ${xpl}
         <p class="empty" style="margin-top:12px">Você já aprendeu a expressão secreta, e ela é sua. O presente continua te esperando: cada tentativa traz exercícios novos.</p>
       </div><div class="foot"><button class="btn" id="again" style="margin-bottom:10px">Jogar de novo</button><button class="btn ghost" id="map">Ver mapa</button></div></div>`;
