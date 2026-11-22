@@ -106,7 +106,9 @@ const MASCOTS = {
 /* mensagens sem repetir em sequência */
 const _bags = {};
 function mascotLine(id, mood){
-  const key = id+":"+mood, list = MASCOTS[id].msgs[mood] || MASCOTS[id].msgs.encourage;
+  /* no alemão (ou outro idioma com falas próprias) o mascote fala nesse idioma */
+  const alt = typeof courseMsgs==="function" ? courseMsgs() : null, src = alt || MASCOTS[id].msgs;
+  const key = (alt?"alt:":"")+id+":"+mood, list = src[mood] || src.encourage;
   if (!_bags[key] || !_bags[key].length){ _bags[key] = list.map((_,i)=>i).sort(()=>Math.random()-.5); }
   return list[_bags[key].pop()];
 }
