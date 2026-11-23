@@ -186,6 +186,8 @@
   .hello{display:flex;align-items:center;gap:12px;margin:16px 16px 4px}
   .hello .mbox{width:92px;height:92px;cursor:pointer}
   .next{margin:14px 16px 0;background:var(--accent);color:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 5px 0 var(--accent-d);width:calc(100% - 32px);text-align:left}
+  .next.wait{background:var(--tint);color:var(--ink);box-shadow:0 5px 0 var(--line2);cursor:default}
+  .next.wait .g{color:var(--muted)}
   .next:active{transform:translateY(3px);box-shadow:0 2px 0 var(--accent-d)}
   .next .ic{font-size:30px;width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.18);display:grid;place-items:center;flex:none}
   .next small{display:block;font-weight:900;font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
@@ -1696,7 +1698,7 @@ const myReview = ()=>Object.keys(S.review).filter(id=>QUESTIONS[id] && QUESTIONS
 const KEY = "blurty-v2";
 const fresh = ()=>({profile:{mascot:null, skin:null, accessories:[]}, phases:{}, xp:0, streak:0, best:0, last:null,
                      days:{}, history:[], review:{}, achieved:{}, stats:{answered:0, correct:0, cleared:0}, challenges:{}, items:[], tipN:0,
-                     course:"en", langs:["en"], xpBy:null, tipBy:{}, mastery:{}});
+                     course:"en", langs:["en"], xpBy:null, tipBy:{}, mastery:{}, blockAt:{}});
 let S = fresh(), storageOK = true;
 try{ const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(fresh(), JSON.parse(raw)); }catch(e){ storageOK = false; }
 S.stats = Object.assign({answered:0, correct:0, cleared:0}, S.stats);
@@ -1712,6 +1714,9 @@ if (!S.xpBy || typeof S.xpBy!=="object") S.xpBy = {en:S.xp||0};
 if (!S.tipBy || typeof S.tipBy!=="object") S.tipBy = {en:S.tipN||0};
 setCourse(S.course);
 if (!S.mastery || typeof S.mastery!=="object") S.mastery = {};
+/* desbloqueio por dia: guarda o dia em que cada bloco foi concluído. Blocos já concluídos antes desta regra contam como de outro dia (nada fica travado para quem já jogava) */
+if (!S.blockAt || typeof S.blockAt!=="object") S.blockAt = {};
+Object.values(COURSES).forEach(co=>co.blocks.forEach(b=>{ if(!S.blockAt[b.id] && b.phases.every(p=>S.phases[p.id] && S.phases[p.id].stars)) S.blockAt[b.id]="0000-00-00"; }));
 function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ storageOK = false; } }
 
 const dayStr = (d=new Date())=>{ const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4); return z.toISOString().slice(0,10); };
@@ -1807,15 +1812,24 @@ const withItem = id => S.profile.accessories.filter(a=>!PRIZES[a] || PRIZES[a].s
 function equip(id){ S.profile.accessories = withItem(id); persist(); }
 function unequip(id){ S.profile.accessories = S.profile.accessories.filter(a=>a!==id); persist(); }
 function goNext(nx){ nx.type==="review" ? startReview() : nx.type==="challenge" ? startChallenge(nx.c.id) : nx.type==="mastery" ? startMastery(nx.b.id) : startPhase(nx.p.id); }
-function unlocked(id){ const idx=MAIN_PHASES.findIndex(p=>p.id===id); return idx===0 || done(MAIN_PHASES[idx-1].id); }
+/* um bloco novo só abre no dia seguinte ao que o anterior foi concluído: estimula jogar todo dia */
+function blockOpen(b){ const bl=COURSES[PHASES[b.phases[0].id].course].blocks, bi=bl.indexOf(b); if(bi<=0) return true;
+  const pv=bl[bi-1]; if(!blockDone(pv)) return false;
+  if(b.phases.some(p=>done(p.id))) return true;            // já começou: nunca trava de novo
+  const at=S.blockAt[pv.id]; return !at || at<dayStr(); }
+const waitingDay = b => { const bl=COURSES[PHASES[b.phases[0].id].course].blocks, bi=bl.indexOf(b); return bi>0 && blockDone(bl[bi-1]) && !blockOpen(b); };
+function unlocked(id){ const {b,i}=PHASES[id]; return i===0 ? blockOpen(b) : done(b.phases[i-1].id); }
+function timeToMidnight(){ const n=new Date(), m=new Date(n); m.setHours(24,0,0,0); const min=Math.max(1,Math.ceil((m-n)/6e4)), h=Math.floor(min/60);
+  return h?`${h}h${min%60?` ${min%60}min`:""}`:`${min}min`; }
 function nextActivity(){
   const p = MAIN_PHASES.find(p=>!done(p.id));
-  if (p) return {type:"phase", p};
+  if (p && unlocked(p.id)) return {type:"phase", p};
   const mb = MAIN.find(b=>blockDone(b) && !mastered(b));
   if (mb) return {type:"mastery", b:mb};
   if (myReview().length) return {type:"review"};
   const c = CHAL.find(c=>c.course===CUR.id && chalOpen(c) && !chalWon(c));
   if (c) return {type:"challenge", c};
+  if (p) return {type:"wait", b:PHASES[p.id].b};
   return {type:"all"};
 }
 const overallPct = ()=>Math.round(MAIN_PHASES.filter(p=>done(p.id)).length/MAIN_PHASES.length*100);
@@ -1903,6 +1917,8 @@ function mapScreen(){
     next = `<button class="next" id="next"><span class="ic">🔁</span><span><small>Próxima atividade</small><b>Revisão</b><span class="g">Reforce ${myReview().length} item(ns) que você errou</span></span></button>`;
   } else if (nx.type==="mastery"){
     next = `<button class="next" id="next"><span class="ic">🎓</span><span><small>Próxima atividade · ${esc(nx.b.title)}</small><b>Teste de domínio</b><span class="g">Mostre que você domina o bloco e suba para o nível ${level()+1}</span></span></button>`;
+  } else if (nx.type==="wait"){
+    next = `<button class="next wait" type="button" aria-disabled="true"><span class="ic">🌙</span><span><small>Volte amanhã</small><b>${esc(nx.b.title)} abre amanhã</b><span class="g">Você mandou bem hoje! Um bloco por dia fixa melhor o que aprendeu. Abre em ${timeToMidnight()}.</span></span></button>`;
   } else if (nx.type==="challenge"){
     next = `<button class="next" id="next"><span class="ic">🎁</span><span><small>Próxima atividade · ${esc(nx.c.b.title)}</small><b>Desafio surpresa</b><span class="g">Vença e ganhe um item para o seu mascote</span></span></button>`;
   }
@@ -1910,7 +1926,7 @@ function mapScreen(){
   const blocks = MAIN.map((b,bi)=>{
     const n=b.phases.filter(p=>done(p.id)).length, offs=[0,56,76,36,-30];
     return `<div class="block"><div class="bhead"><span class="lvl">Bloco ${bi+1} · ${b.level}</span><h2>${b.emoji} ${esc(b.title)}</h2><p>${esc(b.goal)}</p>
-        <div class="pbar"><i style="width:${n/b.phases.length*100}%"></i></div><div class="pcount">${n} de ${b.phases.length} fases${n===b.phases.length?" · bloco completo 🎉":""}</div></div>
+        <div class="pbar"><i style="width:${n/b.phases.length*100}%"></i></div><div class="pcount">${waitingDay(b)?"🌙 Abre amanhã":`${n} de ${b.phases.length} fases${n===b.phases.length?" · bloco completo 🎉":""}`}</div></div>
       <div class="path">${b.phases.map((p,i)=>{ const ul=unlocked(p.id), d=done(p.id), cur=nx.type==="phase"&&nx.p.id===p.id, off=offs[i%offs.length];
         /* desafio que vem depois da fase anterior fica ao lado desta fase, do lado livre do caminho */
         const side=off>0?"l":"r", last=i===b.phases.length-1;
@@ -1934,7 +1950,7 @@ function mapScreen(){
     h.innerHTML=`${mbox("happy",M(),'id="mtap"')}<div class="bubble left">${esc(l[0])}<small>${esc(l[1])}</small></div>`; sfx.ok();
     setTimeout(()=>{ const t=document.getElementById("mtap"); if(t) t.onclick=()=>mapScreen(); },50); };
   app.querySelectorAll("[data-ph]").forEach(b=>b.onclick=()=>{ const id=b.dataset.ph;
-    if(!unlocked(id)){ b.classList.add("shake"); sfx.no(); setTimeout(()=>b.classList.remove("shake"),400); toast("Conclua a fase anterior para desbloquear"); return; }
+    if(!unlocked(id)){ b.classList.add("shake"); sfx.no(); setTimeout(()=>b.classList.remove("shake"),400); toast(waitingDay(PHASES[id].b)?`Este bloco abre amanhã. Volte amanhã para continuar! 🌙`:"Conclua a fase anterior para desbloquear"); return; }
     sfx.tap(); startPhase(id); });
   app.querySelectorAll("[data-ms]").forEach(x=>x.onclick=()=>{ const b=MAIN.find(y=>y.id===x.dataset.ms);
     if(!blockDone(b)){ x.classList.add("shake"); sfx.no(); setTimeout(()=>x.classList.remove("shake"),400); toast("Conclua todas as fases do bloco para fazer o teste"); return; }
@@ -2130,7 +2146,7 @@ function finishMastery(){
       ${win?"":`<p class="empty" style="margin-top:12px">Para dominar o bloco, acerte ${L.need} de ${L.total}. O que você errou foi para a <b>Revisão</b>: revise e tente de novo.</p>`}
     </div><div class="foot">
       ${win?"":`<button class="btn" id="again" style="margin-bottom:10px">Tentar de novo</button>`}
-      ${win && nx.type!=="all"?`<button class="btn" id="nx" style="margin-bottom:10px">Continuar</button>`:""}
+      ${win && nx.type!=="all" && nx.type!=="wait"?`<button class="btn" id="nx" style="margin-bottom:10px">Continuar</button>`:""}
       <button class="btn ghost" id="map">Ver mapa</button></div></div>`;
   win ? (sfx.win(), confetti(first?130:60)) : sfx.tap();
   const a=document.getElementById("again"); if(a) a.onclick=()=>startMastery(b.id);
@@ -2294,6 +2310,7 @@ function finishPhase(){
   const prev=S.phases[p.id]||{stars:0,best:0,plays:0};
   S.phases[p.id]={stars:Math.max(prev.stars,stars), best:Math.max(prev.best,acc), plays:prev.plays+1};
   const blockNow = first && b.phases.every(x=>done(x.id));
+  if (blockNow && !S.blockAt[b.id]) S.blockAt[b.id]=dayStr();
   if (blockNow) lines.push(["Bloco completo!",100]);
   const total=lines.reduce((s,l)=>s+l[1],0); addXP(total);
   S.history.push({d:dayStr(), t:p.title, c:L.ok, n:L.total, xp:total, lang:CUR.id}); S.history=S.history.slice(-40);
@@ -2313,10 +2330,11 @@ function finishPhase(){
         <div class="n">${nd===b.phases.length?esc(b.doneMsg||"Bloco completo!"):`Falta${b.phases.length-nd>1?"m":""} ${b.phases.length-nd} fase${b.phases.length-nd>1?"s":""} para completar o bloco.`}</div></div>
       ${first && CHAL.some(c=>c.after===p.id && !chalWon(c)) ? `<div class="newach"><b>🎁 Um desafio surpresa apareceu no mapa!</b>Vença e ganhe um item para o seu mascote.</div>`:""}
       ${blockNow && !mastered(b) ? `<div class="newach"><b>🎓 Teste de domínio liberado!</b>Mostre que você domina o bloco e suba para o nível ${level()+1}.</div>`:""}
+      ${blockNow && MAIN.indexOf(b)<MAIN.length-1 ? `<div class="newach"><b>🌙 O próximo bloco abre amanhã</b>Volte amanhã para continuar e manter sua sequência de dias. 🔥</div>`:""}
       ${news.map(a=>`<div class="newach"><b>${a.e} Conquista: ${esc(a.t)}</b>${esc(a.d)}</div>`).join("")}
       ${L.mistakes?`<p class="empty" style="margin-top:12px">O que você errou foi para a <b>Revisão</b>.${stars<3?" Refaça a fase sem erros para ganhar 3 estrelas.":""}</p>`:""}
     </div><div class="foot">
-      ${nx.type!=="all"?`<button class="btn" id="nx" style="margin-bottom:10px">${nx.type==="phase"?`Próxima: ${esc(nx.p.title)}`:nx.type==="challenge"?"Próxima: Desafio surpresa":nx.type==="mastery"?"Próxima: Teste de domínio":"Próxima: Revisão"}</button>`:""}
+      ${nx.type!=="all"&&nx.type!=="wait"?`<button class="btn" id="nx" style="margin-bottom:10px">${nx.type==="phase"?`Próxima: ${esc(nx.p.title)}`:nx.type==="challenge"?"Próxima: Desafio surpresa":nx.type==="mastery"?"Próxima: Teste de domínio":"Próxima: Revisão"}</button>`:""}
       <button class="btn ghost" id="map">Ver mapa</button></div></div>`;
   sfx.win(); confetti(blockNow?130:60);
   const nb=document.getElementById("nx"); if(nb) nb.onclick=()=>goNext(nx);
